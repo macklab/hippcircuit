@@ -13,8 +13,8 @@ Everytime you use MAGeTbrain, the following two commands must be run:
     > module load cobralab/2019b
     > source /project/m/mmack/mmack/project/software/MAGeTbrain/bin/activate
     
-These commands can be entered in the command line or they can included at the beginning of a script. After 
+These commands can be entered in the command line or they can included at the beginning of a script. After running them, you will have access to the main MAGeTbrain commands (e.g., mb). 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTMxOTI5MTIxNV19
+eyJoaXN0b3J5IjpbODY3Mzk2NTRdfQ==
 -->
