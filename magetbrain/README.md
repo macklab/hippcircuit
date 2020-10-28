@@ -11,7 +11,7 @@ Every time you log in, these commands will be automatically run and provide acce
 Everytime you use MAGeTbrain, the following two commands must be run:
 
     > module load cobralab/2019b
-    > source /project/m/mmack/mmack/project/software/MAGeTbrain/bin/activate
+    > source /project/m/mmack/software/MAGeTbrain/bin/activate
     
 These commands can be entered in the command line or they can included at the beginning of a script. After running them, you will have access to the main MAGeTbrain commands (e.g., mb). 
 
