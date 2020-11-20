@@ -12,8 +12,13 @@ clean_data <- demo[demo$T1_Count>0 &
                    !demo$Age == "36+",]
 
 subjects <- c()
-for (i in seq(1,971,10)){
+for (i in seq(1,961,10)){
   j = i-1+10
   subjects <- rbind(subjects,clean_data$Subject[i:j])
 }
-subjects <- data.frame(subjects)
+#subjects <- data.frame(subjects)
+write.table(subjects, "~/Documents/labs/macklab/HCP/subjects.txt", 
+            row.names = F, 
+            col.names = F)
+
+
