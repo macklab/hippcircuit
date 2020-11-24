@@ -1,1 +1,1 @@
-# Hippocampus Structural Connectome on Niagara #
+# Structural Hippocampal Connectome on Niagara #
