@@ -1,1 +1,1 @@
-# Hippocampus Connectome for Human Connectome Project on Niagara #
+# Hippocampus Structural Connectome on Niagara #
