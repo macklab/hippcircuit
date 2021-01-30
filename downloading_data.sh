@@ -13,7 +13,8 @@ aws s3 ls hcp-openaccess
 # Set up the BIDS directory
 dcm2bids_scaffold -o /home/m/mmack/mmack/scratch/projects/hippcircuit
 #bids_dir="/home/m/mmack/mmack/scratch/projects/hippcircuit"
-bids_dir="/project/m/mmack/projects/hippcircuit"
+#bids_dir="/projects/m/mmack/projects/hippcircuit"
+bids_dir="/scratch/m/mmack/gumusmel/hippcircuit"
 
 # save the nth line in the file as a list
 sbjs=$(head -1 subjects.txt)
