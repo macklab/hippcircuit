@@ -11,4 +11,16 @@ export QBATCH_OPTIONS="--mail-type=ALL"
 export QBATCH_SCRIPT_FOLDER=".qbatch/"  # Location to generate jobfiles for submission
 export QBATCH_SHELL="/bin/sh"
 
-mb --save run --stage-voting-procs 1
+# check of MAGeTbrain modules loaded and activated
+if [[ ! $(module is-loaded cobralab/2019b) ]]
+then
+	module load cobralab/2019b
+	source /project/m/mmack/software/MAGeTbrain/bin/activate
+fi
+
+# change to scratch directory
+scratch_dir='/scratch/m/mmack/mmack/projects/hcp_maget'
+cd $scratch_dir
+
+# run MAGeTbrain
+mb --save run -n --stage-voting-procs 1
