@@ -23,4 +23,4 @@ scratch_dir='/scratch/m/mmack/mmack/projects/hcp_maget'
 cd $scratch_dir
 
 # run MAGeTbrain
-mb --save run -n --stage-voting-procs 1
+mb --save run --stage-voting-procs 1
