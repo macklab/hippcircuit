@@ -17,8 +17,10 @@ dcm2bids_scaffold -o /home/m/mmack/mmack/scratch/projects/hippcircuit
 bids_dir="/scratch/m/mmack/gumusmel/hippcircuit"
 
 # save the nth line in the file as a list
-sbjs=$(head -1 subjects.txt)
-sbjs="100307"
+cd ${bids_dir}
+#sbjs=$(head -1 subjects.txt)
+#sbjs="100307"
+sbjs=$(sed -n 2p subjects.txt)
 
 # Create anat and dwi folders to save data
 for i in ${sbjs}; do
