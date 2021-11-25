@@ -48,8 +48,8 @@ done
 for i in ${sbjs}; do
   tck2connectome  ${bids_dir}/derivatives/mrtrix/sub-${i}/2M_sift.tck \
   ${bids_dir}/derivatives/itk-snap/sub-${i}/MTL_hipp_subfields.nii.gz \
-  ${bids_dir}/derivatives/mrtrix/sub-${i}/sub-${i}_MTL_hipp_connectome_stream_fixed.csv \
-  -out_assignments ${bids_dir}/derivatives/mrtrix/sub-${i}/sub-${i}_MTL_hipp_assignments_stream_fixed.csv \
+  ${bids_dir}/derivatives/mrtrix/sub-${i}/sub-${i}_MTL_hipp_connectome_stream.csv \
+  -out_assignments ${bids_dir}/derivatives/mrtrix/sub-${i}/sub-${i}_MTL_hipp_assignments_stream.csv \
   -force
 done
 
