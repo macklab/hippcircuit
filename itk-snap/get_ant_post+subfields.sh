@@ -28,13 +28,12 @@ for i in ${sbjs}; do
   -add ${work_dir}/sub-${i}/tmp3.nii.gz ${work_dir}/sub-${i}/ant_post_subfields.nii.gz
 done
 
-atlas=${work_dir}/sub-${i}/ant_post_subfields.nii.gz
-parcel=1
-
 # Right side
-countRant=`echo "$parcel+2" | bc`
-countRpost=`echo "$parcel+6" | bc`
 for i in ${sbjs}; do
+  parcel=1
+  countRant=`echo "$parcel+2" | bc`
+  countRpost=`echo "$parcel+6" | bc`
+  atlas=${work_dir}/sub-${i}/ant_post_subfields.nii.gz
   for r in R_subiculum.nii.gz R_CA4DG.nii.gz R_CA2CA3.nii.gz R_stratum.nii.gz; do
     fslmaths ${work_dir}/sub-${i}/${r} -mas ${work_dir}/sub-${i}/Right_Anterior_dil_thr_mask.nii.gz \
     -bin -mul $countRant ${work_dir}/sub-${i}/tmp_ant1.nii.gz
@@ -53,9 +52,11 @@ for i in ${sbjs}; do
 done
 
 # Left side
-countLant=`echo "$parcel+10" | bc`
-countLpost=`echo "$parcel+15" | bc`
 for i in ${sbjs}; do
+  parcel=1
+  countLant=`echo "$parcel+10" | bc`
+  countLpost=`echo "$parcel+15" | bc`
+  atlas=${work_dir}/sub-${i}/ant_post_subfields.nii.gz
   for k in L_CA1.nii.gz L_subiculum.nii.gz L_CA4DG.nii.gz L_CA2CA3.nii.gz L_stratum.nii.gz; do
     fslmaths ${work_dir}/sub-${i}/${k} -mas ${work_dir}/sub-${i}/Left_Anterior_dil_thr_mask.nii.gz \
     -bin -mul $countLant ${work_dir}/sub-${i}/tmp_ant1.nii.gz
