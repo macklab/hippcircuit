@@ -8,9 +8,16 @@ module load NiaEnv/2018a
 module load openblas/0.2.20
 module load fsl/.experimental-6.0.0
 
+# Only for the mnc2nii part
+if [[ ! $(module is-loaded cobralab/2019b) ]]
+then
+        module load cobralab/2019b
+        source /project/m/mmack/software/MAGeTbrain/bin/activate
+fi
+
 # Define paths for directories
-bids_dir="/scratch/m/mmack/gumusmel/hippcircuit"
-maget_dir="/project/m/mmack/projects/hippcircuit/derivatives/maget/output/fusion/majority_vote"
+bids_dir="/project/m/mmack/projects/hippcircuit"
+maget_dir="${bids_dir}/derivatives/maget/output/fusion/majority_vote"
 work_dir="${bids_dir}/derivatives/mrtrix"
 cd ${bids_dir}
 
@@ -23,7 +30,7 @@ else
 fi
 
 # Define subject number
-sbjs=$(sed -n 3,5p ${bids_dir}/subjects.txt)
+sbjs="define_here"
 
-# Source the script to extract ROIs
-source ${work_dir}/configs/extract_rois.sh
+# Source
+source ${work_dir}/configs/${your_file}
