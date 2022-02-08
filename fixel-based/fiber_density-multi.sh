@@ -14,42 +14,100 @@ module load eigen/3.3.4
 module load mrtrix/3.0.0
 module load freesurfer/6.0.0
 
-cd ${bids_dir}/derivatives/FBA
-mkdir -p template/fod_input
-mkdir -p template/mask_input
+bids_dir="/project/m/mmack/projects/hippcircuit"
+#cd ${bids_dir}
+
+#cd ${bids_dir}/derivatives/fixel-based
+mkdir -p ${bids_dir}/derivatives/fixel-based/fod_input
+mkdir ${bids_dir}/derivatives/fixel-based/mask_input
+mkdir ${bids_dir}/derivatives/fixel-based/fixels
+
+# Define all subjects of interest
+sbjs=$(sed -n 1,85p ${bids_dir}/subjects.txt)
+
+# Create subject specific folders for FBA
+for i in ${sbjs}; do
+  mkdir ${bids_dir}/derivatives/fixel-based/fixels/sub-${i}
+done
 
 #Symbolic link all FOD images (and masks) into a single input folder
-cd ${bids_dir}
 #sbjs=$(ls -R -d sub-*)
-sbjs=$(sed -n 64,85p ${bids_dir}/subjects.txt)
+#sbjs=$(sed -n 64,85p ${bids_dir}/subjects.txt)
+
+# Subjects to be included in the template
+tmp_sbjs=$(sed -n 1,30p ${bids_dir}/template_sbjs.txt)
 
 # for i in $sbjs; do
 #   mv $i.mif ../fod_input_all
 # done
 
-for i in $sbjs; do
-  ln -sr ${bids_dir}/derivatives/mrtrix/${i}/WM_FODs.mif \
-  ${bids_dir}/derivatives/FBA/template/fod_input/${i}.mif
+# for i in $sbjs; do
+#   ln -sr ${bids_dir}/derivatives/mrtrix/${i}/WM_FODs.mif \
+#   ${bids_dir}/derivatives/FBA/template/fod_input/${i}.mif
+# done
+
+# Compute brain mask images
+# for i in ${tmp_sbjs}; do
+#   dwi2mask ${bids_dir}/derivatives/mrtrix/sub-${i}/DWI.mif \
+#   ${bids_dir}/derivatives/fixel-based/mask_input/sub-${i}.mif
+# done
+
+for i in ${sbjs}; do
+  dwi2mask ${bids_dir}/derivatives/mrtrix/sub-${i}/DWI.mif \
+  ${bids_dir}/derivatives/fixel-based/fixels/sub-${i}/mask.mif
 done
 
-for i in $sbjs; do
-  dwi2mask ${bids_dir}/derivatives/mrtrix/${i}/DWI.mif \
-  ${bids_dir}/derivatives/FBA/template/mask_input/${i}.mif
+# Joint bias field correction and global intensity normalisation
+for i in ${sbjs}; do
+  mtnormalise ${bids_dir}/derivatives/mrtrix/sub-${i}/WM_FODs.mif \
+  ${bids_dir}/derivatives/fixel-based/fixels/sub-${i}/WM_FODs_norm.mif \
+  ${bids_dir}/derivatives/mrtrix/sub-${i}/GM.mif \
+  ${bids_dir}/derivatives/fixel-based/fixels/sub-${i}/GM_norm.mif \
+  ${bids_dir}/derivatives/mrtrix/sub-${i}/CSF.mif \
+  ${bids_dir}/derivatives/fixel-based/fixels/sub-${i}/CSF_norm.mif \
+  -mask ${bids_dir}/derivatives/fixel-based/fixels/sub-${i}/mask.mif
 done
 
-population_template ${bids_dir}/derivatives/FBA/template/fod_input \
-    -mask_dir ${bids_dir}/derivatives/FBA/template/mask_input/ \
-    ${bids_dir}/derivatives/FBA/template/wmfod_template.mif \
-    -voxel_size 1.25 -warp_dir ${bids_dir}/derivatives/FBA/template/warps
-
-# Register all subjects FOD images to the FOD fa_template
-for i in $sbjs; do
-  mrregister ${bids_dir}/derivatives/mrtrix/sub-${i}/WM_FODs.mif \
-  -mask1 ${bids_dir}/derivatives/FBA/template/mask_input/sub-${i}.mif \
-  ${bids_dir}/derivatives/FBA/template/wmfod_template.mif \
-  -nl_warp ${bids_dir}/derivatives/FBA/template/warps/sub-${i}_subject2template_warp.mif \
-  ${bids_dir}/derivatives/FBA/template/warps/sub-${i}_template2subject_warp.mif
+#Symbolic link all FOD images (and masks) into a single input folder
+for i in ${tmp_sbjs}; do
+  ln -sr ${bids_dir}/derivatives/fixel-based/fixels/sub-${i}/WM_FODs_norm.mif \
+  ${bids_dir}/derivatives/fixel-based/fod_input/${i}.mif
 done
+
+for i in ${tmp_sbjs}; do
+  ln -sr ${bids_dir}/derivatives/fixel-based/fixels/sub-${i}/mask.mif \
+  ${bids_dir}/derivatives/fixel-based/mask_input/${i}.mif
+done
+
+# Copy necessary FOD files
+# for i in ${tmp_sbjs}; do
+#   cp ${bids_dir}/derivatives/mrtrix/sub-${i}/WM_FODs.mif \
+#   ${bids_dir}/derivatives/fixel-based/fod_input/sub-${i}.mif
+# done
+
+# for i in ${tmp_sbjs}; do
+#   dwi2mask ${bids_dir}/derivatives/mrtrix/sub-${i}/DWI.mif \
+#   ${bids_dir}/derivatives/fixel-based/mask_input/sub-${i}.mif
+# done
+
+# Generate a study-specific unbiased FOD template
+mkdir ${bids_dir}/derivatives/fixel-based/template
+population_template ${bids_dir}/derivatives/fixel-based/fod_input \
+  -mask_dir ${bids_dir}/derivatives/fixel-based/mask_input/ \
+  ${bids_dir}/derivatives/fixel-based/template/wmfod_template.mif \
+  -voxel_size 1.25 -warp_dir ${bids_dir}/derivatives/fixel-based/warps
+
+
+# Register all subject FOD images to the FOD template
+for i in $sbjs; do
+  mrregister ${bids_dir}/derivatives/fixel-based/fixels/sub-${i}/WM_FODs_norm.mif \
+  -mask1 ${bids_dir}/derivatives/fixel-based/fixels/sub-${i}/mask.mif \
+  ${bids_dir}/derivatives/fixel-based/template/wmfod_template.mif \
+  -nl_warp ${bids_dir}/derivatives/fixel-based/warps/sub-${i}_subject2template_warp.mif \
+  ${bids_dir}/derivatives/fixel-based/warps/sub-${i}_template2subject_warp.mif
+done
+
+# Fixed here
 
 # 12) Compute the template mask (intersection of all subject masks in template space)
 #wrap all masks into template space
@@ -215,6 +273,13 @@ ${bids_dir}/derivatives/FBA/template/wmfod_template.mif \
 ${bids_dir}/derivatives/FBA/template/wmfod_template.txt
 
 
+### Extras
+for i in ${sbjs}; do
+  cp sub-${i}/WM_FODs.mif sub-${i}/WM_FODs_org.mif
+done
 
+for i in ${sbjs}; do
+  cp sub-${i}/WM_FODs.mif ../FBA/template/fod_input/sub-${i}.mif
+done
 
 # END #
