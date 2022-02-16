@@ -4,6 +4,7 @@ import { NavLink } from "react-router-dom";
 
 import logo from '../images/MackLabLogo.png';
 import ilf from '../images/ILF.png';
+import HomeButton from '../components/HomeButton';
 
 function Home() {
   return (
@@ -16,11 +17,11 @@ function Home() {
         </div>
         <div className="right">
             <h1>HippCircuit</h1>
-            <NavLink to="/about">
-                <div className='enterButton'>
-                    <p>Explore the data {'>'}</p>
-                </div>
-            </NavLink>
+            <div className='enterButton'>
+                <NavLink to="/about">
+                    <HomeButton />
+                </NavLink>
+            </div>
         </div>
     </div>
   );
