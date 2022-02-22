@@ -28,6 +28,10 @@ sbjs=$(sed -n 1,85p ${bids_dir}/subjects.txt)
 5tt2gmwmi ${bids_dir}/derivatives/fixel-based/template/5TT_template.mif \
   ${bids_dir}/derivatives/fixel-based/template/gmwmi_template.mif -force
 
+source /scinet/conda/etc/profile.d/scinet-conda.sh
+scinet-conda create -n mrtrix3 -c mrtrix3 mrtrix3
+scinet-conda activate mrtrix3
+
 # Create whole-brain tractography
 tckgen ${bids_dir}/derivatives/fixel-based/template/wmfod_template.mif \
   ${bids_dir}/derivatives/fixel-based/template/10M_template.tck \
