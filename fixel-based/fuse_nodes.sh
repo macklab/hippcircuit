@@ -50,4 +50,47 @@ antsJointFusion \
   -b 2.0 \
   -o ${bids_dir}/derivatives/fixel-based/template/node_template.nii.gz \
   -s 3x3x3 \
-  -t ${bids_dir}/derivatives/fixel-based/template/T1_template.nii.gz
+  -t ${bids_dir}/derivatives/fixel-based/template/T1_template.nii.gz \
+  -v
+
+# OTHER OPTIONS
+# Option 1
+ImageMath 3 ${bids_dir}/derivatives/fixel-based/template/majorityvote.nii.gz \
+  MajorityVoting ${bids_dir}/derivatives/fixel-based/fixels/sub-*/nodes_in_template_space.nii.gz
+# include pearson correlation
+
+# Option 2
+cp ${bids_dir}/derivatives/fixel-based/fixels/sub-792564/nodes_in_template_space.nii.gz \
+  ${bids_dir}/derivatives/fixel-based/template/nodes_mask.nii.gz
+
+tmp_sbjs=$(sed -n 1,30p ${bids_dir}/template_sbjs.txt)
+for i in $tmp_sbjs; do
+  fslmaths ${bids_dir}/derivatives/fixel-based/template/nodes_mask.nii.gz \
+  -add ${bids_dir}/derivatives/fixel-based/fixels/sub-${i}/nodes_in_template_space.nii.gz \
+  ${bids_dir}/derivatives/fixel-based/template/nodes_mask.nii.gz
+done
+
+fslmaths ${bids_dir}/derivatives/fixel-based/template/nodes_mask.nii.gz \
+  -bin ${bids_dir}/derivatives/fixel-based/template/nodes_mask_bin.nii.gz
+
+fslmaths ${bids_dir}/derivatives/fixel-based/template/nodes_mask_bin.nii.gz \
+  -kernel sphere 2.5 -dilM ${bids_dir}/derivatives/fixel-based/template/nodes_mask_bin_dil.nii.gz
+
+antsJointFusion \
+  -a 0.1 \
+  -g ${bids_dir}/derivatives/fixel-based/fixels/sub-10*/T1_in_template_space.nii.gz \
+  -l ${bids_dir}/derivatives/fixel-based/fixels/sub-10*/nodes_in_template_space.nii.gz \
+  -b 2.0 \
+  -o ${bids_dir}/derivatives/fixel-based/template/node_template.nii.gz \
+  -s 3x3x3 \
+  -t ${bids_dir}/derivatives/fixel-based/template/T1_template_with_mask.nii.gz \
+  -x ${bids_dir}/derivatives/fixel-based/template/nodes_mask_bin_dil.nii.gz \
+  -v
+
+
+
+
+
+
+
+# END
