@@ -81,11 +81,13 @@ antsJointFusion \
   -g ${bids_dir}/derivatives/fixel-based/fixels/sub-10*/T1_in_template_space.nii.gz \
   -l ${bids_dir}/derivatives/fixel-based/fixels/sub-10*/nodes_in_template_space.nii.gz \
   -b 2.0 \
-  -o ${bids_dir}/derivatives/fixel-based/template/node_template.nii.gz \
+  -o ${bids_dir}/derivatives/fixel-based/template/node_template/node_template_with_mask.nii.gz \
   -s 3x3x3 \
-  -t ${bids_dir}/derivatives/fixel-based/template/T1_template_with_mask.nii.gz \
+  -t ${bids_dir}/derivatives/fixel-based/template/T1_template_mean.nii.gz \
   -x ${bids_dir}/derivatives/fixel-based/template/nodes_mask_bin_dil.nii.gz \
   -v
+
+
 
 
 
