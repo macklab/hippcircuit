@@ -38,4 +38,4 @@ done
 
 # Compute the template as the intersection of all warped T1s
 mrmath ${bids_dir}/derivatives/fixel-based/fixels/sub-*/T1_in_template_space.mif \
-  min ${bids_dir}/derivatives/fixel-based/template/T1_template.mif -datatype Float32LE
+  mean ${bids_dir}/derivatives/fixel-based/template/T1_template.mif -datatype Float32LE
