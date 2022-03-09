@@ -39,3 +39,15 @@ done
 # Compute the template as the intersection of all warped T1s
 mrmath ${bids_dir}/derivatives/fixel-based/fixels/sub-*/T1_in_template_space.mif \
   mean ${bids_dir}/derivatives/fixel-based/template/T1_template.mif -datatype Float32LE
+
+# Convert mifs to nifti for ants
+mrconvert ${bids_dir}/derivatives/fixel-based/template/T1_template.mif \
+  ${bids_dir}/derivatives/fixel-based/template/T1_template.nii.gz
+
+for i in $sbjs; do
+  mrconvert ${bids_dir}/derivatives/fixel-based/fixels/sub-${i}/T1_in_template_space.mif \
+  ${bids_dir}/derivatives/fixel-based/fixels/sub-${i}/T1_in_template_space.nii.gz -force
+done
+
+
+# END
