@@ -1,7 +1,7 @@
 #!/bin/bash
-#SBATCH -N 1
+#SBATCH -N 2
 #SBATCH -c 40
-#SBATCH --time=3:00:00
+#SBATCH --time=24:00:00
 #SBATCH -o %x-%j.out
 
 module load NiaEnv/2018a
