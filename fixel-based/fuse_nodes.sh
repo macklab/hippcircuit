@@ -20,6 +20,7 @@ bids_dir="/project/m/mmack/projects/hippcircuit"
 # Define subjects
 sbjs=$(sed -n 1,85p ${bids_dir}/subjects.txt)
 
+####### Gray Matter Nodes #######
 # Warp nodes to T1 template
 for i in $sbjs; do
   mrtransform ${bids_dir}/derivatives/itk-snap/sub-${i}/MTL_hipp_subfields.nii.gz \
@@ -28,7 +29,6 @@ for i in $sbjs; do
   ${bids_dir}/derivatives/fixel-based/fixels/sub-${i}/MTL_hipp_subfields_in_template_space.mif \
   -template ${bids_dir}/derivatives/itk-snap/sub-${i}/MTL_hipp_subfields.nii.gz -force
 done
-#${bids_dir}/derivatives/itk-snap/sub-${i}/MTL_hipp_subfields.nii.gz
 
 # Convert mifs to nifti for ants
 for i in $sbjs; do
@@ -39,3 +39,23 @@ done
 # Node template
 ImageMath 3 ${bids_dir}/derivatives/fixel-based/template/node_template.nii.gz \
   MajorityVoting ${bids_dir}/derivatives/fixel-based/fixels/sub-*/MTL_hipp_subfields_in_template_space.nii.gz
+
+####### White Matter Labels #######
+# Warp white matter ROIs from magetbrain for visualization
+for i in $sbjs; do
+  mrtransform ${bids_dir}/derivatives/mrtrix/sub-${i}/sub-${i}_T1w_WM_labels.nii.gz \
+  -warp ${bids_dir}/derivatives/fixel-based/warps/sub-${i}_subject2template_warp.mif \
+  -interp nearest -datatype Float32LE \
+  ${bids_dir}/derivatives/fixel-based/fixels/sub-${i}/WM_labels_in_template_space.mif \
+  -template ${bids_dir}/derivatives/mrtrix/sub-${i}/sub-${i}_T1w_WM_labels.nii.gz
+done
+
+# Convert mifs to nifti for ants
+for i in $sbjs; do
+  mrconvert ${bids_dir}/derivatives/fixel-based/fixels/sub-${i}/WM_labels_in_template_space.mif \
+  ${bids_dir}/derivatives/fixel-based/fixels/sub-${i}/WM_labels_in_template_space.nii.gz
+done
+
+# White matter label template
+ImageMath 3 ${bids_dir}/derivatives/fixel-based/template/WM_label_template.nii.gz \
+  MajorityVoting ${bids_dir}/derivatives/fixel-based/fixels/sub-*/WM_labels_in_template_space.nii.gz
