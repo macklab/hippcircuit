@@ -1,4 +1,86 @@
 .aboutcontainer {
+    background-color: white;
+}
+
+.atitle {
+    background-color: rgb(58, 190, 252);
     display: flex;
     justify-content: center;
+    font-size: 32px;
+    padding-top: 45px;
+    height: 200px;
+    width: 100%;
+    color: white;
+}
+
+.atitle h1 {
+    font-weight: 400;
+}
+
+.whiteblockright {
+    background-color: white;
+    width: 100%;
+    height: 500px;
+    display: flex;
+}
+
+.wleft {
+    padding: 50px;
+    display: flex;
+    flex-direction: column;
+}
+
+.wright img {
+    min-width: 300px;
+    max-width: 500px;
+    padding-left: 100px;
+    padding-bottom: 50px;
+    -webkit-user-drag: none;
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+}
+
+.blueblockleft {
+    background-color: rgb(58, 190, 252);
+    width: 100%;
+    height: 500px;
+    display: flex;
+}
+
+.bright {
+    padding: 50px;
+    display: flex;
+    flex-direction: column;
+}
+
+.bleft img {
+    min-width: 300px;
+    max-width: 500px;
+    padding-left: 50px;
+    padding-bottom: 50px;
+    -webkit-user-drag: none;
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+}
+
+.alogo {
+    height: 100px;
+    display: flex;
+    justify-content: center;
+}
+
+.alogo img {
+    min-width: 200px;
+    max-width: 200px;
+    padding-top: 20px;
+    padding-bottom: 10px;
+    -webkit-user-drag: none;
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
 }

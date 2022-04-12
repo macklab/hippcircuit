@@ -28,7 +28,7 @@
     margin: 0;
 }
 
-.left {
+.hleft {
     grid-area: bleft;
     width: 100%;
     min-height: 100%;
@@ -36,7 +36,7 @@
     justify-content: right;
 }
 
-.left img {
+.hleft img {
     min-width: 300px;
     max-width: 500px;
     padding-right: 100px;
@@ -48,7 +48,7 @@
     -ms-user-select: none;
 }
 
-.right {
+.hright {
     grid-area: bright;
     width: 100%;
     min-height: 100%;
@@ -59,7 +59,7 @@
     text-align: left;
 }
 
-.right h1 {
+.hright h1 {
     font-size: 72px;
     font-weight: 400;
 }
@@ -96,7 +96,7 @@
         justify-content: center;
     }
 
-    .left {
+    .hleft {
         grid-area: bleft;
         width: 100%;
         min-height: 100%;
@@ -104,11 +104,11 @@
         justify-content: space-around;
     }
     
-    .left img {
+    .hleft img {
         min-width: 300px;
         max-width: 500px;
         padding-top: 0px;
-        padding-right: 0px;
+        padding-left: 0px;
         -webkit-user-drag: none;
         user-select: none;
         -moz-user-select: none;

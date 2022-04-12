@@ -12,10 +12,10 @@ function Home() {
         <div className="top">
             <a href='http://macklab.utoronto.ca/'><img src={logo} alt='The Mack Lab logo!'/></a>
         </div>
-        <div className="left">
+        <div className="hleft">
             <img src={ilf} alt='The inferior longitudinal fasciculus.'/>
         </div>
-        <div className="right">
+        <div className="hright">
             <h1>HippCircuit</h1>
             <div className='enterButton'>
                 <NavLink to="/about">
