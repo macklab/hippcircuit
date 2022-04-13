@@ -6,7 +6,7 @@
     background-color: rgb(58, 190, 252);
     display: flex;
     justify-content: center;
-    font-size: 32px;
+    font-size: 30px;
     padding-top: 45px;
     height: 200px;
     width: 100%;
@@ -83,4 +83,133 @@
     -moz-user-select: none;
     -webkit-user-select: none;
     -ms-user-select: none;
+}
+
+@media only screen and (max-width: 1300px) {
+
+    .whiteblockright {
+        background-color: white;
+        width: 100%;
+        height: 600px;
+        display: flex;
+    }
+
+}
+
+@media only screen and (max-width: 1200px) {
+
+    .blueblockleft {
+        background-color: rgb(58, 190, 252);
+        width: 100%;
+        height: 650px;
+        display: flex;
+    }
+
+}
+
+@media only screen and (max-width: 1150px) {
+
+    .blueblockleft {
+        background-color: rgb(58, 190, 252);
+        width: 100%;
+        height: 725px;
+        display: flex;
+    }
+
+    .whiteblockright {
+        background-color: white;
+        width: 100%;
+        height: 850px;
+        display: flex;
+    }
+
+
+}
+
+@media only screen and (max-width: 1000px) {
+
+    .atitle {
+        background-color: rgb(58, 190, 252);
+        display: flex;
+        justify-content: center;
+        font-size: 25px;
+        padding-bottom: 175px;
+        height: 100px;
+        width: 100%;
+        color: white;
+        text-align: center;
+    }
+    
+    .atitle h1 {
+        font-weight: 400;
+    }
+
+    .whiteblockright {
+        background-color: white;
+        width: 100%;
+        height: 1100px;
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .wleft {
+        padding: 50px;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .wleft h2 {
+        margin-top: 0px;
+    }
+
+    .wright {
+        display: flex;
+        justify-content: center;
+    }
+    
+    .wright img {
+        min-width: 300px;
+        max-width: 350px;
+        padding-right: 105px;
+        -webkit-user-drag: none;
+        user-select: none;
+        -moz-user-select: none;
+        -webkit-user-select: none;
+        -ms-user-select: none;
+    }
+
+    .blueblockleft {
+        background-color: rgb(58, 190, 252);
+        width: 100%;
+        height: 1100px;
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .bright {
+        padding: 50px;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .bright h2 {
+        margin-top: 0px;
+    }
+
+    .bleft {
+        display: flex;
+        justify-content: center;
+    }
+    
+    .bleft img {
+        min-width: 300px;
+        max-width: 350px;
+        padding-right: 50px;
+        -webkit-user-drag: none;
+        user-select: none;
+        -moz-user-select: none;
+        -webkit-user-select: none;
+        -ms-user-select: none;
+    }
+
 }
