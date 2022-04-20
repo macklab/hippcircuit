@@ -6,11 +6,11 @@
 .vistop {
     height: 85vh;
     width: 100%;
-    background-color: blueviolet;
+    background-color: rgb(0, 0, 0);
 }
 
 .visbot {
     height: 15vh;
     width: 100%;
-    background-color: blue;
+    background-color: rgb(255, 255, 255);
 }
