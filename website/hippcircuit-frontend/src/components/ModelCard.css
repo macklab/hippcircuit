@@ -1,0 +1,10 @@
+.modelcardcontainer {
+    width: 75px;
+    text-align: center;
+    border: solid;
+}
+
+.modelcardcontainer p {
+    margin: 0px;
+    margin-top: 9px;
+}
