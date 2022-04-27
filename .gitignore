@@ -50,5 +50,11 @@ slurm-*.out
 # Data files
 **/data/**
 
+# R objects
+**/output/**
+
+# Figures/tables
+**/plots/**
+
 # Mac related files
 .DS_Store
