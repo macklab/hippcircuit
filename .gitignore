@@ -47,5 +47,8 @@ slurm-*.out
 # Files for testing and drafting
 **/local/**
 
+# Data files
+**/data/**
+
 # Mac related files
 .DS_Store
