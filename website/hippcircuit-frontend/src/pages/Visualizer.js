@@ -6,6 +6,7 @@ import glbtest2 from '../models/test2.glb';
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls } from '@react-three/drei';
 import { Suspense, useState } from "react";
+import Carousel from 'react-elastic-carousel'
 
 import Model from '../components/Model';
 import ModelCard from '../components/ModelCard';
@@ -130,9 +131,20 @@ function Visualizer() {
 
   const [model, setModel] = useState(Model1);
 
+  const [titleText, setTitleText] = useState('ROIs: CA1 to CA2CA3')
+  const [sideText, setSideText] = useState('Hemisphere: Left')
+
   return (
     <div className="visualizercontainer">
       <div className='vistop'>
+          <div className='infobox'>
+            <h1>{titleText}</h1>
+            <h2>{sideText}</h2>
+            <h2>N-Tracts: 724</h2>
+            <h2>Stat1: X</h2>
+            <h2>Stat2: Y</h2>
+            <h2>Stat3: Z</h2>
+          </div>
           <Canvas>
             <Suspense fallback={null}>
               <OrbitControls />
@@ -141,14 +153,20 @@ function Visualizer() {
           </Canvas>
       </div>
       <div className='visbot'>
+        <Carousel itemsToShow={6}>
         {cardData.map((card) =>
-          <div key={card.id} onClick={() => setModel(card.url)}>
+          <div key={card.id} onClick={() => {
+              setModel(card.url)
+              setTitleText(`ROIs: ${card.firstROI} to ${card.secondROI}`)
+              setSideText(`Hemisphere: ${card.side}`)
+              }}>
             <ModelCard side={card.side} 
                        firstROI={card.firstROI} 
                        secondROI={card.secondROI}
             />
           </div>
         )}
+        </Carousel>
       </div>
     </div>
   );

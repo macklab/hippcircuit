@@ -4,16 +4,34 @@
 }
 
 .vistop {
-    height: 85vh;
+    height: 80vh;
     width: 100%;
     background-color: rgb(0, 0, 0);
 }
 
+.infobox {
+    position: absolute;
+    color: white;
+    z-index: 2;
+    padding-top: 40px;
+    padding-left: 50px;
+}
+
+.infobox h1 {
+    margin: 0px;
+}
+
 .visbot {
-    height: 15vh;
+    height: 20vh;
     width: 100%;
-    background-color: rgb(255, 255, 255);
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
+    background-color: rgb(0, 0, 0);
+    position: absolute;
+}
+
+.rec.rec-arrow {
+    background-color: rgb(58, 190, 252);
+}
+
+.rec.rec-arrow:hover {
+    background-color: rgb(154, 222, 254);
 }

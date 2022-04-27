@@ -1,7 +1,9 @@
 .modelcardcontainer {
-    width: 75px;
+    width: 150px;
     text-align: center;
     border: solid;
+    height: 98%;
+    background-color: rgb(58, 190, 252);
 }
 
 .modelcardcontainer p {
