@@ -1,15 +1,22 @@
 #!/bin/bash
 
+#######################
+#### Configuration ####
+#######################
+# Please change these paths for your directory of interest
+bids_dir='/project/m/mmack/projects/hippcircuit'
+maget_dir='/scratch/m/mmack/mmack/projects/hcp_maget'
+#######################
+
+# Check if module uploaded
 if [[ ! $(module is-loaded cobralab/2019b) ]]
 then
 	module load cobralab/2019b
 	source /project/m/mmack/software/MAGeTbrain/bin/activate
 fi
 
-bids_dir='/scratch/m/mmack/gumusmel/hippcircuit'
-maget_dir='/scratch/m/mmack/mmack/projects/hcp_maget'
-
 sbjs=$1
+# sbjs=$(sed -n 21p ${bids_dir}/subjects_rest.txt)
 
 for s in $sbjs;
 do
@@ -18,4 +25,3 @@ do
 	nii2mnc $t1nii $t1mnc
 	echo "-- converted and transferred $s"
 done
-	
