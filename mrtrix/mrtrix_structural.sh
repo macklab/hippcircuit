@@ -51,11 +51,3 @@ for i in ${sbjs}; do
   5tt2vis ${bids_dir}/derivatives/mrtrix/sub-${i}/5TT.mif\
   ${bids_dir}/derivatives/mrtrix/sub-${i}/vis.mif -force
 done
-
-# Assign the right labels to connectome with respect to the parcellated image
-for i in ${sbjs}; do
-  labelconvert ${bids_dir}/derivatives/mrtrix/sub-${i}/sub-${i}_T1w_GM_labels.nii.gz\
-  ${bids_dir}/derivatives/mrtrix/configs/GM_labels_original.txt\
-  ${bids_dir}/derivatives/mrtrix/configs/GM_labels_ordered.txt\
-  ${bids_dir}/derivatives/mrtrix/sub-${i}/hipp_nodes.mif -force
-done
