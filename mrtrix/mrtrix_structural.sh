@@ -34,8 +34,6 @@ fi
 cd ${bids_dir}
 # Set subjects
 sbjs=$1
-# If you'd like to define subjects here:
-# sbjs=$(sed -n 1,2p ${seg_dir}/subjects_rest.txt)
 
 # 1) Structural image processing
 # Tissue segmented image
