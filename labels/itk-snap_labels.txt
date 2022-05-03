@@ -1,0 +1,41 @@
+################################################
+# ITK-SnAP Original Label Description File
+# File format:
+# IDX   -R-  -G-  -B-  -A--  VIS MSH  LABEL
+# Fields:
+#    IDX:   Zero-based index
+#    -R-:   Red color component (0..255)
+#    -G-:   Green color component (0..255)
+#    -B-:   Blue color component (0..255)
+#    -A-:   Label transparency (0.00 .. 1.00)
+#    VIS:   Label visibility (0 or 1)
+#    IDX:   Label mesh visibility (0 or 1)
+#  LABEL:   Label description
+################################################
+    0     0    0    0        0  0  0    "Clear Label"
+    1   255    0    0        1  1  1    "Left Anterior hippocampus"
+    2     0  255    0        1  1  1    "Left Posterior hippocampus"
+    4   255  255    0        1  1  1    "Left Cysts"
+    6   166  193  255        1  1  1    "Left Overlap"
+    7   231   66    0        1  1  1    "Left MISC"
+    9   255  170    0        1  1  1    "Left Meninges PHC"
+   10   181  255  158        1  1  1    "Left ERC"
+   11    55  180  255        1  1  1    "Left Br35"
+   12     0    0  255        1  1  1    "Left Br36"
+   13   243    0  170        1  1  1    "Left PHC"
+   14   183  205  255        1  1  1    "Left ColSul"
+   16   181  101   30        1  1  1    "Left OTSul"
+   17   255  170  255        1  1  1    "Left Meninges"
+  101   255    0    0        1  1  1    "Right Anterior hippocampus"
+  102     0  255    0        1  1  1    "Right Posterior hippocampus"
+  104   255  255    0        1  1  1    "Right Cysts"
+  106   166  193  255        1  1  1    "Right Overlap"
+  107   231   66    0        1  1  1    "Right MISC"
+  109   255  170    0        1  1  1    "Right Meninges PHC"
+  110   181  255  158        1  1  1    "Right ERC"
+  111    55  180  255        1  1  1    "Right Br35"
+  112     0    0  255        1  1  1    "Right Br36"
+  113   243    0  170        1  1  1    "Right PHC"
+  114   183  205  255        1  1  1    "Right ColSul"
+  116   181  101   30        1  1  1    "Right OTSul"
+  117   255  170  255        1  1  1    "Right Meninges"

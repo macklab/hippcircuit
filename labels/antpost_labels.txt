@@ -1,0 +1,35 @@
+################################################
+# Ant-Post Subfield Label Description File
+# File format:
+# IDX   -R-  -G-  -B-  -A--  VIS MSH  LABEL
+# Fields:
+#    IDX:   Zero-based index
+#    -R-:   Red color component (0..255)
+#    -G-:   Green color component (0..255)
+#    -B-:   Blue color component (0..255)
+#    -A-:   Label transparency (0.00 .. 1.00)
+#    VIS:   Label visibility (0 or 1)
+#    IDX:   Label mesh visibility (0 or 1)
+#  LABEL:   Label description
+################################################
+    0     0    0    0        0  0  0    "Clear Label"
+    1   255    0    0        1  1  1    "R_ant_CA1"
+    2   215    0    0        1  1  1    "R_post_CA1"
+    3     0  255    0        1  1  1    "R_ant_subiculum"
+    4     0    0  255        1  1  1    "R_ant_CA4DG"
+    5   255  255    0        1  1  1    "R_ant_CA2CA3"
+    6     0  255  255        1  1  1    "R_ant_stratum"
+    7     0  215    0        1  1  1    "R_post_subiculum"
+    8     0    0  215        1  1  1    "R_post_CA4DG"
+    9   215  215    0        1  1  1    "R_post_CA2CA3"
+    10    0  215  215        1  1  1    "R_post_stratum"
+    11  205    0    0        1  1  1    "L_ant_CA1"
+    12    0  205    0        1  1  1    "L_ant_subiculum"
+    13    0    0  205        1  1  1    "L_ant_CA4DG"
+    14  205  205    0        1  1  1    "L_ant_CA2CA3"
+    15    0  205  205        1  1  1    "L_ant_stratum"
+    16  235    0    0        1  1  1    "L_post_CA1"
+    17    0  235    0        1  1  1    "L_post_subiculum"
+    18    0    0  235        1  1  1    "L_post_CA4DG"
+    19  235  235    0        1  1  1    "L_post_CA2CA3"
+    20    0  235  235        1  1  1    "L_post_stratum"
