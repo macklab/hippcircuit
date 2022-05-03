@@ -1,9 +1,41 @@
 #!/bin/bash
+#SBATCH -N 1
+#SBATCH -c 40
+#SBATCH --time=20:00
+
+#######################
+#### Configuration ####
+#######################
+# Where logs stored - Change this for your directory
+#SBATCH -o /project/m/mmack/projects/hippcircuit/code/logs/%x-%j.out
+
+# Please also change these paths for your directory
+bids_dir="/project/m/mmack/projects/hippcircuit"
+work_dir="${bids_dir}/derivatives/itk-snap" # where segmentations stored
+#######################
+
+# Define subjects
+sbjs=$1
+# OR define subjects here:
+# sbjs=$(sed -n 1p ${bids_dir}/subjects_rest.txt)
+cd ${work_dir}
+
+# Upload modules
+module load NiaEnv/2018a
+module load intel/2018.2
+module load ants/2.3.1
+module load openblas/0.2.20
+module load fsl/.experimental-6.0.0
+module load fftw/3.3.7
+module load eigen/3.3.4
+module load mrtrix/3.0.0
+module load freesurfer/6.0.0
 
 # Only extract anterior/posterior from ASHS segmentation
 for i in ${sbjs}; do
-  cp ${work_dir}/sub-${i}/layer_002* \
-  ${work_dir}/sub-${i}/ant_post_all_labels.nii.gz
+  # Not necessary if you alread renamed the segmented file
+  # cp ${work_dir}/sub-${i}/layer_002* \
+  # ${work_dir}/sub-${i}/ant_post_all_labels.nii.gz
 
   fslmaths ${work_dir}/sub-${i}/ant_post_all_labels.nii.gz \
   -thr 1 -uthr 1 -bin ${work_dir}/sub-${i}/ant_post_rois.nii.gz
@@ -42,7 +74,7 @@ for i in ${sbjs}; do
   done
 done
 
-#Dilate ant/post
+# Dilate ant/post
 for i in ${sbjs}; do
   for r in $(cat ${work_dir}/configs/itk_antpost_labels.txt); do
     fslmaths ${work_dir}/sub-${i}/${r}.nii.gz \
