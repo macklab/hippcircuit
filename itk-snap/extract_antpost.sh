@@ -68,7 +68,7 @@ done
 for i in ${sbjs}; do
   for r in 1 2 3 4
   do
-    var=$(cat ${work_dir}/configs/itk_antpost_labels.txt | sed -n $r'p')
+    var=$(cat ${bids_dir}/derivatives/labels/itk-snap_antpost_names.txt | sed -n $r'p')
     fslmaths ${work_dir}/sub-${i}/ant_post_regrid.nii.gz \
     -thr $r -uthr $r -bin ${work_dir}/sub-${i}/${var}.nii.gz
   done
@@ -76,7 +76,7 @@ done
 
 # Dilate ant/post
 for i in ${sbjs}; do
-  for r in $(cat ${work_dir}/configs/itk_antpost_labels.txt); do
+  for r in $(cat ${bids_dir}/derivatives/labels/itk-snap_antpost_names.txt); do
     fslmaths ${work_dir}/sub-${i}/${r}.nii.gz \
     -kernel sphere 2.5 -dilM ${work_dir}/sub-${i}/${r}_dil.nii.gz
 
