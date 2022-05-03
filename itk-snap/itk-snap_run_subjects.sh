@@ -1,5 +1,16 @@
 #!/bin/bash
 
+#######################
+#### Configuration ####
+#######################
+# Please change these paths for your directory of interest
+seg_dir="~/Documents/PhD/HippCircuit/itksnap"
+#######################
+
+# Define subjects
+sbjs="SUB_ID"
+# sbjs=$(sed -n 1p ${seg_dir}/subjects_rest.txt)
+
 # Download T1s
 for i in $sbjs; do
   aws_dir="s3://hcp-openaccess/HCP_1200/${i}/T1w"
@@ -30,4 +41,9 @@ done
 # Download results
 for i in ${sbjs}; do
   itksnap-wt -dss-tickets-download $(cat ${seg_dir}/sub-${i}/ticket_${i}.txt | tail -n1) ${seg_dir}/sub-${i}
+done
+
+# Rename the segmented image
+for i in ${sbjs}; do
+  cp ${seg_dir}/sub-${i}/layer_002* ${seg_dir}/sub-${i}/ant_post_all_labels.nii.gz
 done
