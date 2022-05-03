@@ -32,8 +32,8 @@ module load mrtrix/3.0.0
 module load freesurfer/6.0.0
 
 # Extract roi from maget
-num=$(cat ${bids_dir}/derivatives/mrtrix/configs/GM_labels_original.txt | awk '{print $1}' | tail -n 10)
-var=$(cat ${bids_dir}/derivatives/mrtrix/configs/GM_labels_original.txt | awk '{print $8}' | tail -n 10)
+num=$(cat ${bids_dir}/derivatives/labels/subfield_labels.txt | awk '{print $1}' | tail -n 10)
+var=$(cat ${bids_dir}/derivatives/labels/subfield_labels.txt | awk '{print $8}' | tail -n 10)
 for k in ${sbjs}; do
   for i in ${num}; do
     roi=$(echo $var | awk "{print \$$i}" | tr -d '"')
