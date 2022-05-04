@@ -43,6 +43,7 @@ slurm-*.out
 
 # Scrap - Which is To Be Deleted
 **wTBD**
+**/garbage-bin/**
 
 # Files for testing and drafting
 **/local/**
