@@ -59,7 +59,6 @@ done
 
 #######################
 # 2) MTL + maget segmentation (no anterior/posteior)
-sbjs=$(sed -n 1,15p ${bids_dir}/subjects.txt)
 for i in ${sbjs}; do
   tck2connectome  ${bids_dir}/derivatives/mrtrix/sub-${i}/2M_sift.tck \
   ${bids_dir}/derivatives/itk-snap/sub-${i}/MTL_hipp_subfields.nii.gz \
