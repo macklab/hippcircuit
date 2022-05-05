@@ -11,7 +11,7 @@
 
 # Please also change these paths for your directory
 bids_dir="/project/m/mmack/projects/hippcircuit"
-work_dir="${bids_dir}/derivatives/itk-snap" # where segmentations stored
+work_dir="${bids_dir}/derivatives/itk-snap"  # where segmentations stored
 #######################
 
 # Define subjects
