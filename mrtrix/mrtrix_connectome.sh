@@ -50,11 +50,13 @@ done
 
 # Tensor specific connectomes
 for i in ${sbjs}; do
-  tck2connectome ${bids_dir}/derivatives/mrtrix/sub-${i}/2M_sift.tck \
-  ${bids_dir}/derivatives/mrtrix/sub-${i}/${i}_T1w_GM_labels.nii.gz \
-  ${bids_dir}/derivatives/mrtrix/sub-${i}/sub-${i}_hipp_connectome_${t}.csv \
-  -scale_file ${bids_dir}/derivatives/mrtrix/sub-${i}/metrics_${t}.csv \
-  -stat_edge mean -force
+  for t in ${metrics}; do
+    tck2connectome ${bids_dir}/derivatives/mrtrix/sub-${i}/2M_sift.tck \
+    ${bids_dir}/derivatives/mrtrix/sub-${i}/${i}_T1w_GM_labels.nii.gz \
+    ${bids_dir}/derivatives/mrtrix/sub-${i}/sub-${i}_hipp_connectome_${t}.csv \
+    -scale_file ${bids_dir}/derivatives/mrtrix/sub-${i}/metrics_${t}.csv \
+    -stat_edge mean -force
+  done
 done
 
 #######################
