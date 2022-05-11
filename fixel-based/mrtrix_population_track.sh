@@ -1,9 +1,19 @@
 #!/bin/bash
-#SBATCH -N 2
+#SBATCH -N 1
 #SBATCH -c 40
 #SBATCH --time=24:00:00
-#SBATCH -o %x-%j.out
 
+#######################
+#### Configuration ####
+#######################
+# Where logs stored - Change this for your directory
+#SBATCH -o /project/m/mmack/projects/hippcircuit/code/logs/%x-%j.out
+
+# Please also change these paths for your directory
+bids_dir="/project/m/mmack/projects/hippcircuit"
+#######################
+
+# Load modules
 module load NiaEnv/2018a
 module load intel/2018.2
 module load ants/2.3.1
@@ -14,11 +24,10 @@ module load eigen/3.3.4
 module load mrtrix/3.0.0
 module load freesurfer/6.0.0
 
-# Define path
-bids_dir="/project/m/mmack/projects/hippcircuit"
-
-# Define subjects
-sbjs=$(sed -n 1,85p ${bids_dir}/subjects.txt)
+# Define subjects of interest
+sbjs=$1
+# OR define here:
+# sbjs=$(sed -n 1,831p ${bids_dir}/derivatives/subjects/final_subjects.txt)
 
 # Tissue segmention of T1 template
 5ttgen fsl ${bids_dir}/derivatives/fixel-based/template/T1_template.mif \
