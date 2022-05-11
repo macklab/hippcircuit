@@ -51,6 +51,12 @@ for i in $sbjs; do
   -interp nearest -datatype bit ${bids_dir}/derivatives/fixel-based/fixels/sub-${i}/mask_in_template_space.mif -force
 done
 
+for i in $sbjs; do
+  mrtransform ${bids_dir}/derivatives/fixel-based/fixels/sub-${i}/mask.mif \
+  -warp ${bids_dir}/derivatives/fixel-based/warps/sub-${i}_subject2template_warp.mif \
+  -interp nearest -datatype bit ${scratch_dir}/derivatives/fixel-based/fixels/sub-${i}/mask_in_template_space.mif -force
+done
+
 # Compute the template mask as the intersection of all warped masks
 mrmath ${bids_dir}/derivatives/fixel-based/fixels/sub-*/mask_in_template_space.mif \
   min ${bids_dir}/derivatives/fixel-based/template/template_mask.mif -datatype bit -force
