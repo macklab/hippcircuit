@@ -22,13 +22,23 @@ sbjs=$(sed -n 1,85p ${bids_dir}/subjects.txt)
 
 mkdir ${bids_dir}/derivatives/fixel-based/validation
 rm -f ${bids_dir}/derivatives/fixel-based/validation/nodes_pearson_corr.csv
-# 1) Pearson Correlation
+# # 1) Pearson Correlation for Labels
+# for i in $sbjs; do
+#   #ImageMath 3 - PearsonCorrelation majorityvote_copy.nii.gz nodes_in_template_space.nii.gz
+#   num=$(ImageMath 3 - PearsonCorrelation \
+#   ${bids_dir}/derivatives/fixel-based/template/node_template.nii.gz \
+#   ${bids_dir}/derivatives/fixel-based/fixels/sub-${i}/MTL_hipp_subfields_in_template_space.nii.gz | awk '{print $1}')
+#   printf '%s\n' ${i} ${num} | paste -sd ',' >> "${bids_dir}/derivatives/fixel-based/validation/nodes_pearson_corr.csv"
+# done
+
+# 1) Pearson Correlation for T1s
+rm -f ${bids_dir}/derivatives/fixel-based/validation/T1s_pearson_corr.csv
 for i in $sbjs; do
   #ImageMath 3 - PearsonCorrelation majorityvote_copy.nii.gz nodes_in_template_space.nii.gz
   num=$(ImageMath 3 - PearsonCorrelation \
-  ${bids_dir}/derivatives/fixel-based/template/node_template.nii.gz \
-  ${bids_dir}/derivatives/fixel-based/fixels/sub-${i}/MTL_hipp_subfields_in_template_space.nii.gz | awk '{print $1}')
-  printf '%s\n' ${i} ${num} | paste -sd ',' >> "${bids_dir}/derivatives/fixel-based/validation/nodes_pearson_corr.csv"
+  ${bids_dir}/derivatives/fixel-based/template/T1_template.nii.gz \
+  ${bids_dir}/sub-${i}/anat/T1w_acpc_dc_restore_brain.nii.gz | awk '{print $1}')
+  printf '%s\n' ${i} ${num} | paste -sd ',' >> "${bids_dir}/derivatives/fixel-based/validation/T1s_pearson_corr.csv"
 done
 
 # 2) Dice
