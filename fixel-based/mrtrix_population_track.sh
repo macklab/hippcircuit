@@ -57,7 +57,7 @@ tcksift ${bids_dir}/derivatives/fixel-based/template/10M_template.tck \
 
 # Population connectome
 tck2connectome ${bids_dir}/derivatives/fixel-based/template/2M_sift_template.tck \
-  ${bids_dir}/derivatives/fixel-based/template/node_template.nii.gz \
+  ${bids_dir}/derivatives/fixel-based/template/MTL_hipp_subfields_template.nii.gz\
   ${bids_dir}/derivatives/fixel-based/template/connectome_stream_template_hipp_MTL.csv \
   -out_assignments ${bids_dir}/derivatives/fixel-based/template/assignments_stream_template_hipp_MTL.csv \
   -force
