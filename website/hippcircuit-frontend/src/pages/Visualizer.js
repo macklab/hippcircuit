@@ -7,6 +7,7 @@ import { Canvas } from "@react-three/fiber";
 import { OrbitControls } from '@react-three/drei';
 import { Suspense, useState } from "react";
 import Carousel from 'react-elastic-carousel'
+import { NavLink } from "react-router-dom";
 
 import Model from '../components/Model';
 import ModelCard from '../components/ModelCard';
@@ -218,12 +219,19 @@ function Visualizer() {
     <div className="visualizercontainer">
       <div className='vistop'>
           <div className='infobox'>
+            <div className='infolines'>
             <h1>{titleText}</h1>
-            <h2>{sideText}</h2>
-            <h2>N-Tracts: 724</h2>
-            <h2>Stat1: X</h2>
-            <h2>Stat2: Y</h2>
-            <h2>Stat3: Z</h2>
+            <h3>{sideText}</h3>
+            <h3>N-Tracts: 724</h3>
+            <h3>Stat1: X</h3>
+            <h3>Stat2: Y</h3>
+            <h3>Stat3: Z</h3>
+          </div>
+          <NavLink to='/about'>
+            <div className='aboutlink'>
+              <h2>ABOUT THE PROJECT</h2>
+            </div>
+          </NavLink>
           </div>
           <Canvas>
             <Suspense fallback={null}>

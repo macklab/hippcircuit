@@ -18,7 +18,7 @@ function Home() {
         <div className="hright">
             <h1>HippCircuit</h1>
             <div className='enterButton'>
-                <NavLink to="/about">
+                <NavLink to="/explore">
                     <HomeButton />
                 </NavLink>
             </div>

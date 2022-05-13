@@ -3,11 +3,16 @@ import './About.css';
 import ilf from '../images/ILF.png';
 import logo from '../images/MackLabLogo.png';
 
+import { NavLink } from "react-router-dom";
+
 function About() {
   return (
     <div className="aboutcontainer">
       <div className='atitle'>
         <h1>About the HippCircuit project:</h1>
+        <NavLink to='/explore'>
+          <h4>{'<'} BACK TO THE DATA</h4>
+        </NavLink>
       </div>
       <div className='whiteblockright'>
         <div className='wleft'>

@@ -3,10 +3,22 @@
     text-align: center;
     border: solid;
     height: 98%;
-    background-color: rgb(58, 190, 252);
+    color: grey;
+    background-color: black;
+    transition: 0.3s;
+    border-radius: 5px;
+}
+
+.modelcardcontainer:hover {
+    width: 150px;
+    text-align: center;
+    border: solid;
+    height: 98%;
+    color: white;
+    background-color: rgb(23, 60, 70);
 }
 
 .modelcardcontainer p {
     margin: 0px;
-    margin-top: 9px;
+    margin-top: 7px;
 }

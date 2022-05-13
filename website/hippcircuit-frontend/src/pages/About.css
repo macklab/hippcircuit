@@ -4,17 +4,29 @@
 
 .atitle {
     background-color: rgb(58, 190, 252);
-    display: flex;
-    justify-content: center;
+    text-align: center;
     font-size: 30px;
     padding-top: 45px;
-    height: 200px;
+    height: 250px;
     width: 100%;
     color: white;
+    -webkit-user-select: none;      
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 
 .atitle h1 {
     font-weight: 400;
+}
+
+.atitle h4 {
+    color: white;
+    transition: 0.5s;
+}
+
+.atitle h4:hover {
+    color: rgb(12, 63, 113);
 }
 
 .whiteblockright {
