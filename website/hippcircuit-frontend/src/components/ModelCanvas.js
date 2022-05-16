@@ -10,13 +10,14 @@ export default function ModelCanvas(props) {
 
   return (
     <Canvas>
+        <OrbitControls />
         <Suspense fallback={<></>}>
-            <OrbitControls />
             <>
-                <ambientLight color="blue" intensity={1}/>
+                <ambientLight color="white" intensity={0.5}/>
                 <pointLight position={[10, 20, 10]} intensity={0.5} color="white"/>
                 <pointLight position={[-10, -20, -10]} intensity={0.5} color="white"/>
-                <primitive object={gltf.scene} scale={0.1} />
+                <primitive object={gltf.scene} scale={0.1}/>
+
             </>
         </Suspense>
     </Canvas>

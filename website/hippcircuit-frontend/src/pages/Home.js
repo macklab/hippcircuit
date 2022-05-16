@@ -1,12 +1,20 @@
 import './Home.css';
 
-import { NavLink } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import logo from '../images/MackLabLogo.png';
 import ilf from '../images/ILF.png';
 import HomeButton from '../components/HomeButton';
 
 function Home() {
+
+    const navigate = useNavigate();
+
+    function handleClick() {
+        navigate("/explore");
+        window.location.reload(false);
+    }
+
   return (
     <div className="container">
         <div className="top">
@@ -17,10 +25,8 @@ function Home() {
         </div>
         <div className="hright">
             <h1>HippCircuit</h1>
-            <div className='enterButton'>
-                <NavLink to="/explore">
-                    <HomeButton />
-                </NavLink>
+            <div className='enterButton' onClick={() => handleClick()}>
+                <HomeButton />
             </div>
         </div>
     </div>

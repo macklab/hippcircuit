@@ -24,6 +24,10 @@
     display: flex;
     width: 95%;
     justify-content: space-between;
+    -webkit-user-select: none;       
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 
 .infobox h1 {
@@ -44,13 +48,13 @@
 .purplebox {
     width: 20px;
     height: 20px;
-    background-color: #a17df0;
+    background-color: #6bb8cc;
 }
 
 .bluebox {
     width: 20px;
     height: 20px;
-    background-color: #afe3ff;
+    background-color: #2f55ff;
 }
 
 .aboutlink {
