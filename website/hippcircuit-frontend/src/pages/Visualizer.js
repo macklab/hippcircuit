@@ -1,9 +1,6 @@
 import './Visualizer.css';
 
-import glbtest from '../models/test.glb';
-import glbtest2 from '../models/test2.glb';
-import glbtest3 from '../models/test3.glb';
-
+import ALLTRACTS from '../models/Full_Model.glb';
 import LCA1SUB from '../models/L_CA1_SUB.glb';
 import LCA2CA3CA1 from '../models/L_CA2CA3_CA1.glb';
 import LCA4DGCA2CA3 from '../models/L_CA4DG_CA2CA3.glb';
@@ -11,6 +8,13 @@ import LERCCA1 from '../models/L_ERC_CA1.glb';
 import LERCCA4DG from '../models/L_ERC_CA4DG.glb';
 import LSUBCA4DG from '../models/L_SUB_CA4DG.glb';
 import LSUBERC from '../models/L_SUB_ERC.glb';
+import RCA1SUB from '../models/R_CA1_SUB.glb';
+import RCA2CA3CA1 from '../models/R_CA2CA3_CA1.glb';
+import RCA4DGCA2CA3 from '../models/R_CA4DG_CA2CA3.glb';
+import RERCCA1 from '../models/R_ERC_CA1.glb';
+import RERCCA4DG from '../models/R_ERC_CA4DG.glb';
+import RSUBCA4DG from '../models/R_SUB_CA4DG.glb';
+import RSUBERC from '../models/R_SUB_ERC.glb'
 
 import { useState, useTransition, useEffect } from "react";
 import Carousel from 'react-elastic-carousel'
@@ -23,6 +27,14 @@ import ModelCanvas from '../components/ModelCanvas';
 const cardData = [
   {
     id: 1,
+    model: ALLTRACTS,
+    side: 'Both',
+    firstROI: 'All ROIs',
+    secondROI: 'all ROIs',
+    n: 3390
+  },
+  {
+    id: 2,
     model: LCA1SUB,
     side: 'Left',
     firstROI: 'CA1',
@@ -30,7 +42,7 @@ const cardData = [
     n: 283
   },
   {
-    id: 2,
+    id: 3,
     model: LCA2CA3CA1,
     side: 'Left',
     firstROI: 'CA2CA3',
@@ -38,7 +50,7 @@ const cardData = [
     n: 44
   },
   {
-    id: 3,
+    id: 4,
     model: LCA4DGCA2CA3,
     side: 'Left',
     firstROI: 'CA4DG',
@@ -46,7 +58,7 @@ const cardData = [
     n: 163
   },
   {
-    id: 4,
+    id: 5,
     model: LERCCA1,
     side: 'Left',
     firstROI: 'ERC',
@@ -54,7 +66,7 @@ const cardData = [
     n: 128
   },
   {
-    id: 5,
+    id: 6,
     model: LERCCA4DG,
     side: 'Left',
     firstROI: 'ERC',
@@ -62,7 +74,7 @@ const cardData = [
     n: 0
   },
   {
-    id: 6,
+    id: 7,
     model: LSUBCA4DG,
     side: 'Left',
     firstROI: 'SUB',
@@ -70,7 +82,7 @@ const cardData = [
     n: 83
   },
   {
-    id: 7,
+    id: 8,
     model: LSUBERC,
     side: 'Left',
     firstROI: 'SUB',
@@ -78,69 +90,76 @@ const cardData = [
     n: 841
   },
   {
-    id: 8,
-    model: glbtest,
+    id: 9,
+    model: RCA1SUB,
     side: 'Right',
     firstROI: 'CA1',
     secondROI: 'SUB',
-  },
-  {
-    id: 9,
-    model: glbtest2,
-    side: 'Left',
-    firstROI: 'CA1',
-    secondROI: 'CA2CA3',
+    n: 616
   },
   {
     id: 10,
-    model: glbtest3,
+    model: RCA2CA3CA1,
     side: 'Right',
-    firstROI: 'CA1',
-    secondROI: 'SUB',
+    firstROI: 'CA2CA3',
+    secondROI: 'CA1',
+    n: 108
   },
   {
     id: 11,
-    model: glbtest2,
-    side: 'Left',
-    firstROI: 'CA1',
+    model: RCA4DGCA2CA3,
+    side: 'Right',
+    firstROI: 'CA4DG',
     secondROI: 'CA2CA3',
+    n: 301
   },
   {
     id: 12,
-    model: glbtest,
+    model: RERCCA1,
     side: 'Right',
-    firstROI: 'CA1',
-    secondROI: 'SUB',
+    firstROI: 'ERC',
+    secondROI: 'CA1',
+    n: 110
   },
   {
     id: 13,
-    model: glbtest3,
-    side: 'Left',
-    firstROI: 'CA1',
-    secondROI: 'CA2CA3',
+    model: RERCCA4DG,
+    side: 'Right',
+    firstROI: 'ERC',
+    secondROI: 'CA4DG',
+    n: 0
   },
   {
     id: 14,
-    model: glbtest2,
+    model: RSUBCA4DG,
     side: 'Right',
-    firstROI: 'CA1',
-    secondROI: 'SUB',
+    firstROI: 'SUB',
+    secondROI: 'CA4DG',
+    n: 33
+  },
+  {
+    id: 15,
+    model: RSUBERC,
+    side: 'Right',
+    firstROI: 'SUB',
+    secondROI: 'ERC',
+    n: 680
   },
 ];
 
 
 function Visualizer() {
 
-  const [model, setModel] = useState(LCA1SUB);
-  const [loaded, setLoaded] = useState(<ModelCanvas model={LCA1SUB} />)
+  const [model, setModel] = useState(ALLTRACTS);
+  const [loaded, setLoaded] = useState(<ModelCanvas model={ALLTRACTS} />)
 
   const [isPending, startTransition] = useTransition();
 
-  const [titleText, setTitleText] = useState('ROIs: CA1 to SUB')
-  const [sideText, setSideText] = useState('Hemisphere: Left')
-  const [roi1, setRoi1] = useState('CA1')
-  const [roi2, setRoi2] = useState('SUB')
-  const [n, setN] = useState(283)
+  const [titleText, setTitleText] = useState('All tracts and ROIs')
+  const [sideText, setSideText] = useState('Both hemishperes')
+  const [roi1, setRoi1] = useState('N/A')
+  const [roi2, setRoi2] = useState('N/A')
+  const [n, setN] = useState(3390)
 
   useEffect(() => {
     setLoaded(<ModelCanvas model={model} />);
