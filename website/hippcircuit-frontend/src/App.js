@@ -8,7 +8,7 @@ import Visualizer from './pages/Visualizer';
 function App() {
   return (
     <div className="App">
-      <Router>
+      <Router basename={process.env.PUBLIC_URL}>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
