@@ -1,4 +1,227 @@
 .aboutcontainer {
+    background-color: white;
+}
+
+.atitle {
+    background-color: rgb(58, 190, 252);
+    text-align: center;
+    font-size: 30px;
+    padding-top: 45px;
+    height: 250px;
+    width: 100%;
+    color: white;
+    -webkit-user-select: none;      
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.atitle h1 {
+    font-weight: 400;
+}
+
+.atitle h4 {
+    color: white;
+    transition: 0.5s;
+}
+
+.atitle h4:hover {
+    color: rgb(12, 63, 113);
+}
+
+.whiteblockright {
+    background-color: white;
+    width: 100%;
+    height: 500px;
+    display: flex;
+}
+
+.wleft {
+    padding: 50px;
+    display: flex;
+    flex-direction: column;
+}
+
+.wright img {
+    min-width: 300px;
+    max-width: 500px;
+    padding-left: 100px;
+    padding-bottom: 50px;
+    -webkit-user-drag: none;
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+}
+
+.blueblockleft {
+    background-color: rgb(58, 190, 252);
+    width: 100%;
+    height: 500px;
+    display: flex;
+}
+
+.bright {
+    padding: 50px;
+    display: flex;
+    flex-direction: column;
+}
+
+.bleft img {
+    min-width: 300px;
+    max-width: 500px;
+    padding-left: 50px;
+    padding-bottom: 50px;
+    -webkit-user-drag: none;
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+}
+
+.alogo {
+    height: 100px;
     display: flex;
     justify-content: center;
+}
+
+.alogo img {
+    min-width: 200px;
+    max-width: 200px;
+    padding-top: 20px;
+    padding-bottom: 10px;
+    -webkit-user-drag: none;
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+}
+
+@media only screen and (max-width: 1300px) {
+
+    .whiteblockright {
+        background-color: white;
+        width: 100%;
+        height: 600px;
+        display: flex;
+    }
+
+}
+
+@media only screen and (max-width: 1200px) {
+
+    .blueblockleft {
+        background-color: rgb(58, 190, 252);
+        width: 100%;
+        height: 650px;
+        display: flex;
+    }
+
+}
+
+@media only screen and (max-width: 1150px) {
+
+    .blueblockleft {
+        background-color: rgb(58, 190, 252);
+        width: 100%;
+        height: 725px;
+        display: flex;
+    }
+
+    .whiteblockright {
+        background-color: white;
+        width: 100%;
+        height: 850px;
+        display: flex;
+    }
+
+
+}
+
+@media only screen and (max-width: 1000px) {
+
+    .atitle {
+        background-color: rgb(58, 190, 252);
+        display: flex;
+        justify-content: center;
+        font-size: 25px;
+        padding-bottom: 175px;
+        height: 100px;
+        width: 100%;
+        color: white;
+        text-align: center;
+    }
+    
+    .atitle h1 {
+        font-weight: 400;
+    }
+
+    .whiteblockright {
+        background-color: white;
+        width: 100%;
+        height: 1100px;
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .wleft {
+        padding: 50px;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .wleft h2 {
+        margin-top: 0px;
+    }
+
+    .wright {
+        display: flex;
+        justify-content: center;
+    }
+    
+    .wright img {
+        min-width: 300px;
+        max-width: 350px;
+        padding-right: 105px;
+        -webkit-user-drag: none;
+        user-select: none;
+        -moz-user-select: none;
+        -webkit-user-select: none;
+        -ms-user-select: none;
+    }
+
+    .blueblockleft {
+        background-color: rgb(58, 190, 252);
+        width: 100%;
+        height: 1100px;
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .bright {
+        padding: 50px;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .bright h2 {
+        margin-top: 0px;
+    }
+
+    .bleft {
+        display: flex;
+        justify-content: center;
+    }
+    
+    .bleft img {
+        min-width: 300px;
+        max-width: 350px;
+        padding-right: 50px;
+        -webkit-user-drag: none;
+        user-select: none;
+        -moz-user-select: none;
+        -webkit-user-select: none;
+        -ms-user-select: none;
+    }
+
 }
