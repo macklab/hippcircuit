@@ -1,0 +1,34 @@
+{
+  "files": {
+    "main.css": "/hippcircuit/static/css/main.50c7a8de.css",
+    "main.js": "/hippcircuit/static/js/main.226a5557.js",
+    "static/media/R_SUB_ERC.glb": "/hippcircuit/static/media/R_SUB_ERC.0490fbb98655104a35c6.glb",
+    "static/media/R_CA1_SUB.glb": "/hippcircuit/static/media/R_CA1_SUB.499e99c403e5c398bc52.glb",
+    "static/media/L_SUB_ERC.glb": "/hippcircuit/static/media/L_SUB_ERC.398cc6e3172cb8c4b476.glb",
+    "static/media/Full_Model.glb": "/hippcircuit/static/media/Full_Model.0e2de2d8e0d69051f99e.glb",
+    "static/media/L_ERC_CA1.glb": "/hippcircuit/static/media/L_ERC_CA1.718bd0004ce5fa77cd20.glb",
+    "static/media/L_CA1_SUB.glb": "/hippcircuit/static/media/L_CA1_SUB.41e56140bc518c835ced.glb",
+    "static/media/R_CA4DG_CA2CA3.glb": "/hippcircuit/static/media/R_CA4DG_CA2CA3.39121c0bb02e231c9fcc.glb",
+    "static/media/R_ERC_CA1.glb": "/hippcircuit/static/media/R_ERC_CA1.20d3ba10c91a97081e4f.glb",
+    "static/media/L_CA4DG_CA2CA3.glb": "/hippcircuit/static/media/L_CA4DG_CA2CA3.066d1fdd96961ddb5d2f.glb",
+    "static/media/R_CA2CA3_CA1.glb": "/hippcircuit/static/media/R_CA2CA3_CA1.557bf047dcf90b4a56ae.glb",
+    "static/media/L_SUB_CA4DG.glb": "/hippcircuit/static/media/L_SUB_CA4DG.7f2c229240720918f196.glb",
+    "static/media/R_SUB_CA4DG.glb": "/hippcircuit/static/media/R_SUB_CA4DG.a24f4c0ea6a8db69313f.glb",
+    "static/media/L_CA2CA3_CA1.glb": "/hippcircuit/static/media/L_CA2CA3_CA1.1b1e9c166fc07de6b4ee.glb",
+    "static/media/tracts2.glb": "/hippcircuit/static/media/tracts2.c26963c7714ecbadd63b.glb",
+    "static/media/tracts1.glb": "/hippcircuit/static/media/tracts1.1a717022a9b474c65098.glb",
+    "static/media/tracts4.glb": "/hippcircuit/static/media/tracts4.8de8d8b4c3a962b5829d.glb",
+    "static/media/tracts3.glb": "/hippcircuit/static/media/tracts3.00a2b553159d655f02d2.glb",
+    "static/media/L_ERC_CA4DG.glb": "/hippcircuit/static/media/L_ERC_CA4DG.8f8b842f21df58ca9074.glb",
+    "static/media/R_ERC_CA4DG.glb": "/hippcircuit/static/media/R_ERC_CA4DG.043f0ed17798e36aca09.glb",
+    "static/media/ILF.png": "/hippcircuit/static/media/ILF.0409f610734d3f5b9ef4.png",
+    "static/media/MackLabLogo.png": "/hippcircuit/static/media/MackLabLogo.23cc74947ffdac0e2ab4.png",
+    "index.html": "/hippcircuit/index.html",
+    "main.50c7a8de.css.map": "/hippcircuit/static/css/main.50c7a8de.css.map",
+    "main.226a5557.js.map": "/hippcircuit/static/js/main.226a5557.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.50c7a8de.css",
+    "static/js/main.226a5557.js"
+  ]
+}
