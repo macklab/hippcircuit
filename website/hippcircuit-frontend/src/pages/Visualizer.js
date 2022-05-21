@@ -182,6 +182,11 @@ function Visualizer() {
               <h3>{roi2}</h3>
             </div>
           </div>
+          <NavLink to='/results'>
+            <div className='aboutlink'>
+              <h2>OTHER DATA & RESULTS</h2>
+            </div>
+          </NavLink>
           <NavLink to='/about'>
             <div className='aboutlink'>
               <h2>ABOUT THE PROJECT</h2>
