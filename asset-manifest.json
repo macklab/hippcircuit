@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/hippcircuit/static/css/main.fb7fc427.css",
-    "main.js": "/hippcircuit/static/js/main.c5b266a3.js",
+    "main.css": "/hippcircuit/static/css/main.60624c61.css",
+    "main.js": "/hippcircuit/static/js/main.fa189026.js",
     "static/media/R_SUB_ERC.glb": "/hippcircuit/static/media/R_SUB_ERC.0490fbb98655104a35c6.glb",
     "static/media/R_CA1_SUB.glb": "/hippcircuit/static/media/R_CA1_SUB.499e99c403e5c398bc52.glb",
     "static/media/L_SUB_ERC.glb": "/hippcircuit/static/media/L_SUB_ERC.398cc6e3172cb8c4b476.glb",
@@ -16,23 +16,24 @@
     "static/media/L_SUB_CA4DG.glb": "/hippcircuit/static/media/L_SUB_CA4DG.7f2c229240720918f196.glb",
     "static/media/R_SUB_CA4DG.glb": "/hippcircuit/static/media/R_SUB_CA4DG.a24f4c0ea6a8db69313f.glb",
     "static/media/L_CA2CA3_CA1.glb": "/hippcircuit/static/media/L_CA2CA3_CA1.1b1e9c166fc07de6b4ee.glb",
+    "static/media/pipeline.png": "/hippcircuit/static/media/pipeline.69a166af14a9c3c4536f.png",
     "static/media/tracts2.glb": "/hippcircuit/static/media/tracts2.c26963c7714ecbadd63b.glb",
     "static/media/tracts1.glb": "/hippcircuit/static/media/tracts1.1a717022a9b474c65098.glb",
     "static/media/tracts4.glb": "/hippcircuit/static/media/tracts4.8de8d8b4c3a962b5829d.glb",
     "static/media/tracts3.glb": "/hippcircuit/static/media/tracts3.00a2b553159d655f02d2.glb",
     "static/media/L_ERC_CA4DG.glb": "/hippcircuit/static/media/L_ERC_CA4DG.8f8b842f21df58ca9074.glb",
     "static/media/R_ERC_CA4DG.glb": "/hippcircuit/static/media/R_ERC_CA4DG.043f0ed17798e36aca09.glb",
-    "static/media/ILF.png": "/hippcircuit/static/media/ILF.0409f610734d3f5b9ef4.png",
     "static/media/MackLabLogo.png": "/hippcircuit/static/media/MackLabLogo.23cc74947ffdac0e2ab4.png",
+    "static/media/Vanier_logo.png": "/hippcircuit/static/media/Vanier_logo.c7306adbe027ec8dcbbb.png",
     "static/media/CIHRLogo.jpg": "/hippcircuit/static/media/CIHRLogo.dd09226c0c338cbd7610.jpg",
     "static/media/BuddingMindsLogo.png": "/hippcircuit/static/media/BuddingMindsLogo.7d2f9664dc41590e93d9.png",
     "static/media/BrainCanadaLogoDark.png": "/hippcircuit/static/media/BrainCanadaLogoDark.552793afd7781211a7e6.png",
     "index.html": "/hippcircuit/index.html",
-    "main.fb7fc427.css.map": "/hippcircuit/static/css/main.fb7fc427.css.map",
-    "main.c5b266a3.js.map": "/hippcircuit/static/js/main.c5b266a3.js.map"
+    "main.60624c61.css.map": "/hippcircuit/static/css/main.60624c61.css.map",
+    "main.fa189026.js.map": "/hippcircuit/static/js/main.fa189026.js.map"
   },
   "entrypoints": [
-    "static/css/main.fb7fc427.css",
-    "static/js/main.c5b266a3.js"
+    "static/css/main.60624c61.css",
+    "static/js/main.fa189026.js"
   ]
 }
