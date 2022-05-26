@@ -1,0 +1,30 @@
+.citcontainer {
+    color: rgb(32, 127, 139);
+}
+
+.citbar {
+    position: absolute;
+    width: 50%;
+    z-index: 2;
+    display: flex;
+    justify-content: center;
+    margin-top: -7px;
+}
+
+.citdiv {
+    background-color: rgb(15, 63, 69);
+    border: 2px solid rgb(12, 44, 78);
+    color: white;
+    border-radius: 5px;
+    position: relative;
+    width: 750px;
+    text-align: center;
+    transition: 0.3s;
+}
+
+.citdiv:hover {
+    border: 7px solid rgb(12, 44, 78);
+    background-color: white;
+    color: rgb(15, 63, 69);
+    font-weight: 800;
+}
