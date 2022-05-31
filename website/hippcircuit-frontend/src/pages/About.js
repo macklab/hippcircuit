@@ -2,17 +2,30 @@ import './About.css';
 
 import tractrotate from '../images/homegif.gif';
 import pipeline from '../images/pipeline.png';
+
+import im1 from '../images/artim1.png';
+import im2 from '../images/artim2.png';
+import im3 from '../images/artim3.png';
+import im4 from '../images/artim4.png';
+import im5 from '../images/artim5.png';
+import im6 from '../images/artim6.png';
+import im7 from '../images/artim7.png';
+import im8 from '../images/artim8.png';
+import im9 from '../images/artim9.png';
+
 import logo1 from '../images/MackLabLogo.png';
 import logo2 from '../images/BuddingMindsLogo.png';
 import logo3 from '../images/BrainCanadaLogoDark.png';
 import logo4 from '../images/CIHRLogo.jpg';
 import logo5 from '../images/NSERC_logo.png';
 import logo6 from '../images/Vanier_logo.png';
+import logo7 from '../images/blender_logo.png';
 
 import posterPDF from '../images/OHBM_2022_poster.pdf';
 
 import { NavLink } from "react-router-dom";
 import { Document, Page, pdfjs } from "react-pdf";
+import { useState } from 'react';
 
 import Citation from '../components/Citation';
 
@@ -20,6 +33,49 @@ pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/$
 
 
 function About() {
+
+  const [image, setImage] = useState(im1);
+  const [imageId, setImageId] = useState(0);
+  const [altText, setAltText] = useState('A test image.')
+
+  const handleImageRight = () => {
+    if (imageId < 8) {
+      setImageId(imageId+1)
+    } else {
+      setImageId(0)
+    }
+  };
+
+  const handleImageLeft = () => {
+    if (imageId > 0) {
+      setImageId(imageId-1)
+    } else {
+      setImageId(8)
+    }
+  };
+
+  const handleImageSwitch = (id) => {
+    if (id === 0) {
+      setImage(im1)
+    } else if (id === 1) {
+      setImage(im2)
+    } else if (id === 2) {
+      setImage(im3)
+    } else if (id === 3) {
+      setImage(im4)
+    } else if (id === 4) {
+      setImage(im5)
+    } else if (id === 5) {
+      setImage(im6)
+    } else if (id === 6) {
+      setImage(im7)
+    } else if (id === 7) {
+      setImage(im8)
+    } else {
+      setImage(im9)
+    }
+  }
+
   return (
     <div className="aboutcontainer">
       <div className='atitle'>
@@ -50,16 +106,42 @@ function About() {
       </div>
       <div className='blueblockleft'>
         <div className='bleft'>
-          <img src={pipeline} alt='The inferior longitudinal fasciculus.'/>
+          <img src={pipeline} alt='The HippCircuit pipeline!'/>
         </div>
         <div className='bright'>
             <h2>The pipeline:</h2>
             <p>The HippCircuit pipeline was run using 831 (n = 831) young, healthy adults from the Human Connectome Project (HCP).<Citation text="[5]" content={["5. Van Essen, D. C., Smith, S. M., Barch, D. M., Behrens, T. E. J., Yacoub, E., Ugurbil, K., & WU-Minn HCP Consortium. (2013). The WU-Minn Human Connectome Project: An overview. NeuroImage, 80, 62–79."]}/> For all subjects, T1 images with voxel resolution (0.7mm x 0.7mm x 0.7mm) and diffusion images with voxel resolution (1.25mm x 1.25mm x 1.25mm) were preprocessed by the HCP.<Citation text="[5]" content={["5. Van Essen, D. C., Smith, S. M., Barch, D. M., Behrens, T. E. J., Yacoub, E., Ugurbil, K., & WU-Minn HCP Consortium. (2013). The WU-Minn Human Connectome Project: An overview. NeuroImage, 80, 62–79."]}/> Hippocampal subfield segmentation was performed on all participants using MAGeTBrain.<Citation text="[6]" content={["6. Pipitone, J., Park, M. T. M., Winterburn, J., Lett, T. A., Lerch, J. P., Pruessner, J. C., Lepage, M., Voineskos, A. N., Chakravarty, M. M., & Alzheimer’s Disease Neuroimaging Initiative.(2014). Multi-atlas segmentation of the whole hippocampus and subfields using multiple automatically generated templates. NeuroImage, 101, 494–512."]}/> Subsequently, medial temporal lobe segmentation was conducted using ASHS via ITK-SNAP.<Citation text="[7]" content={["7. Yushkevich, P. A., Pluta, J. B., Wang, H., Xie, L., Ding, S.-L., Gertje, E. C., Mancuso, L., Kliot, D., Das, S. R., & Wolk, D. A. (2015). Automated volumetry and regional thickness analysis ofhippocampal subfields and medial temporal cortical structures in mild cognitive impairment. Human Brain Mapping, 36(1)."]}/> Individual connectomes and hippocampal white matter atlases were generated using MRtrix.<Citation text="[8]" content={["8. Tournier, J.-D., Smith, R., Raffelt, D., Tabbara, R., Dhollander, T., Pietsch, M., Christiaens, D., Jeurissen, B., Yeh, C.-H., & Connelly, A. (2019). MRtrix3: A fast, flexible and open softwareframework for medical image processing and visualisation. NeuroImage, 202, 116137."]}/></p>
         </div>
       </div>
+      <div className='blenderblock'>
+        <div className='blenderblockleft'>
+          <h2>Creation of 3D Assets in Blender:</h2>
+          <p>Many of the HippCircuit 3D assets (rendered images, models, etc.) were created using the open-source software Blender.<Citation text="[9]" content={["9. Community, B. O. (2022). Blender - a 3D modelling and rendering package. Stichting Blender Foundation, Amsterdam. Retrieved from http://www.blender.org"]} /></p>
+          <p>To import tractography models for use in Blender as 3D meshes, we created a custom Blender plugin called TrainTracts.<Citation text="[10]" content={["10. Bourganos, A. (2022). TrainTracts (Version V1.0.0) [Computer software]. https://doi.org/10.5281/zenodo.6599466"]} /> The plugin can be accessed and downloaded <a href='https://github.com/Apsis/TrainTracts/'>here (on GitHub).</a></p>
+        </div>
+        <div className='blenderblockright'>
+          <div className='blenderblockrightup'>
+            <div className='blenderblocktheater'>
+              <img src={image} alt={altText} />
+            </div>
+          </div>
+          <div className='blenderblockrightdown'>
+            <div className='arrowleft'
+              onClick={() => {
+              handleImageLeft()
+              handleImageSwitch(imageId)
+              }}></div>
+            <div className='arrowright' 
+              onClick={() => {
+              handleImageRight()
+              handleImageSwitch(imageId)
+              }}></div>
+          </div>
+        </div>
+      </div>
       <div className='alogo'>
             <div className='supporttitle'>
-              <h1>This project was made possible with funding and support from:</h1>
+              <h1>This project was made possible by:</h1>
             </div>
             <div className='supportlogos'>
               <a href='http://macklab.utoronto.ca/'><img className='resultslogo' alt='The Mack Lab logo!' src={logo1} /></a>
@@ -68,6 +150,7 @@ function About() {
               <a href='https://cihr-irsc.gc.ca/e/193.html'><img className='resultslogo' alt='The CIHR logo!' src={logo4} /></a>
               <a href='https://www.nserc-crsng.gc.ca/index_eng.asp'><img className='resultslogo' alt='The NSERC logo!' src={logo5} /></a>
               <a href='https://vanier.gc.ca/en/home-accueil.html'><img className='resultslogo' alt='The Vanier logo!' src={logo6} /></a>
+              <a href='https://www.blender.org/'><img className='resultslogo' alt='The Blender logo!' src={logo7} /></a>
             </div>
       </div>
     </div>

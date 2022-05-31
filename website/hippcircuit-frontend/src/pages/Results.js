@@ -6,6 +6,7 @@ import logo3 from '../images/BrainCanadaLogoDark.png';
 import logo4 from '../images/CIHRLogo.jpg';
 import logo5 from '../images/NSERC_logo.png';
 import logo6 from '../images/Vanier_logo.png';
+import logo7 from '../images/blender_logo.png';
 
 import { NavLink } from "react-router-dom";
 import { useState } from 'react';
@@ -221,6 +222,7 @@ function Results() {
         <a href='https://cihr-irsc.gc.ca/e/193.html'><img className='resultslogo' alt='The CIHR logo!' src={logo4} /></a>
         <a href='https://www.nserc-crsng.gc.ca/index_eng.asp'><img className='resultslogo' alt='The NSERC logo!' src={logo5} /></a>
         <a href='https://vanier.gc.ca/en/home-accueil.html'><img className='resultslogo' alt='The Vanier logo!' src={logo6} /></a>
+        <a href='https://www.blender.org/'><img className='resultslogo' alt='The Blender logo!' src={logo7} /></a>
       </div>
     </div>
   );
