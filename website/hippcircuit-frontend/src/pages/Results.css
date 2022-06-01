@@ -20,14 +20,13 @@
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
-    transition: 0.4s;
     color: rgb(12, 44, 78);
     font-size: 20px;
     margin-top: 20px;
 }
 
 .resultsheader h2:hover {
-    color: rgb(36, 117, 198);
+    color: white;
 }
 
 .backbutton {
@@ -35,11 +34,31 @@
     height: 60px;
     width: 100px;
     border: 0.1rem solid rgb(12, 44, 78);
+    background-color: white;
     border-radius: 100px;
+    transition: 0.4s;
+}
+
+.backbutton:hover {
+    margin-top: 25px;
+    height: 60px;
+    width: 100px;
+    border: 0.1rem solid rgb(12, 44, 78);
+    background-color: rgb(12, 44, 78);
+    border-radius: 100px;
+    color: white;
 }
 
 .resultsbody {
-    height: 93vh;
+    min-height: 93vh;
+}
+
+.resultsbody img {
+    max-width: 100%;
+}
+
+.resultsbody h4 {
+    color:rgb(12, 44, 78);
 }
 
 .resspacerbar {
@@ -96,6 +115,52 @@
 
 .downloadbutton p {
     margin-top: -2px;
+}
+
+.dataviews {
+    background-color: aquamarine;
+    margin-top: 50px;
+    width: 100%;
+    display: grid;
+    grid-template-columns: auto auto;
+    grid-template-rows: auto auto;
+    gap: 50px;
+}
+
+.topleftdata {
+    grid-column: 1;
+    grid-row: 1;
+    background-color: blue;
+    height: 100%;
+    width: 100%;
+    text-align: center;
+}
+
+.toprightdata {
+    grid-column: 2;
+    grid-row: 1;
+    background-color: rgb(230, 4, 151);
+    height: 100%;
+    width: 100%;
+    text-align: center;
+}
+
+.botleftdata {
+    grid-column: 1;
+    grid-row: 2;
+    background-color: rgb(223, 78, 0);
+    height: 100%;
+    width: 100%;
+    text-align: center;
+}
+
+.botrightdata {
+    grid-column: 2;
+    grid-row: 2;
+    background-color: rgb(62, 176, 0);
+    height: 100%;
+    width: 100%;
+    text-align: center;
 }
 
 .resultsfooter {

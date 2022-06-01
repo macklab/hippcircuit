@@ -14,7 +14,7 @@ code {
 
 * {
   scrollbar-width: thin;
-  scrollbar-color: rgb(94, 92, 92) rgba(0, 0, 0, 0);
+  scrollbar-color: rgb(12, 44, 78) rgba(0, 0, 0, 0);
 }
 
 *::-webkit-scrollbar {
@@ -22,11 +22,11 @@ code {
 }
 
 *::-webkit-scrollbar-track {
-  background: rgb(58, 190, 252);
+  background: rgb(255, 255, 255);
 }
 
 *::-webkit-scrollbar-thumb {
-  background-color: rgb(94, 92, 92);
+  background-color: rgb(12, 44, 78);
   border-radius: 20px;
   border: 3px solid rgba(0, 0, 0, 0);
 }

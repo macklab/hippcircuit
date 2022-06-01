@@ -36,7 +36,7 @@ function About() {
 
   const [image, setImage] = useState(im1);
   const [imageId, setImageId] = useState(0);
-  const [altText, setAltText] = useState('A test image.')
+  const [altText, setAltText] = useState('The first artistic tractography render.')
 
   const handleImageRight = () => {
     if (imageId < 8) {
@@ -57,22 +57,31 @@ function About() {
   const handleImageSwitch = (id) => {
     if (id === 0) {
       setImage(im1)
+      setAltText('The first artistic tractography render.')
     } else if (id === 1) {
       setImage(im2)
+      setAltText('The second artistic tractography render.')
     } else if (id === 2) {
       setImage(im3)
+      setAltText('The third artistic tractography render.')
     } else if (id === 3) {
       setImage(im4)
+      setAltText('The fourth artistic tractography render.')
     } else if (id === 4) {
       setImage(im5)
+      setAltText('The fifth artistic tractography render.')
     } else if (id === 5) {
       setImage(im6)
+      setAltText('The sixth artistic tractography render.')
     } else if (id === 6) {
       setImage(im7)
+      setAltText('The seventh artistic tractography render.')
     } else if (id === 7) {
       setImage(im8)
+      setAltText('The eighth artistic tractography render.')
     } else {
       setImage(im9)
+      setAltText('The ninth artistic tractography render.')
     }
   }
 
@@ -116,8 +125,9 @@ function About() {
       <div className='blenderblock'>
         <div className='blenderblockleft'>
           <h2>Creation of 3D Assets in Blender:</h2>
-          <p>Many of the HippCircuit 3D assets (rendered images, models, etc.) were created using the open-source software Blender.<Citation text="[9]" content={["9. Community, B. O. (2022). Blender - a 3D modelling and rendering package. Stichting Blender Foundation, Amsterdam. Retrieved from http://www.blender.org"]} /></p>
+          <p>Many of the HippCircuit 3D assets (rendered images, models, etc.) were created using the open-source software Blender.<Citation text="[9]" content={["9. Community, B. O. (2022). Blender - a 3D modelling and rendering package. Stichting Blender Foundation, Amsterdam. Retrieved from http://www.blender.org"]} /> Blender is a public project hosted on blender.org, and is licensed as GNU GPL. Blender is Free and Open Source software.</p>
           <p>To import tractography models for use in Blender as 3D meshes, we created a custom Blender plugin called TrainTracts.<Citation text="[10]" content={["10. Bourganos, A. (2022). TrainTracts (Version V1.0.0) [Computer software]. https://doi.org/10.5281/zenodo.6599466"]} /> The plugin can be accessed and downloaded <a href='https://github.com/Apsis/TrainTracts/'>here (on GitHub).</a></p>
+          <p>The artistic renders shown here are just some simple examples of tracts displayed using the Cycles render engine in Blender. The software also allows for more robust animations, images, and texturing.</p>
         </div>
         <div className='blenderblockright'>
           <div className='blenderblockrightup'>

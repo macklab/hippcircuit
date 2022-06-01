@@ -179,12 +179,12 @@ function Results() {
   return (
     <div className="resultscontainer">
       <div className='resultsheader'>
+        <NavLink to='/explore'>
           <div className='backbutton'>
-            <NavLink to='/explore'>
-                <h2>{'<'} BACK</h2>
-            </NavLink>
+            <h2>{'<'} BACK</h2>
           </div>
-          <h1>Results and Data Download</h1>
+        </NavLink>
+        <h1>Results and Data Download</h1>
       </div>
       <div className='resultsbody'>
         <div className='resspacerbar'></div>
@@ -212,6 +212,24 @@ function Results() {
               <p>{downloadText}</p>
             </div>
           </a>
+        </div>
+        <div className='dataviews'>
+          <div className='topleftdata'>
+            <img src={logo7} alt="Test1" />
+            <h4>{"A caption for image 1."}</h4>
+          </div>
+          <div className='toprightdata'>
+            <img src={logo7} alt="Test2" />
+            <h4>{"A caption for image 2."}</h4>
+          </div>
+          <div className='botleftdata'>
+            <img src={logo7} alt="Test3" />
+            <h4>{"A caption for image 3."}</h4>
+          </div>
+          <div className='botrightdata'>
+            <img src={logo7} alt="Test4" />
+            <h4>{"A caption for image 4."}</h4>
+          </div>
         </div>
       </div>
       <div className='resspacerbar'></div>
