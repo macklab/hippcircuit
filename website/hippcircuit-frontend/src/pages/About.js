@@ -25,7 +25,7 @@ import posterPDF from '../images/OHBM_2022_poster.pdf';
 
 import { NavLink } from "react-router-dom";
 import { Document, Page, pdfjs } from "react-pdf";
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 import Citation from '../components/Citation';
 
@@ -34,9 +34,18 @@ pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/$
 
 function About() {
 
+  const [windowWidth, setWindowWidth] =  useState(window.innerWidth);
   const [image, setImage] = useState(im1);
   const [imageId, setImageId] = useState(0);
-  const [altText, setAltText] = useState('The first artistic tractography render.')
+  const [altText, setAltText] = useState('The first artistic tractography render.');
+
+  const handleResize = () => {
+    setWindowWidth(window.innerWidth);
+  };
+
+  useEffect(() => {
+    window.addEventListener("resize", handleResize)
+  });
 
   const handleImageRight = () => {
     if (imageId < 8) {
@@ -109,7 +118,7 @@ function About() {
         <div>
           <h2>HippCircuit Poster from <span><a href="https://www.humanbrainmapping.org/i4a/pages/index.cfm?pageid=1">OHBM</a></span> (2022)</h2>
         <Document file={posterPDF}>
-          <Page width={1000} pageNumber={1} />
+          <Page width={windowWidth-50} pageNumber={1} />
         </Document>
         </div>
       </div>

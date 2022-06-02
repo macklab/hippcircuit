@@ -7,7 +7,6 @@
     text-align: center;
     font-size: 30px;
     padding-top: 45px;
-    height: 250px;
     width: 100%;
     color: white;
     -webkit-user-select: none;      
@@ -23,6 +22,7 @@
 .atitle h4 {
     color: white;
     transition: 0.5s;
+    padding-bottom: 50px;
 }
 
 .atitle h4:hover {
@@ -32,7 +32,6 @@
 .whiteblockright {
     background-color: white;
     width: 100%;
-    height: 500px;
     display: flex;
 }
 
@@ -45,7 +44,6 @@
 .wright img {
     min-width: 300px;
     max-width: 500px;
-    padding-left: 0px;
     padding-bottom: 50px;
     -webkit-user-drag: none;
     user-select: none;
@@ -174,6 +172,7 @@
 
 .alogo {
     background-color: white;
+    width: 100%;
     height: 250px;
 }
 
@@ -190,6 +189,7 @@
     height: 100px;
     display: flex;
     justify-content: center;
+    flex-wrap: wrap;
 }
 
 .supportlogos img {
@@ -204,12 +204,77 @@
     -ms-user-select: none;
 }
 
-@media only screen and (max-width: 1300px) {
+@media only screen and (max-width: 1023px) {
 
     .whiteblockright {
         background-color: white;
         width: 100%;
         display: flex;
+    }
+
+    .wright img {
+        min-width: 200px;
+        max-width: 500px;
+        padding-bottom: 50px;
+        -webkit-user-drag: none;
+        user-select: none;
+        -moz-user-select: none;
+        -webkit-user-select: none;
+        -ms-user-select: none;
+    }
+
+    .whiteblockright {
+        background-color: white;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .blueblockleft {
+        background-color: white;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .bright {
+        padding: 50px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-evenly;
+    }
+    
+    .bleft img {
+        min-width: 300px;
+        max-width: 500px;
+        -webkit-user-drag: none;
+        user-select: none;
+        -moz-user-select: none;
+        -webkit-user-select: none;
+        -ms-user-select: none;
+    }
+
+    .blenderblock {
+        display: flex;
+        background-color: rgb(58, 190, 252);
+        color: white;
+        flex-direction: column;
+    }
+
+    .blenderblockleft {
+        width: 85%;
+        padding: 50px;
+    }
+    
+    .blenderblockright {
+        width: 85%;
+        padding: 50px;
+    }
+
+    .blenderblocktheater img {
+        min-width: 250;
+        max-width: 450px;
+        border-radius: 25px;
     }
 
 }
