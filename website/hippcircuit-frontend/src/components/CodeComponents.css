@@ -1,0 +1,32 @@
+.coderowcontainer {
+    width: 100%;
+    display: flex;
+}
+
+.codeleftcolumn {
+    width: 50vw;
+    background-color: white;
+}
+
+.codeleftcolumn h1 {
+    margin-top: 50px;
+    margin-left: 50px;
+}
+
+.codeleftcolumn p {
+    margin-left: 55px;
+}
+
+.coderightcolumn {
+    width: 50vw;
+    background-color: rgb(21, 27, 48);
+    display: flex;
+}
+
+.coderightcolumn p {
+    margin-left: 2px;
+}
+
+.codespacediv {
+    height: 50px;
+}
