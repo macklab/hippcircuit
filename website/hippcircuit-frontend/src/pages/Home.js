@@ -2,13 +2,7 @@ import './Home.css';
 
 import { useNavigate } from "react-router-dom";
 
-import logo1 from '../images/MackLabLogo.png';
-import logo2 from '../images/BuddingMindsLogo.png';
-import logo3 from '../images/BrainCanadaLogoDark.png';
-import logo4 from '../images/CIHRLogo.jpg';
-import logo5 from '../images/NSERC_logo.png';
-import logo6 from '../images/Vanier_logo.png';
-import logo7 from '../images/blender_logo.png';
+import { logo1, logo2, logo3, logo4, logo5, logo6, logo7 } from '../jsondata.js';
 
 import tractrotate from '../images/homegif.gif';
 import HomeButton from '../components/HomeButton';

@@ -3,23 +3,11 @@ import './About.css';
 import tractrotate from '../images/homegif.gif';
 import pipeline from '../images/pipeline.png';
 
-import im1 from '../images/artim1.png';
-import im2 from '../images/artim2.png';
-import im3 from '../images/artim3.png';
-import im4 from '../images/artim4.png';
-import im5 from '../images/artim5.png';
-import im6 from '../images/artim6.png';
-import im7 from '../images/artim7.png';
-import im8 from '../images/artim8.png';
-import im9 from '../images/artim9.png';
-
-import logo1 from '../images/MackLabLogo.png';
-import logo2 from '../images/BuddingMindsLogo.png';
-import logo3 from '../images/BrainCanadaLogoDark.png';
-import logo4 from '../images/CIHRLogo.jpg';
-import logo5 from '../images/NSERC_logo.png';
-import logo6 from '../images/Vanier_logo.png';
-import logo7 from '../images/blender_logo.png';
+import { im1, im2, im3, im4, 
+         im5, im6, im7, im8, 
+         im9, logo1, logo2, 
+         logo3, logo4, logo5, 
+         logo6, logo7 } from '../jsondata.js';
 
 import posterPDF from '../images/OHBM_2022_poster.pdf';
 
