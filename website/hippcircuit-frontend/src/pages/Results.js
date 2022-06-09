@@ -11,10 +11,11 @@ import { buttondata } from '../jsondata.js';
 
 function Results() {
 
-  const [roistitle, setRoisTitle] = useState('All ROIs to All ROIs');
+  const [roisTitle, setRoisTitle] = useState('All ROIs to All ROIs');
   const [downloadFile, setDownloadFile] = useState(buttondata[0].downloadFile);
   const [downloadName, setDownloadName] = useState('Testfile.zip');
   const [downloadText, setDownloadText] = useState('Download data for all ROIs');
+  const [streamViolinPlot, setStreamViolinPlot] = useState(null);
 
   return (
     <div className="resultscontainer">
@@ -36,6 +37,7 @@ function Results() {
                       setDownloadFile(button.downloadFile)
                       setDownloadName(button.downloadName)
                       setDownloadText(button.downloadText)
+                      setStreamViolinPlot(button.streamsViolin)
                     }}>
                         <ROIButton key={button.id} name={`${button.side} ${button.firstROI} to ${button.secondROI}`} />
                     </div>
@@ -44,7 +46,7 @@ function Results() {
         </div>
         <div className='resspacerbar'></div>
         <div className='roititlerow'>
-          <h2>{roistitle}</h2>
+          <h2>{roisTitle}</h2>
         </div>
         <div className='downloadrow'>
           <a href={downloadFile} download={downloadName}>
@@ -55,8 +57,8 @@ function Results() {
         </div>
         <div className='dataviews'>
           <div className='topleftdata'>
-            <img src={logo7} alt="Test1" />
-            <h4>{"A caption for image 1."}</h4>
+            {(streamViolinPlot != null) ? <img src={streamViolinPlot} alt="Streams violin plot." /> : <h3>No streams violin plot for this data.</h3>}
+            <h4>Streamline counts violin plot for {roisTitle}.</h4>
           </div>
           <div className='toprightdata'>
             <img src={logo7} alt="Test2" />

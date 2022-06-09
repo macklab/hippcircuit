@@ -118,7 +118,6 @@
 }
 
 .dataviews {
-    background-color: aquamarine;
     margin-top: 50px;
     width: 100%;
     display: grid;
@@ -130,7 +129,6 @@
 .topleftdata {
     grid-column: 1;
     grid-row: 1;
-    background-color: blue;
     height: 100%;
     width: 100%;
     text-align: center;
@@ -203,7 +201,6 @@
     .topleftdata {
         grid-row: 1;
         grid-column: 1;
-        background-color: blue;
         height: 100%;
         width: 100%;
         text-align: center;

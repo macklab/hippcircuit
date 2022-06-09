@@ -42,7 +42,7 @@ export function CodeSpacer() {
           </div>
           <div className='coderightcolumn'>
                 {props.codelines.map((line) => {
-                    return <p>{line}</p>
+                    return <span>{line}</span>
                 })}
           </div>
       </div>

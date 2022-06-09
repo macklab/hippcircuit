@@ -34,6 +34,19 @@ import ima7 from './images/artim7.png';
 import ima8 from './images/artim8.png';
 import ima9 from './images/artim9.png';
 
+import VPstreamLCA2CA3CA1 from './images/results/violin_plots/stream_L_CA2CA3_L_CA1.png';
+import VPstreamLCA2CA3CA4DG from './images/results/violin_plots/stream_L_CA2CA3_L_CA4DG.png';
+import VPstreamLCA4DGSUB from './images/results/violin_plots/stream_L_CA4DG_L_subiculum.png';
+import VPstreamLERCCA1 from './images/results/violin_plots/stream_L_ERC_L_CA1.png';
+import VPstreamLERCSUB from './images/results/violin_plots/stream_L_ERC_L_subiculum.png';
+import VPstreamLSUBCA1 from './images/results/violin_plots/stream_L_subiculum_L_CA1.png';
+import VPstreamRCA2CA3CA1 from './images/results/violin_plots/stream_R_CA2CA3_R_CA1.png';
+import VPstreamRCA2CA3CA4DG from './images/results/violin_plots/stream_R_CA2CA3_R_CA4DG.png';
+import VPstreamRCA4DGSUB from './images/results/violin_plots/stream_R_CA4DG_R_subiculum.png';
+import VPstreamRERCCA1 from './images/results/violin_plots/stream_R_ERC_R_CA1.png';
+import VPstreamRERCSUB from './images/results/violin_plots/stream_R_ERC_R_subiculum.png';
+import VPstreamRSUBCA1 from './images/results/violin_plots/stream_R_subiculum_R_CA1.png';
+
 
 export const buttondata = [
     {
@@ -44,7 +57,8 @@ export const buttondata = [
         n: 3390,
         downloadFile: TestFile,
         downloadName: 'TestFile1.zip',
-        downloadText: 'Download data for all ROIs'
+        downloadText: 'Download data for all ROIs',
+        streamsViolin: null
       },
       {
         id: 2,
@@ -54,7 +68,8 @@ export const buttondata = [
         n: 283,
         downloadFile: TestFile,
         downloadName: 'TestFile1.zip',
-        downloadText: 'Download data for Left CA1 to SUB'
+        downloadText: 'Download data for Left CA1 to SUB',
+        streamsViolin: VPstreamLSUBCA1
       },
       {
         id: 3,
@@ -64,7 +79,8 @@ export const buttondata = [
         n: 44,
         downloadFile: TestFile,
         downloadName: 'TestFile1.zip',
-        downloadText: 'Download data for Left CA2CA3 to CA1'
+        downloadText: 'Download data for Left CA2CA3 to CA1',
+        streamsViolin: VPstreamLCA2CA3CA1
       },
       {
         id: 4,
@@ -74,7 +90,8 @@ export const buttondata = [
         n: 163,
         downloadFile: TestFile,
         downloadName: 'TestFile1.zip',
-        downloadText: 'Download data for Left CA4DG to CA2CA3'
+        downloadText: 'Download data for Left CA4DG to CA2CA3',
+        streamsViolin: VPstreamLCA2CA3CA4DG
       },
       {
         id: 5,
@@ -84,7 +101,8 @@ export const buttondata = [
         n: 128,
         downloadFile: TestFile,
         downloadName: 'TestFile1.zip',
-        downloadText: 'Download data for Left ERC to CA1'
+        downloadText: 'Download data for Left ERC to CA1',
+        streamsViolin: VPstreamLERCCA1
       },
       {
         id: 6,
@@ -94,7 +112,8 @@ export const buttondata = [
         n: 0,
         downloadFile: TestFile,
         downloadName: 'TestFile1.zip',
-        downloadText: 'Download data for Left ERC to CA4DG'
+        downloadText: 'Download data for Left ERC to CA4DG',
+        streamsViolin: null
       },
       {
         id: 7,
@@ -104,7 +123,8 @@ export const buttondata = [
         n: 83,
         downloadFile: TestFile,
         downloadName: 'TestFile1.zip',
-        downloadText: 'Download data for Left SUB to CA4DG'
+        downloadText: 'Download data for Left SUB to CA4DG',
+        streamsViolin: VPstreamLCA4DGSUB
       },
       {
         id: 8,
@@ -114,7 +134,8 @@ export const buttondata = [
         n: 841,
         downloadFile: TestFile,
         downloadName: 'TestFile1.zip',
-        downloadText: 'Download data for Left SUB to ERC'
+        downloadText: 'Download data for Left SUB to ERC',
+        streamsViolin: VPstreamLERCSUB
       },
       {
         id: 9,
@@ -124,7 +145,8 @@ export const buttondata = [
         n: 616,
         downloadFile: TestFile,
         downloadName: 'TestFile1.zip',
-        downloadText: 'Download data for Right CA1 to SUB'
+        downloadText: 'Download data for Right CA1 to SUB',
+        streamsViolin: VPstreamRSUBCA1
       },
       {
         id: 10,
@@ -134,7 +156,8 @@ export const buttondata = [
         n: 108,
         downloadFile: TestFile,
         downloadName: 'TestFile1.zip',
-        downloadText: 'Download data for Right CA2CA3 to CA1'
+        downloadText: 'Download data for Right CA2CA3 to CA1',
+        streamsViolin: VPstreamRCA2CA3CA1
       },
       {
         id: 11,
@@ -144,7 +167,8 @@ export const buttondata = [
         n: 301,
         downloadFile: TestFile,
         downloadName: 'TestFile1.zip',
-        downloadText: 'Download data for Right CA4DG to CA2CA3'
+        downloadText: 'Download data for Right CA4DG to CA2CA3',
+        streamsViolin: VPstreamRCA2CA3CA4DG
       },
       {
         id: 12,
@@ -154,7 +178,8 @@ export const buttondata = [
         n: 110,
         downloadFile: TestFile,
         downloadName: 'TestFile1.zip',
-        downloadText: 'Download data for Right ERC to CA1'
+        downloadText: 'Download data for Right ERC to CA1',
+        streamsViolin: VPstreamRERCCA1
       },
       {
         id: 13,
@@ -164,7 +189,8 @@ export const buttondata = [
         n: 0,
         downloadFile: TestFile,
         downloadName: 'TestFile1.zip',
-        downloadText: 'Download data for Right ERC to CA4DG'
+        downloadText: 'Download data for Right ERC to CA4DG',
+        streamsViolin: null
       },
       {
         id: 14,
@@ -174,7 +200,8 @@ export const buttondata = [
         n: 33,
         downloadFile: TestFile,
         downloadName: 'TestFile1.zip',
-        downloadText: 'Download data for Right SUB to CA4DG'
+        downloadText: 'Download data for Right SUB to CA4DG',
+        streamsViolin: VPstreamRCA4DGSUB
       },
       {
         id: 15,
@@ -184,7 +211,8 @@ export const buttondata = [
         n: 680,
         downloadFile: TestFile,
         downloadName: 'TestFile1.zip',
-        downloadText: 'Download data for Right SUB to ERC'
+        downloadText: 'Download data for Right SUB to ERC',
+        streamsViolin: VPstreamRERCSUB
       }
 ];
 

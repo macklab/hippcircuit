@@ -4,7 +4,7 @@
 }
 
 .codeleftcolumn {
-    width: 50vw;
+    width: 30%;
     background-color: white;
 }
 
@@ -14,17 +14,19 @@
 }
 
 .codeleftcolumn p {
+    margin-top: 0px;
     margin-left: 55px;
+    margin-right: 55px;
 }
 
 .coderightcolumn {
-    width: 50vw;
+    width: 70%;
     background-color: rgb(21, 27, 48);
-    display: flex;
+    font-family: Consolas, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New;
 }
 
-.coderightcolumn p {
-    margin-left: 2px;
+.coderightcolumn span {
+    margin-right: 1px;
 }
 
 .codespacediv {
