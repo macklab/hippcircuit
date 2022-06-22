@@ -25,7 +25,7 @@ function Home() {
             <a href='https://cihr-irsc.gc.ca/e/193.html'><img className='resultslogo' alt='The CIHR logo!' src={logo4} /></a>
             <a href='https://www.nserc-crsng.gc.ca/index_eng.asp'><img className='resultslogo' alt='The NSERC logo!' src={logo5} /></a>
             <a href='https://vanier.gc.ca/en/home-accueil.html'><img className='resultslogo' alt='The Vanier logo!' src={logo6} /></a>
-            <a href='https://www.blender.org/'><img className='resultslogo' alt='The Blender logo!' src={logo7} /></a>
+            {/* <a href='https://www.blender.org/'><img className='resultslogo' alt='The Blender logo!' src={logo7} /></a> */}
         </div>
         <div className="hleft">
             <img src={tractrotate} alt='Rotating HippCircuit tractography!'/>
