@@ -14,10 +14,10 @@ function App() {
       <Router>
         <Routes>
           <Route path="/" exact element={<Home />} />
-          <Route path="/about" exact element={<About />} />
+          <Route path="/abouthidden" exact element={<About />} />
           <Route path="/explore" exact element={<Visualizer />} />
-          <Route path="/results" exact element={<Results />} />
-          <Route path="/docs" exact element={<CodeDocs />} />
+          <Route path="/resultshidden" exact element={<Results />} />
+          <Route path="/docshidden" exact element={<CodeDocs />} />
         </Routes>
       </Router>
     </div>

@@ -44,16 +44,16 @@ function Visualizer() {
               <h3>{roi2}</h3>
             </div>
           </div>
-          <NavLink to='/results'>
+          <a href='https://docs.google.com/forms/d/e/1FAIpQLSeghEkTcCFaqrCPLIrvBv9x6UaP46KsWoloHfdfSp6v1BkQxw/viewform' style={{textDecoration: 'none'}}>
             <div className='aboutlink'>
               <h2>OTHER DATA & RESULTS</h2>
             </div>
-          </NavLink>
-          <NavLink to='/about'>
+          </a>
+          <a href='https://docs.google.com/forms/d/e/1FAIpQLSeghEkTcCFaqrCPLIrvBv9x6UaP46KsWoloHfdfSp6v1BkQxw/viewform' style={{textDecoration: 'none'}}>
             <div className='aboutlink'>
               <h2>ABOUT THE PROJECT</h2>
             </div>
-          </NavLink>
+          </a>
           </div>
           {isPending ? <h4>LOADING...</h4> : <></>}
           {loaded}
