@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/hippcircuit/static/css/main.e86249e4.css",
-    "main.js": "/hippcircuit/static/js/main.b344cc7d.js",
+    "main.js": "/hippcircuit/static/js/main.bc08feb8.js",
     "static/media/R_SUB_ERC.glb": "/hippcircuit/static/media/R_SUB_ERC.0490fbb98655104a35c6.glb",
     "static/media/R_CA1_SUB.glb": "/hippcircuit/static/media/R_CA1_SUB.499e99c403e5c398bc52.glb",
     "static/media/L_SUB_ERC.glb": "/hippcircuit/static/media/L_SUB_ERC.398cc6e3172cb8c4b476.glb",
@@ -54,10 +54,10 @@
     "static/media/BrainCanadaLogoDark.png": "/hippcircuit/static/media/BrainCanadaLogoDark.552793afd7781211a7e6.png",
     "index.html": "/hippcircuit/index.html",
     "main.e86249e4.css.map": "/hippcircuit/static/css/main.e86249e4.css.map",
-    "main.b344cc7d.js.map": "/hippcircuit/static/js/main.b344cc7d.js.map"
+    "main.bc08feb8.js.map": "/hippcircuit/static/js/main.bc08feb8.js.map"
   },
   "entrypoints": [
     "static/css/main.e86249e4.css",
-    "static/js/main.b344cc7d.js"
+    "static/js/main.bc08feb8.js"
   ]
 }
