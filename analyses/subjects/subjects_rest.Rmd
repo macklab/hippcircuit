@@ -1,0 +1,58 @@
+---
+title: "subjects_rest"
+output: html_document
+---
+
+# Setup environment
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+# clear environment
+rm(list = ls())
+
+# load packages
+library(tidyverse)
+
+# read in data
+demo <- read.csv("../../data/HCP_demographics.csv")
+sbjs <- read.table("../../data/subjects/subjects.txt") #, header = F)
+
+```
+
+# Select subjects used in initial analyses
+```{r}
+sbjs <- sbjs[1:85,]
+final_sbjs <- c(sapply(sbjs, unlist))
+data <- demo[is.element(demo$Subject, final_sbjs), ]
+```
+
+# Selecting the rest of the subjects
+```{r}
+hcp_data <- demo[demo$T1_Count>0 & 
+                   demo$T2_Count>0 &
+                   demo$X3T_dMRI_Compl == "true" &
+                   !demo$Age == "36+",]
+
+sbj_rest <- hcp_data[!hcp_data$Subject %in% final_sbjs,]$Subject
+data_rest <- hcp_data[!hcp_data$Subject %in% final_sbjs,]
+
+# Exclude those participants with anatomical/segmentation issues
+data_rest_clean <-
+  data_rest[-unique(c(grep("A", data_rest$QC_Issue),
+  grep("B", data_rest$QC_Issue))),]
+
+sbjs_rest <- 
+  matrix(c(data_rest_clean$Subject, c(1:4)), ncol = 10, byrow = T)
+sbjs_rest[11,7:10] <- NA
+```
+
+# Save data as txt
+```{r}
+write.table(sbjs_rest,
+          "../../data/subjects/subjects_rest.txt",
+          row.names = F,
+          col.names = F) 
+```
+
+
+
