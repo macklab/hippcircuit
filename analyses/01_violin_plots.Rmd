@@ -19,7 +19,7 @@ load("../output/Rdata/00_import_data_subfields+MTL_all_data.RDATA")
 modality <- c("stream", "FA", "AD", "RD", "MD")
 
 modality_clean <- c("Steamline Count",
-                    "Fractional anisotropy",
+                    "Fractional Anisotropy",
                     "Axial Diffusivity",
                     "Radial Diffusivity",
                     "Mean Diffusivity")
@@ -64,12 +64,12 @@ for (m in 1:length(modality)){
   L_temp_heat$side <- "L"
   
   temp_heat <- rbind(L_temp_heat, R_temp_heat)
-  temp_rois <- c("CA2CA3/CA4DG",
-                 "CA2CA3/CA1",
-                 "SUB/CA1",
-                 "ERC/SUB",
-                 "CA4DG/SUB",
-                 "ERC/CA1")
+  temp_rois <- c("ERC/CA1",
+                  "CA4DG/SUB",
+                  "CA2CA3/CA4DG",
+                  "CA2CA3/CA1",
+                  "SUB/CA1",
+                  "ERC/SUB")
   
   temp_heat_clean <-
     temp_heat %>%
@@ -80,12 +80,13 @@ for (m in 1:length(modality)){
   
   temp_heat_clean$variable <-
     factor(temp_heat_clean$variable,
-           levels = c("CA2CA3/CA4DG",
+           levels = c("ERC/CA1",
+                      "CA4DG/SUB",
+                      "CA2CA3/CA4DG",
                       "CA2CA3/CA1",
                       "SUB/CA1",
-                      "ERC/SUB",
-                      "CA4DG/SUB",
-                      "ERC/CA1"))
+                      "ERC/SUB"
+                      ))
   
   (ggplot(temp_heat_clean, aes(x=variable, y=value, fill=variable)) +
       geom_boxplot(aes(y = value, fill = side)) +
