@@ -1,0 +1,293 @@
+---
+title: "01_violin_plots"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+# clear environment
+rm(list = ls())
+
+# packages
+library(tidyverse)
+library(reshape2)
+library(ggplot2)
+
+# data
+load("../output/Rdata/00_import_data_subfields+MTL_all_data.RDATA")
+
+# Define modalities
+modality <- c("stream", "FA", "AD", "RD", "MD")
+
+modality_clean <- c("Steamline Count",
+                    "Fractional anisotropy",
+                    "Axial Diffusivity",
+                    "Radial Diffusivity",
+                    "Mean Diffusivity")
+```
+
+
+# Compare all ROI pairs to each other in right and left side
+```{r}
+for (m in 1:length(modality)){
+  L_temp_ready <- melt(get(paste0("L_data_", modality[m])))
+  R_temp_ready <- melt(get(paste0("R_data_", modality[m])))
+       
+  # get rid of PRC PHC
+  R_temp_heat <-
+    R_temp_ready[-which(grepl("PRC", R_temp_ready$variable) |
+                   grepl("PHC", R_temp_ready$variable) |
+                   grepl("stratum", R_temp_ready$variable)
+                     ),]
+  
+  L_temp_heat <-
+    L_temp_ready[-which(grepl("PRC", L_temp_ready$variable) |
+                   grepl("PHC", L_temp_ready$variable) |
+                   grepl("stratum", L_temp_ready$variable)
+                     ),]
+  
+  
+  # Clean up the names
+  R_temp_heat$variable <-
+    gsub('R_subiculum', 'SUB',
+         gsub("R_CA1", "CA1",
+              gsub("R_CA4DG", "CA4DG",
+                   gsub("R_CA2CA3", "CA2CA3",
+                        gsub("R_ERC", "ERC", R_temp_heat$variable)))))
+  R_temp_heat$side <- "R"
+  
+  L_temp_heat$variable <-
+    gsub('L_subiculum', 'SUB',
+         gsub("L_CA1", "CA1",
+              gsub("L_CA4DG", "CA4DG",
+                   gsub("L_CA2CA3", "CA2CA3",
+                        gsub("L_ERC", "ERC", L_temp_heat$variable)))))
+  L_temp_heat$side <- "L"
+  
+  temp_heat <- rbind(L_temp_heat, R_temp_heat)
+  temp_rois <- c("CA2CA3/CA4DG",
+                 "CA2CA3/CA1",
+                 "SUB/CA1",
+                 "ERC/SUB",
+                 "CA4DG/SUB",
+                 "ERC/CA1")
+  
+  temp_heat_clean <-
+    temp_heat %>%
+    subset(temp_heat$variable == temp_rois)
+  
+  temp_heat_clean$side <- 
+    factor(temp_heat_clean$side, levels = c("R", "L"))
+  
+  temp_heat_clean$variable <-
+    factor(temp_heat_clean$variable,
+           levels = c("CA2CA3/CA4DG",
+                      "CA2CA3/CA1",
+                      "SUB/CA1",
+                      "ERC/SUB",
+                      "CA4DG/SUB",
+                      "ERC/CA1"))
+  
+  (ggplot(temp_heat_clean, aes(x=variable, y=value, fill=variable)) +
+      geom_boxplot(aes(y = value, fill = side)) +
+      scale_fill_manual(name = "Hemisphere",
+                      breaks = c("R", "L"),
+                      values=c("#00AEEF",
+                               "#EF2C9F"
+                               ),
+                      labels = c("Right", "Left"))+
+      ylab(modality_clean[m]) +
+      xlab(" ") +
+      theme(
+        legend.title = element_text(colour="black", size = 12, face = "bold"),
+        axis.text.x=element_text(size=9,color="black", face="bold"),
+        axis.text.y=element_text(size=12,color="black"),
+        axis.line.y.left =element_line(size=0.5, color = "black"),
+        axis.line.x.bottom =element_line(size=0.5, color = "black"),
+        axis.title.x = element_text(color="black", size=13, face="bold", vjust=-0.8), # vjust=0.5),
+        axis.title.y = element_text(color="black", size=13, face="bold", vjust=1.5),
+        panel.grid.major = element_blank(), 
+        panel.grid.minor = element_blank(),
+        panel.background = element_rect(fill = "white", color = "white"),
+        legend.background = element_rect(fill = "white", color = "white")
+        #plot.background = element_rect(fill = "transparent", color = NA)# vjust=0.5)
+        )) %>%
+    ggsave(paste0("../output/plots/violin/", modality[m], "_",
+                  "all_rois", ".png"), .,
+           width = 10, height = 5 #,
+           #bg = "transparent"
+           )
+}
+```
+
+# Ttest - Left vs Right
+```{r}
+for (i in 1:6){
+  print(right_rois[i])
+  t.test(R_data_stream[,right_rois[i]], L_data_stream[,left_rois[i]], paired = T) %>%
+    print()
+}
+```
+
+
+# Other visuals - NOT USED
+# Volin Plots - Separate plots
+```{r}
+# LEFT
+left_rois <- c("L_ERC/L_CA4DG",
+               "L_CA2CA3/L_CA4DG",
+               "L_CA2CA3/L_CA1",
+               "L_subiculum/L_CA1",
+               "L_ERC/L_subiculum",
+               "L_CA4DG/L_subiculum",
+               "L_ERC/L_CA1"
+               )
+
+left_rois_clean <- c("Left ERC - Left CA4DG",
+               "Left CA4DG - Left CA2CA3",
+               "Left CA2CA3 - Left CA1",
+               "Left CA1 - Left SUB",
+               "Left SUB - Left ERC",
+               "Left SUB - Left CA4DG",
+               "Left ERC - Left CA1"
+               )
+         
+dotsize <- c(1, 0.0001, 0.0001, 0.0001, 0.0001)
+binwidth <- c(1, 0.0001, 0.0001, 0.0001, 0.0001)
+
+for (m in 1:length(modality)){
+  for (i in 1:length(left_rois)){
+    (ggplot(melt(get(paste0("L_data_", modality[m]))), aes(x=variable, y=value, fill=variable)) + 
+      geom_violin(trim=FALSE)+ #geom_boxplot()+
+    geom_dotplot(binaxis='y', stackdir='center', dotsize = dotsize[m], binwidth = binwidth[m], fill = "black")+
+    scale_x_discrete(limits=c(left_rois[i]),
+                     labels = c(left_rois[i]))+
+    scale_fill_manual(breaks = c(left_rois[i]),
+                      values=c("#EF2C9F"
+                               ))+
+      ylab(modality_clean[m])+
+      xlab(left_rois_clean[i]) +
+        theme(
+          legend.position="none",
+          axis.title.x=element_blank(),
+          legend.title = element_text(colour="black", size = 12, face = "bold"),
+          #axis.text.x=element_text(size=9,color="black", face="bold"),
+          axis.text.x=element_blank(),
+          axis.text.y=element_text(size=12,color="black"),
+          axis.line.y.left =element_line(size=0.5, color = "black"),
+          axis.line.x.bottom =element_line(size=0.5, color = "black"),
+          #axis.title.x = element_text(color="black", size=13, face="bold", vjust=-0.8), # vjust=0.5),
+          axis.title.y = element_text(color="black", size=13, face="bold", vjust=1.5),
+          panel.grid.major = element_blank(), 
+          panel.grid.minor = element_blank(),
+          panel.background = element_rect(fill = "transparent", color = NA),
+          plot.background = element_rect(fill = "transparent", color = NA)# vjust=0.5)
+        )) %>%
+    ggsave(paste0("../output/plots/violin/", modality[m], "_", gsub("/", "_", left_rois[i]), ".png"), ., 
+           width = 6, height = 5,
+           bg = "transparent")
+  }
+}
+
+# RIGHT
+right_rois <- c("R_ERC/R_CA4DG",
+               "R_CA2CA3/R_CA4DG",
+               "R_CA2CA3/R_CA1",
+               "R_subiculum/R_CA1",
+               "R_ERC/R_subiculum",
+               "R_CA4DG/R_subiculum",
+               "R_ERC/R_CA1"
+               )
+
+right_rois_clean <- c("Right ERC - Right CA4DG",
+               "Right CA4DG - Right CA2CA3",
+               "Right CA2CA3 - Right CA1",
+               "Right CA1 - Right SUB",
+               "Right SUB - Right ERC",
+               "Right SUB - Right CA4DG",
+               "Right ERC - Right CA1"
+               )
+
+for (m in 1:length(modality)){
+  for (i in 1:length(right_rois)){
+    (ggplot(melt(get(paste0("R_data_", modality[m]))), aes(x=variable, y=value, fill=variable)) + 
+      geom_violin(trim=FALSE)+ #geom_boxplot()+
+    geom_dotplot(binaxis='y', stackdir='center', dotsize = dotsize[m], binwidth = binwidth[m], fill = "black")+
+    scale_x_discrete(limits=c(right_rois[i]),
+                     labels = c(right_rois[i]))+
+    scale_fill_manual(breaks = c(right_rois[i]),
+                      values=c("#00AEEF"
+                               ))+
+
+    ylab(modality_clean[m]) +
+      xlab(right_rois_clean[i]) +
+        theme(
+          legend.position="none",
+          axis.title.x=element_blank(),
+          legend.title = element_text(colour="black", size = 12, face = "bold"),
+          axis.text.x=element_blank(),
+          axis.text.y=element_text(size=12,color="black"),
+          axis.line.y.left =element_line(size=0.5, color = "black"),
+          axis.line.x.bottom =element_line(size=0.5, color = "black"),
+          #axis.title.x = element_text(color="black", size=13, face="bold", vjust=-0.8), # vjust=0.5),
+          axis.title.y = element_text(color="black", size=13, face="bold", vjust=1.5),
+          panel.grid.major = element_blank(), 
+          panel.grid.minor = element_blank(),
+          panel.background = element_rect(fill = "transparent", color = NA),
+          plot.background = element_rect(fill = "transparent", color = NA)# vjust=0.5)
+        )) %>%
+    ggsave(paste0("../output/plots/violin/", modality[m], "_", gsub("/", "_", right_rois[i]), ".png"), ., 
+           width = 6, height = 5,
+           bg = "transparent")
+  }
+}
+
+```
+
+
+# Left and Right in pairs
+```{r}
+dotsize <- c(1, 0.0001, 0.0001, 0.0001, 0.0001)
+binwidth <- c(1, 0.0001, 0.0001, 0.0001, 0.0001)
+
+
+for (m in 1:length(modality)){
+  temp_data <- rbind(melt(get(paste0("L_data_", modality[m]))), melt(get(paste0("R_data_", modality[m]))))
+  for (i in 1:length(left_rois)){
+    (ggplot(temp_data, aes(x=variable, y=value, fill=variable)) +
+       geom_violin(trim=FALSE)+ #geom_boxplot()+
+       geom_dotplot(binaxis='y', stackdir='center', dotsize = dotsize[m], binwidth = binwidth[m], fill = "black")+
+       scale_x_discrete(
+         labels = c("Right", "Left"),
+         limits=c(right_rois[i], left_rois[i]))+
+       scale_fill_manual(breaks = c(right_rois[i], left_rois[i]),
+                      values=c("#00AEEF",
+                               "#EF2C9F"))+
+       ylab(modality_clean[m])+
+       xlab(" ") +
+       theme(
+          legend.position="none",
+          axis.title.x=element_blank(),
+          legend.title = element_text(colour="black", size = 12, face = "bold"),
+          axis.text.x=element_text(size=18,color="black", face="bold"),
+          #axis.text.x=element_blank(),
+          axis.text.y=element_text(size=18,color="black"),
+          axis.line.y.left =element_line(size=0.5, color = "black"),
+          axis.line.x.bottom =element_line(size=0.5, color = "black"),
+          #axis.title.x = element_text(color="black", size=20, face="bold", vjust=-0.8), # vjust=0.5),
+          axis.title.y = element_text(color="black", size=20, face="bold", vjust=1.5),
+          panel.grid.major = element_blank(), 
+          panel.grid.minor = element_blank(),
+          panel.background = element_rect(fill = "transparent", color = NA),
+          plot.background = element_rect(fill = "transparent", color = NA)# vjust=0.5)
+        )) %>%
+    ggsave(paste0("../output/plots/violin/", modality[m],
+                  "_both_right_left", gsub("/", "_", left_rois[i]), ".png"), .,
+           width = 8, height = 5,
+           dpi = 300, 
+           bg = "transparent")
+  }
+}
+
+```
+
+## END
