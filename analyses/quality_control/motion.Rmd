@@ -1,0 +1,106 @@
+---
+title: "motion"
+author: "Melisa Gumus"
+date: "17/08/2022"
+output: html_document
+---
+
+# Read in data
+```{r setup, include=FALSE}
+rm(list = ls())
+
+library(ggplot2)
+library(tidyverse)
+
+temp <- list.files(path="../../data/quality-control/motion/", pattern="*eddy_movement_rms",
+                   recursive = T,
+                   full.names = T)
+subjects <- read.csv("../../data/subjects/final_subjects.txt", header=F, sep="")
+
+```
+
+# store data
+```{r}
+for (i in 1:length(temp)) assign(temp[i], read.csv(temp[i], header=F, sep=""))
+data <- list()
+for (i in 1:length(temp)){
+  data[[i]] <- mget(temp[i])
+  names(data[[i]]) <- temp[i]
+}
+```
+
+# Plot mean RMS
+```{r}
+# MEAN
+average_rms <- data.frame(matrix(ncol=2, nrow=831))
+for (i in 1:831){
+  average_rms[i,2] <- mean(as.data.frame(data[[i]])[c(5:571),2])
+}
+average_rms[,1] <- as.vector(t(subjects))[1:831]
+
+(ggplot(average_rms, aes(x= X2))+
+    geom_histogram(bins=30, color="black", fill = "palegreen4")+
+    xlab("Eddy Movement Mean RMS") +
+    ylab("Number of Subjects") +
+  theme(
+    legend.title = element_text(colour="black", size = 12, face = "bold"),
+    axis.text.x=element_text(size=9,color="black", face="bold"),
+    axis.text.y=element_text(size=12,color="black"),
+    axis.line.y.left =element_line(size=0.5, color = "black"),
+    axis.line.x.bottom =element_line(size=0.5, color = "black"),
+    axis.title.x = element_text(color="black", size=13, face="bold", vjust=-0.8), # vjust=0.5),
+    axis.title.y = element_text(color="black", size=13, face="bold", vjust=1.5),
+    panel.grid.major = element_blank(), 
+    panel.grid.minor = element_blank(),
+    #panel.background = element_rect(fill = "white", color = "white"),
+    legend.background = element_rect(fill = "white", color = "white"),
+    plot.background = element_rect(fill = "transparent", color = NA),
+    panel.background = element_rect(fill = "transparent", color = NA)
+    )) %>%
+ggsave(file=paste0("../../output/plots/quality-control/eddy_movement_rms_mean.png"),
+         width = 6, height = 5, device = "png")
+
+
+```
+
+# other plots - NOT USED
+```{r}
+# MEDIAN
+median_rms <- data.frame(matrix(ncol=2, nrow=850))
+for (i in 1:850){
+  median_rms[i,2] <- median(as.data.frame(data[[i]])[c(5:571),2])
+  #average_rms[i,3] <- mean(as.data.frame(con_run_2[[i]])[c(3:65),2])
+}
+median_rms[,1] <- as.vector(t(subjects))[1:850]
+
+ggplot(median_rms, aes(x= X2))+
+  geom_histogram(bins=30)+
+  xlab("median eddy movement rms")
+# ggsave(file=paste0("~/Documents/GitHub/plots/motion/eddy_movement_rms_median.png"),
+#        width = 7, height = 5, device = "png")
+
+# Boxplot
+reshape2::melt(median_rms$X2) %>%
+  mutate(name = "rms") %>%
+  ggplot(., aes(x = name, y = value))+
+  #geom_violin()+
+  geom_dotplot(binaxis = "y", binwidth = 0.01, stackdir = "center")+
+  xlab("median eddy movement rms")
+ggsave(file=paste0("~/Documents/GitHub/plots/motion/eddy_movement_rms_median_dotplot.png"),
+       width = 5, height = 7, device = "png")
+
+# Boxplot
+reshape2::melt(average_rms$X2) %>%
+  mutate(name = "rms") %>%
+  ggplot(., aes(x = name, y = value))+
+  #geom_violin()+
+  geom_dotplot(binaxis = "y", binwidth = 0.01, stackdir = "center")+
+  xlab("mean eddy movement rms")
+ggsave(file=paste0("~/Documents/GitHub/plots/motion/eddy_movement_rms_mean_dotplot.png"),
+       width = 5, height = 7, device = "png")
+
+````
+
+
+
+# END 
