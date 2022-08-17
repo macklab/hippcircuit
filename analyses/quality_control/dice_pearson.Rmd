@@ -1,0 +1,495 @@
+---
+title: "validate"
+output: html_document
+---
+
+# Load packages
+```{r}
+library(tidyverse)
+library(ggplot2)
+install.packages(c("ggdist", "gghalves"))
+library(ggdist)
+library(gghalves)
+library(reshape2)
+library(lme4)
+library(lmerTest)
+```
+
+# Read in data
+```{r setup, include=FALSE}
+# clear environment
+rm(list = ls())
+
+subjects_all <- read.csv("../../data/subjects/final_subjects.txt", header=F, sep="")
+headers <- read.table("../../labels/subfield_MTL_labels.txt", header=T, sep="")
+
+pearson_T1 <- read.csv("../../data/quality-control/pearson/T1s_pearson_corr.csv", header=F)
+dice_data <- read.csv("../../data/quality-control/dice/nodes_dice.csv", header=F)
+dice_data$group <- "subjects"
+
+# Read in the ROI specific dice
+temp <- list.files(path="../../data/quality-control/dice",
+                   pattern="^sub.*\\.csv$", recursive = T, full.names = T)
+for (k in 1:length(temp)) assign(temp[k], read.csv(temp[k], header = T))
+
+dice_list <- list()
+for (i in 1:length(temp)){
+  dice_list[[i]] <- mget(temp[i])
+  names(dice_list[[i]]) <- temp[i]
+}
+
+# Volume
+ICV_data <- read.csv("../../data/quality-control/volume/ICV.csv", header=F)
+ICV_data$group <- "subjects"
+
+# Read in the ROI specific volume
+temp <- list.files(path="../../data/quality-control/volume",
+                   pattern="sub*", recursive = T, full.names = T)
+for (k in 1:length(temp)) assign(temp[k], read.csv(temp[k], header = F))
+
+volume_list <- list()
+for (i in 1:length(temp)){
+  volume_list[[i]] <- mget(temp[i])
+  names(volume_list[[i]]) <- temp[i]
+}
+
+```
+
+# Pearson correlations - T1 images
+```{r}
+# T1
+(ggplot(pearson_T1, aes(x = V2)) +
+  geom_histogram(color="black", fill="lightblue", binwidth = 0.01) +
+  xlab("Correlation Coefficient") +
+  ylab("Number of Subjects")+
+        theme(
+          legend.title = element_text(colour="black", size = 12, face = "bold"),
+          axis.text.y=element_text(size=12,color="black"),
+          axis.line.y.left =element_line(size=0.5, color = "black"),
+          axis.line.x.bottom =element_line(size=0.5, color = "black"),
+          axis.title.x = element_text(color="black", size=13, face="bold", vjust=-0.8), # vjust=0.5),
+          axis.title.y = element_text(color="black", size=13, face="bold", vjust=1.5),
+                  panel.grid.major = element_blank(), 
+          panel.grid.minor = element_blank(),
+          panel.background = element_rect(fill = "transparent", color = NA),
+          plot.background = element_rect(fill = "transparent", color = NA)# vjust=0.5)
+        )) %>%
+  ggsave("../../output/plots/quality-control/Pearson_T1.png", .,
+         device = "png",
+         width = 6, height = 6,
+         dpi = 300)
+
+
+# Select subjects with r 0.6 or lower 
+pearson_sub <- pearson_T1[which(pearson_T1$V2 <= 0.85),]
+pearson_sub
+
+pearson_exc <- pearson_T1[pearson_T1$V2 < mean(pearson_T1$V2) - sd(pearson_T1$V2)*2.5,]$V1
+```
+
+# Dice - whole hippocampus
+```{r}
+(ggplot(dice_data, aes(x = group, y = V2, fill = group)) + 
+  ## add half-violin from {ggdist} package
+  ggdist::stat_halfeye(
+    adjust = .5, alpha = .8, width = .6, 
+    justification = -.2, .width = 0, 
+    point_colour = NA
+  ) +
+  scale_fill_manual(values = c("cornflowerblue"))+
+  geom_boxplot(
+    width = .12, alpha = .8, 
+    outlier.color = NA ## `outlier.shape = NA` works as well
+  ) +
+  # ## add dot plots from {ggdist} package
+  gghalves::geom_half_point(
+    aes(x = group, color = group),
+    dotsize = 0.2, side = "l",
+    range_scale = .4,
+    alpha = .3, color = "cornflowerblue",
+    binwidth = 0.02
+  ) +
+  ## remove white space on the left
+  coord_cartesian(xlim = c(1.2, NA)) +
+  # geom_hline(aes(yintercept = 0.55),
+  #           color="blue", linetype="dashed", size=1) +
+  ylab(" Dice Similarity Coefficient") +
+  xlab(" ") +
+  theme(legend.position = " ",
+        legend.title = element_text(colour="black", size = 12, face = "bold"),
+          #axis.text.x=element_text(size=9,color="black", face="bold"),
+          #axis.text.x=element_blank(),
+          axis.text.y=element_text(size=12,color="black"),
+          axis.line.y.left =element_line(size=0.5, color = "black"),
+          axis.line.x.bottom =element_line(size=0.5, color = "black"),
+          axis.title.x = element_text(color="black", size=13, face="bold", vjust=-0.8), # vjust=0.5),
+          axis.title.y = element_text(color="black", size=13, face="bold", vjust=1.5),
+                  panel.grid.major = element_blank(), 
+          panel.grid.minor = element_blank(),
+          panel.background = element_rect(fill = "transparent", color = NA),
+          plot.background = element_rect(fill = "transparent", color = NA)# vjust=0.5)
+        )) %>%
+  ggsave("../../output/plots/quality-control/Hipp_dice.png", .,
+         device = "png",
+         width = 6, height = 6,
+         dpi = 300)
+
+
+# Select subjects with dice lower than 0.5
+dice_sub <- dice_data[which(dice_data$V2 <= 0.55),]
+
+# outliers that overlap between pearson and dice 
+#pearson_sub[which(pearson_sub$V1 %in% dice_sub$V1),]
+```
+
+# ROI dice
+```{r}
+# temp_dice
+#ROI_dice <- data.frame(subjects)
+ROI_dice <- as.data.frame(matrix(ncol = 17, nrow = length(dice_list)))
+colnames(ROI_dice) <- c("IDs", "01", "02", "03", "04", "05",
+                        "06", "07", "08", "09", "10", "11",
+                        "12", "13", "14", "15", "16")
+roi_labels <- colnames(ROI_dice)[2:17]
+
+for (i in 1:length(dice_list)){
+  temp_data <- dice_list[[i]][[1]]
+  sbj_path <- names(dice_list[i][[1]])
+  sbj_id <-
+    sub("../../data/quality-control/dice/sub-", "", sbj_path) %>%
+    sub(".csv", "", .)
+  ROI_dice$IDs[i] <- sbj_id
+  
+  for (j in roi_labels){
+    #label_num <- grep(j, temp_data[["Label.Name"]])
+    temp_dice <- temp_data[grep(j, temp_data[["Label.Name"]]),]$Dice
+    ROI_dice[j][i,] <- temp_dice
+  }
+}
+
+colnames(ROI_dice) <- c("IDs",
+                        sub("0", "", colnames(ROI_dice)[2:10]),
+                        colnames(ROI_dice)[11:17])
+
+for (i in 1:16){
+  colnames(ROI_dice)[which(colnames(ROI_dice) == i)] <-
+    headers[i,]$Clear.Label
+}
+```
+
+# Plot subfield dice
+```{r}
+ROI_dice_melt <-
+  melt(ROI_dice)
+ROI_dice_melt$group <- "subjects"  
+
+ROI_dice_melt <- 
+  ROI_dice_melt[!(grepl("stratum", ROI_dice_melt$variable) |
+                 grepl("PHC", ROI_dice_melt$variable) |
+                 grepl("PRC", ROI_dice_melt$variable)
+                   #grepl("ERC", ROI_dice_melt$variable)
+                 ),]
+
+
+ROI_dice_melt$variable <-
+  factor(ROI_dice_melt$variable, levels = c(
+                                    "R_CA4DG", "L_CA4DG",
+                                    "R_CA2CA3", "L_CA2CA3",
+                                    "R_CA1", "L_CA1",
+                                    "R_subiculum", "L_subiculum",
+                                    "R_ERC", "L_ERC"))
+
+
+ROI_names <- c(
+  "R_ERC"="Right ERC",
+  "L_ERC"="Left ERC",
+  "R_CA4DG"="Right CA4DG",
+  "L_CA4DG"="Left CA4DG",
+  "R_CA2CA3"="Right CA2CA3",
+  "L_CA2CA3"="Left CA2CA3",
+  "R_CA1"="Right CA1",
+  "L_CA1"="Left CA1",
+  "R_subiculum"="Right SUB",
+  "L_subiculum"="Left SUB"
+)
+
+
+(ggplot(ROI_dice_melt, aes(x = group, y = value, fill = group)) + 
+  ## add half-violin from {ggdist} package
+  ggdist::stat_halfeye(
+    adjust = .5, alpha = .8, width = .6, 
+    justification = -.2, .width = 0, 
+    point_colour = NA
+  ) +
+  scale_fill_manual(values = c("lightslateblue"))+
+  geom_boxplot(
+    width = .12, alpha = .8, 
+    outlier.color = NA ## `outlier.shape = NA` works as well
+  ) +
+  # ## add dot plots from {ggdist} package
+  gghalves::geom_half_point(
+    aes(x = group, color = group),
+    dotsize = 0.2, side = "l",
+    range_scale = .4,
+    alpha = .3, color = "lightslateblue",
+    binwidth = 0.02
+  ) +
+  ## remove white space on the left
+  coord_cartesian(xlim = c(1.2, NA)) +
+  # geom_hline(aes(yintercept = 0.4),
+  #           color="blue", linetype="dashed", size=1) +
+  ylab(" Dice Similarity Coefficient") +
+  xlab(" ") +
+    theme(legend.position = " ",
+          plot.title = element_text(colour="black", size = 12, face = "bold"),
+        legend.title = element_text(colour="black", size = 12, face = "bold"),
+          #axis.text.x=element_text(size=9,color="black", face="bold"),
+          axis.text.x=element_blank(),
+          axis.text.y=element_text(size=12,color="black"),
+          axis.line.y.left =element_line(size=0.5, color = "black"),
+          axis.line.x.bottom =element_line(size=0.5, color = "black"),
+          axis.title.x = element_text(color="black", size=13, face="bold", vjust=-0.8), # vjust=0.5),
+          axis.title.y = element_text(color="black", size=13, face="bold", vjust=1.5),
+                  panel.grid.major = element_blank(), 
+          panel.grid.minor = element_blank(),
+          panel.background = element_rect(fill = "transparent", color = NA),
+          plot.background = element_rect(fill = "transparent", color = NA)# vjust=0.5)
+        ) +
+  facet_wrap(~ variable, ncol = 4, labeller = labeller(variable = ROI_names))) %>%
+  ggsave("../../output/plots/quality-control/Subfield_dice.png", .,
+         device = "png",
+         width = 10, height = 7,
+         dpi = 300)
+
+# 2 SD away
+dice_exc <- c()
+for (i in 2:17){
+  # ROI_dice[ROI_dice$L_CA2CA3 < mean(ROI_dice$L_CA2CA3) - sd(ROI_dice$L_CA2CA3)*2,]$IDs
+  temp_dice <- ROI_dice[ROI_dice[,i] < mean(ROI_dice[,i]) - sd(ROI_dice[,i])*2.5,]$IDs
+  dice_exc <- c(dice_exc, temp_dice)
+}
+
+sbj_exc <- c(unique(c(dice_exc, pearson_exc)))
+ROI_dice %>%
+  subset(IDs == pearson_exc)
+
+#save(pearson_T1, dice_data, ROI_dice, file = "../../output/Rdata/validata.RDATA")
+```
+
+
+# Plot DICE after clean up- This is not really used
+```{r}
+ROI_dice_melt <-
+  melt(ROI_dice)
+ROI_dice_melt$group <- "subjects"  
+
+(ggplot(ROI_dice_melt, aes(x = group, y = value, fill = group)) + 
+  ## add half-violin from {ggdist} package
+  ggdist::stat_halfeye(
+    adjust = .5, alpha = .8, width = .6, 
+    justification = -.2, .width = 0, 
+    point_colour = NA
+  ) +
+  scale_fill_manual(values = c("cornflowerblue"))+
+  geom_boxplot(
+    width = .12, alpha = .8, 
+    outlier.color = NA ## `outlier.shape = NA` works as well
+  ) +
+  # ## add dot plots from {ggdist} package
+  gghalves::geom_half_point(
+    aes(x = group, color = group),
+    dotsize = 0.2, side = "l",
+    range_scale = .4,
+    alpha = .3, color = "cornflowerblue",
+    binwidth = 0.02
+  ) +
+  ## remove white space on the left
+  coord_cartesian(xlim = c(1.2, NA)) +
+  geom_hline(aes(yintercept = 0.4),
+            color="blue", linetype="dashed", size=1) +
+  ylab(" Dice Similarity Coefficient") +
+  xlab(" ") +
+  theme(legend.position = " ") +
+  facet_wrap(~ variable)) # %>%
+  # ggsave("../../data/validation/output/Subfield_dice.png", .,
+  #        device = "png", 
+  #        width = 10, height = 10, 
+  #        dpi = 300)
+
+
+```
+
+
+
+# Volumes
+```{r}
+(ggplot(ICV_data, aes(x = group, y = V2, fill = group)) + 
+  ## add half-violin from {ggdist} package
+  ggdist::stat_halfeye(
+    adjust = .5, alpha = .8, width = .6, 
+    justification = -.2, .width = 0, 
+    point_colour = NA
+  ) +
+  scale_fill_manual(values = c("cornflowerblue"))+
+  geom_boxplot(
+    width = .12, alpha = .8, 
+    outlier.color = NA ## `outlier.shape = NA` works as well
+  ) +
+  # ## add dot plots from {ggdist} package
+  gghalves::geom_half_point(
+    aes(x = group, color = group),
+    dotsize = 0.2, side = "l",
+    range_scale = .4,
+    alpha = .3, color = "cornflowerblue",
+    binwidth = 0.02
+  ) +
+  ## remove white space on the left
+  coord_cartesian(xlim = c(1.2, NA)) +
+  # geom_hline(aes(yintercept = 0.55),
+  #           color="blue", linetype="dashed", size=1) +
+  ylab("ICV") +
+  xlab(" ") +
+  theme(legend.position = " ")) %>%
+  ggsave("../../output/plots/quality-control/ICV.png", .,
+         device = "png",
+         width = 10, height = 10,
+         dpi = 300)
+
+```
+
+# ROI volume 
+```{r}
+ROI_volume <- as.data.frame(matrix(ncol = 17, nrow = length(volume_list)))
+colnames(ROI_volume) <- c("IDs", "1", "2", "3", "4", "5",
+                          "6", "7", "8", "9", "10", "11",
+                          "12", "13", "14", "15", "16")
+roi_labels <- colnames(ROI_volume)[2:17]
+
+# for (i in )
+# volume_list[[1]][[1]][2,]
+
+for (i in 1:length(volume_list)){
+  temp_data <- volume_list[[i]][[1]]
+  sbj_path <- names(volume_list[i][[1]])
+  sbj_id <-
+    sub("../../data/quality-control/volume/sub-", "", sbj_path) %>%
+    sub("_node_volume.csv", "", .)
+  ROI_volume$IDs[i] <- sbj_id
+  
+  for (j in roi_labels){
+    temp_icv <- ICV_data[which(ICV_data$V1 == sbj_id),]$V2
+    ROI_volume[j][i,] <- temp_data[j,] #/temp_icv
+    ROI_volume$ICV[i] <- temp_icv
+  }
+}
+
+for (i in 1:16){
+  colnames(ROI_volume)[which(colnames(ROI_volume) == i)] <-
+    headers[i,]$Clear.Label
+}
+
+```
+
+# ROI volume corrected for ICV
+```{r}
+ROI_volume$IDs <- as.factor(ROI_volume$IDs)
+
+# a <- ROI_volume[2]
+ROI_volume_res <- ROI_volume
+for (i in 2:17){
+  ROI_volume_res[, i] <- residuals(lm(ROI_volume[, i] ~ ICV , data = ROI_volume))
+}
+
+```
+
+
+# ROI volumes
+```{r}
+ROI_volume_melt <-
+  melt(ROI_volume_res[1:17])
+ROI_volume_melt$group <- "subjects"  
+
+ROI_volume_melt <- 
+  ROI_volume_melt[!(grepl("stratum", ROI_volume_melt$variable) |
+                 grepl("PHC", ROI_volume_melt$variable) |
+                 grepl("PRC", ROI_volume_melt$variable)
+                   #grepl("ERC", ROI_volume_melt$variable)
+                 ),]
+
+
+ROI_volume_melt$variable <-
+  factor(ROI_volume_melt$variable, levels = c(
+                                    "R_CA4DG", "L_CA4DG",
+                                    "R_CA2CA3", "L_CA2CA3",
+                                    "R_CA1", "L_CA1",
+                                    "R_subiculum", "L_subiculum",
+                                    "R_ERC", "L_ERC"))
+
+
+ROI_names <- c(
+  "R_ERC"="Right ERC",
+  "L_ERC"="Left ERC",
+  "R_CA4DG"="Right CA4DG",
+  "L_CA4DG"="Left CA4DG",
+  "R_CA2CA3"="Right CA2CA3",
+  "L_CA2CA3"="Left CA2CA3",
+  "R_CA1"="Right CA1",
+  "L_CA1"="Left CA1",
+  "R_subiculum"="Right SUB",
+  "L_subiculum"="Left SUB"
+)
+# ROI_volume_melt <- ROI_volume_melt[-c(grep("PRC", ROI_volume_melt$variable),
+#                   grep("PHC", ROI_volume_melt$variable)),]
+
+(ggplot(ROI_volume_melt, aes(x = group, y = value, fill = group)) + 
+  ## add half-violin from {ggdist} package
+  ggdist::stat_halfeye(
+    adjust = .5, alpha = .8, width = .6, 
+    justification = -.2, .width = 0, 
+    point_colour = NA
+  ) +
+  scale_fill_manual(values = c("coral3"))+
+  geom_boxplot(
+    width = .12, alpha = .8, 
+    outlier.color = NA ## `outlier.shape = NA` works as well
+  ) +
+  # ## add dot plots from {ggdist} package
+  gghalves::geom_half_point(
+    aes(x = group, color = group),
+    dotsize = 0.2, side = "l",
+    range_scale = .4,
+    alpha = .3, color = "coral3",
+    binwidth = 0.02
+  ) +
+  ## remove white space on the left
+  coord_cartesian(xlim = c(1.2, NA)) +
+  # geom_hline(aes(yintercept = 0.55),
+  #           color="blue", linetype="dashed", size=1) +
+  ylab("Volume") +
+  xlab(" ") +
+      theme(legend.position = " ",
+          plot.title = element_text(colour="black", size = 12, face = "bold"),
+        legend.title = element_text(colour="black", size = 12, face = "bold"),
+          #axis.text.x=element_text(size=9,color="black", face="bold"),
+          axis.text.x=element_blank(),
+          axis.text.y=element_text(size=12,color="black"),
+          axis.line.y.left =element_line(size=0.5, color = "black"),
+          axis.line.x.bottom =element_line(size=0.5, color = "black"),
+          axis.title.x = element_text(color="black", size=13, face="bold", vjust=-0.8), # vjust=0.5),
+          axis.title.y = element_text(color="black", size=13, face="bold", vjust=1.5),
+                  panel.grid.major = element_blank(), 
+          panel.grid.minor = element_blank(),
+          panel.background = element_rect(fill = "transparent", color = NA),
+          plot.background = element_rect(fill = "transparent", color = NA)# vjust=0.5)
+        ) +
+  facet_wrap(~ variable, ncol = 4, labeller = labeller(variable = ROI_names))) %>%
+  # facet_wrap(~ variable, scales = "free")) %>%
+  ggsave("../../output/plots/quality-control/Subfield_volume.png", .,
+         device = "png",
+         width = 10, height = 7,
+         dpi = 300)
+
+```
+
+
+# END # 
