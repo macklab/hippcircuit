@@ -59,24 +59,25 @@ for (i in 1:length(temp)){
 ```{r}
 # T1
 (ggplot(pearson_T1, aes(x = V2)) +
-  geom_histogram(color="black", fill="lightblue", binwidth = 0.01) +
+  geom_histogram(color="black", fill="orange3", binwidth = 0.01) +
   xlab("Correlation Coefficient") +
   ylab("Number of Subjects")+
         theme(
           legend.title = element_text(colour="black", size = 12, face = "bold"),
           axis.text.y=element_text(size=12,color="black"),
+          axis.text.x=element_text(size=9,color="black", face="bold"),
           axis.line.y.left =element_line(size=0.5, color = "black"),
           axis.line.x.bottom =element_line(size=0.5, color = "black"),
           axis.title.x = element_text(color="black", size=13, face="bold", vjust=-0.8), # vjust=0.5),
           axis.title.y = element_text(color="black", size=13, face="bold", vjust=1.5),
-                  panel.grid.major = element_blank(), 
+          panel.grid.major = element_blank(), 
           panel.grid.minor = element_blank(),
           panel.background = element_rect(fill = "transparent", color = NA),
           plot.background = element_rect(fill = "transparent", color = NA)# vjust=0.5)
         )) %>%
   ggsave("../../output/plots/quality-control/Pearson_T1.png", .,
          device = "png",
-         width = 6, height = 6,
+         width = 6, height = 5,
          dpi = 300)
 
 
