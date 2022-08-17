@@ -1,0 +1,107 @@
+---
+title: "final_subjects"
+output: html_document
+---
+
+# Setup environment
+```{r setup, include=FALSE}
+# knitr::opts_chunk$set(echo = TRUE)
+
+# clear environment
+rm(list = ls())
+
+# load packages
+library(tidyverse)
+
+# read in data
+demo <- read.csv("../../data/subjects/HCP_demographics.csv")
+first_sbjs_data <- read.table("../../data/subjects/subjects.txt")
+second_sbjs_data <- read.table("../../data/subjects/subjects_rest.txt")
+exclude_ashs <- read.table("../../data/subjects/exclude_subjects_ashs.txt")
+```
+
+# Select subjects used in the analyses
+```{r}
+# Subjects in 1st analyses
+first_sbjs <- 
+  first_sbjs_data[1:85,] %>%
+  c(sapply(., unlist))
+first_data <- demo[is.element(demo$Subject, first_sbjs), ]
+
+# Subjects in 2nd analyses
+second_sbjs <- 
+  second_sbjs_data %>%
+  c(sapply(., unlist))
+second_data <- demo[is.element(demo$Subject, second_sbjs), ]
+
+# Combine data
+total_data <- rbind(first_data, second_data)
+
+# # Exclude those with anatomical/segmentation issues
+# clean_data <-
+#   final_data[-unique(c(grep("A", final_data$QC_Issue),
+#                        grep("B", final_data$QC_Issue))),]
+
+```
+
+# Save data as txt
+```{r}
+# Excluded - flagged by HCP
+#exclude_hcp <- final_data$Subject[!final_data$Subject %in% clean_data$Subject]
+exclude_hcp <- total_data[unique(c(grep("A", total_data$QC_Issue),
+                                   grep("B", total_data$QC_Issue))),]$Subject 
+write.table(exclude_hcp,
+          "../../data/subjects/exclude_subjects_hcp.txt",
+          row.names = F,
+          col.names = F) 
+
+# Exclude - mrtrix issues
+exclude_mrtrix <- c(138837, 212823, 742549)
+write.table(exclude_mrtrix,
+          "../../data/subjects/exclude_subjects_mrtrix.txt",
+          row.names = F,
+          col.names = F) 
+
+exclude_sbjs <-
+  unique(c(exclude_hcp,
+           exclude_mrtrix,
+           exclude_ashs$V1))
+
+final_sbjs <-
+  total_data$Subject[!is.element(total_data$Subject, exclude_sbjs)]
+```
+
+# Store 10 in a row
+```{r}
+# final_sbjs <- c()
+# for (i in seq(1,899,10)){
+#   j = i-1+10
+#   final_sbjs<- rbind(final_sbjs,clean_data$Subject[i:j])
+# }
+
+# Excluded subjects
+write.table(exclude_sbjs,
+          "../../data/subjects/exclude_subjects_total.txt",
+          row.names = F,
+          col.names = F) 
+
+# Final subjects
+write.table(final_sbjs,
+          "../../data/subjects/final_subjects.txt",
+          row.names = F,
+          col.names = F) 
+
+```
+
+# Get age and sex
+```{r}
+# Females
+length(which(demo[is.element(demo$Subject, final_sbjs), ]$Gender =="F"))
+
+# Age
+unique(demo[is.element(demo$Subject, final_sbjs), ]$Age)
+```
+
+
+# END 
+
