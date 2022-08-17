@@ -1,0 +1,69 @@
+---
+title: "template_subjects"
+output: html_document
+---
+
+# Load data
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+# clear environment
+rm(list = ls())
+
+# load packages
+library(tidyverse)
+
+# read in data
+demo <- read.csv("../../data/subjects/HCP_demographics.csv")
+sbjs <- read.table("../../data/subjects/final_subjects.txt") #, header = F)
+load("../../output/Rdata/validata.RDATA")
+
+```
+
+# Read in data and select subjects
+```{r}
+data <- demo[is.element(demo$Subject, sbjs$V1), ]
+```
+
+# Exclude those with low Pearson and Dice
+```{r}
+pearson_exc <- pearson_T1[pearson_T1$V2 < 0.9,]$V1
+dice_exc <- c()
+for (i in 2:17){
+  temp_dice <- ROI_dice[ROI_dice[,i] < mean(ROI_dice[,i]) - sd(ROI_dice[,i])*2.5,]$IDs
+  dice_exc <- c(dice_exc, temp_dice)
+}
+
+sbj_exc <- c(unique(c(dice_exc, pearson_exc)))
+
+clean_data <-
+  data %>%
+  subset(!Subject %in% sbj_exc) %>%
+  subset(QC_Issue == "")
+
+# Select 15 M and 15 F that are age matched
+out <- c()
+for (j in c("F", "M")){
+  for (i in c("22-25", "26-30", "31-35")){
+    temp <-
+      clean_data %>%
+      subset(Gender == j &
+               Age == i) %>%
+      .["Subject"] %>%
+      .[1:5,]
+    out <- c(out, temp)
+  }
+}
+
+```
+
+# Write to a file
+```{r}
+write.table(out, "../../data/subjects/template_subjects.txt",
+            row.names = F,
+            col.names = F)
+
+```
+
+
+# END 
