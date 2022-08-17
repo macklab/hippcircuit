@@ -1,0 +1,45 @@
+---
+title: "subjects"
+output: html_document
+---
+
+# Setup environment
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+# clear environment
+rm(list = ls())
+
+# load packages
+library(tidyverse)
+
+# read in data
+demo <- read.csv("../../data/subjects/HCP_demographics.csv")
+
+```
+
+# Select those with T1 and diffusion
+```{r}
+# Should have at least 1 T1, 1 T2 and 1 Diffusion
+clean_data <- demo[demo$T1_Count>0 & 
+                   demo$T2_Count>0 &
+                   demo$X3T_dMRI_Compl == "true" &
+                   !demo$Age == "36+",]
+```
+
+# Save 10 in a row
+```{r}
+subjects <- c()
+for (i in seq(1,961,10)){
+  j = i-1+10
+  subjects <- rbind(subjects,clean_data$Subject[i:j])
+}
+```
+
+# Save data as txt
+```{r}
+write.table(subjects, "../../data/subjects/subjects.txt", 
+            row.names = F, 
+            col.names = F)
+```
+
