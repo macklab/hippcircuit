@@ -1,0 +1,323 @@
+---
+title: "01_heatmaps_subfields+MTL"
+output: html_document
+---
+
+# Clean env and install packages
+```{r setup, include=FALSE}
+# packages
+library(tidyverse)
+library(reshape2)
+library(ggpubr)
+library(ggplot2)
+library(gridExtra)
+library(RColorBrewer)
+```
+
+# Read in data
+```{r}
+# clear environment
+rm(list = ls())
+
+modality <- c("stream", "FA", "AD", "RD", "MD")
+headers <- read.table("../labels/subfield_MTL_labels.txt", header=T, sep="")
+
+for (m in modality){
+  temp <- list.files(path=paste0("../data/connectomes/subfields_MTL_",m), pattern="*.csv", recursive = T, full.names = T)
+  for (k in 1:length(temp)) assign(temp[k], read.csv(temp[k], header=F, sep=","))
+
+  temp_data <- list()
+  for (i in 1:length(temp)){
+    temp_data[[i]] <- mget(temp[i])
+    names(temp_data[[i]]) <- temp[i]
+  }
+  assign(paste0(m,"_data"), temp_data)
+}
+```
+
+# Get connectome labels
+```{r}
+# Subjects in a list
+sbj_list <- as.list(grep("stream", stream_data))
+
+columns <- c()
+for (i in 1:length(headers$Clear.Label)){
+  for (t in 1:length(headers$Clear.Label)){
+    column_name <- paste(headers$Clear.Label[i], headers$Clear.Label[t], sep="/")
+    columns <- append(columns, column_name)
+  }
+}
+
+```
+
+# Normalize streamline data
+```{r}
+# stream_mat <- vector()
+# for (i in 1:length(stream_data)){
+#   stream_mat <- rbind(stream_mat, t(as.vector(
+#     as.matrix(stream_data[[i]][[1]])/sum(as.matrix(stream_data[[i]][[1]])))))
+# }
+```
+
+# Separate Right and Left hemisphere
+```{r}
+right_coor <- grep("R_", headers$Clear.Label)
+left_coor <- grep("L_", headers$Clear.Label)
+
+# Separate R and L labels
+R_columns <- c()
+for (i in right_coor) {
+  for (t in right_coor){
+    R_column_name <- paste(headers$Clear.Label[i], headers$Clear.Label[t], sep="/")
+    R_columns <- append(R_columns, R_column_name)
+  }
+}
+
+L_columns <- c()
+for (j in left_coor){
+  for (k in left_coor){
+    L_column_name <- paste(headers$Clear.Label[j], headers$Clear.Label[k], sep="/")
+    L_columns <- append(L_columns, L_column_name)
+  }
+}
+```
+
+# Averaga data for heatmaps
+```{r}
+for (m in modality){
+  R_temp_mat <- matrix(unlist(get(paste0(m,"_data"))[[1]]),
+                       ncol = length(headers$Clear.Label),
+                       nrow = length(headers$Clear.Label),
+                       byrow = F)[right_coor, right_coor]
+  for (i in 2:length(get(paste0(m,"_data")))){
+    R_temp_mat <- R_temp_mat + matrix(unlist(get(paste0(m,"_data"))[[i]]),
+                                      ncol = length(headers$Clear.Label),
+                                      nrow = length(headers$Clear.Label),
+                                      byrow = F)[right_coor, right_coor]
+  }
+  R_temp_sum <- R_temp_mat/length(get(paste0(m,"_data")))
+  assign(paste0("R_", m,"_sum"), R_temp_sum)
+}
+
+for (m in modality){
+  L_temp_mat <- matrix(unlist(get(paste0(m,"_data"))[[1]]),
+                       ncol = length(headers$Clear.Label),
+                       nrow = length(headers$Clear.Label),
+                       byrow = F)[left_coor, left_coor]
+  for (i in 2:length(get(paste0(m,"_data")))){
+    L_temp_mat <- L_temp_mat + matrix(unlist(get(paste0(m,"_data"))[[i]]),
+                                      ncol = length(headers$Clear.Label),
+                                      nrow = length(headers$Clear.Label),
+                                      byrow = F)[left_coor, left_coor]
+  }
+  L_temp_sum <- L_temp_mat/length(get(paste0(m,"_data")))
+  assign(paste0("L_", m,"_sum"), L_temp_sum)
+}
+
+# save(R_stream_sum, L_stream_sum,
+#      R_FA_sum, L_FA_sum,
+#      R_MD_sum, L_MD_sum,
+#      R_AD_sum, L_AD_sum,
+#      R_RD_sum, L_RD_sum,
+#      file = "../output/Rdata/00_import_data_hipp+MTL_sums.RDATA")
+
+```
+
+# Get ready for heatmaps
+```{r}
+# Rearrange matrices
+arran_func <- function(data){
+  diag(data) <- 0
+  data[lower.tri(data)] <- t(data)[lower.tri(data)]
+  return(data)
+}
+for (m in modality){
+  assign(paste0("R_", m, "_sym"), arran_func(get(paste0("R_", m, "_sum"))))
+  assign(paste0("L_", m, "_sym"), arran_func(get(paste0("L_", m, "_sum"))))
+}
+
+# Melt data
+for (m in modality){
+  assign(paste0("R_", m, "_melt"), melt(get(paste0("R_", m, "_sym"))))
+  assign(paste0("L_", m, "_melt"), melt(get(paste0("L_", m, "_sym"))))
+}
+
+# Name labels in melted data
+# Right
+for (m in modality){
+  temp_data <- get(paste0("R_", m, "_melt"))
+  for (i in 1:length(headers$Clear.Label[right_coor])){
+    temp_data[,1][which(temp_data[,1] == i)] <-
+      headers$Clear.Label[right_coor][i]
+    temp_data[,2][which(temp_data[,2] == i)] <-
+      headers$Clear.Label[right_coor][i]
+  }
+  temp_data[,1] <- as.factor(temp_data[,1])
+  temp_data[,2] <- as.factor(temp_data[,2])
+  assign(paste0("R_", m, "_clean"), temp_data)
+}
+
+# Left
+for (m in modality){
+  temp_data <- get(paste0("L_", m, "_melt"))
+  for (i in 1:length(headers$Clear.Label[left_coor])){
+    temp_data[,1][which(temp_data[,1] == i)] <-
+      headers$Clear.Label[left_coor][i]
+    temp_data[,2][which(temp_data[,2] == i)] <-
+      headers$Clear.Label[left_coor][i]
+  }
+  temp_data[,1] <- as.factor(temp_data[,1])
+  temp_data[,2] <- as.factor(temp_data[,2])
+  assign(paste0("L_", m, "_clean"), temp_data)
+}
+
+# save(R_stream_clean, L_stream_clean,
+#      # R_FA_clean, L_FA_clean,
+#      # R_MD_clean, L_MD_clean,
+#      # R_AD_clean, L_AD_clean,
+#      # R_RD_clean, L_RD_clean,
+#      file = "../output/Rdata/00_import_data_hipp+MTL_for_networks.RDATA")
+
+# Make 0 entries NA
+for (m in modality){
+  # get(paste0("L_", m, "_clean"))[get(paste0("L_", m, "_clean"))$value == 0,]$value <- NA
+  Ltemp_data <- get(paste0("L_", m, "_clean"))
+  Ltemp_data[Ltemp_data$value == 0,]$value <- NA
+  assign(paste0("L_", m, "_ready"), Ltemp_data)
+  
+  Rtemp_data <- get(paste0("R_", m, "_clean"))
+  Rtemp_data[Rtemp_data$value == 0,]$value <- NA
+  assign(paste0("R_", m, "_ready"), Rtemp_data)
+}
+  
+```
+
+# get rid of PRC PHC
+```{r}
+R_stream_heat <-
+  R_stream_ready[-which(grepl("PRC", R_stream_ready$Var1) |
+                 grepl("PRC", R_stream_ready$Var2) |
+                 grepl("PHC", R_stream_ready$Var1) |
+                 grepl("PHC", R_stream_ready$Var2) |
+                 grepl("stratum", R_stream_ready$Var1) |
+                 grepl("stratum", R_stream_ready$Var2)),]
+
+L_stream_heat <-
+  L_stream_ready[-which(grepl("PRC", L_stream_ready$Var1) |
+                 grepl("PRC", L_stream_ready$Var2) |
+                 grepl("PHC", L_stream_ready$Var1) |
+                 grepl("PHC", L_stream_ready$Var2) |
+                 grepl("stratum", L_stream_ready$Var1) |
+                 grepl("stratum", L_stream_ready$Var2)),]
+```
+
+# Heatmaps
+```{r}
+cols <- brewer.pal(5, 'Reds') #OrRd
+
+# Clean up the names
+# RIGHT
+R_stream_heat$Var1 <-
+  gsub('R_subiculum', 'SUB',
+       gsub("R_CA1", "CA1",
+            gsub("R_CA4DG", "CA4DG",
+                 gsub("R_CA2CA3", "CA2CA3",
+                      gsub("R_ERC", "ERC", R_stream_heat$Var1)))))
+R_stream_heat$Var2 <-
+  gsub('R_subiculum', 'SUB',
+       gsub("R_CA1", "CA1",
+            gsub("R_CA4DG", "CA4DG",
+                 gsub("R_CA2CA3", "CA2CA3",
+                      gsub("R_ERC", "ERC", R_stream_heat$Var2)))))
+
+R_stream_heat$Var1 <-
+factor(R_stream_heat$Var1,
+       levels=(c("CA4DG", "CA2CA3", "CA1", "SUB", "ERC"))) #[order(R_stream_heat$Var2)]
+
+R_stream_heat$Var2 <-
+factor(R_stream_heat$Var2,
+       levels=(c("CA4DG", "CA2CA3", "CA1", "SUB", "ERC"))) #[order(R_stream_heat$Var2)]
+
+# LEFT
+L_stream_heat$Var1 <-
+  gsub('L_subiculum', 'SUB',
+       gsub("L_CA1", "CA1",
+            gsub("L_CA4DG", "CA4DG",
+                 gsub("L_CA2CA3", "CA2CA3",
+                      gsub("L_ERC", "ERC", L_stream_heat$Var1)))))
+L_stream_heat$Var2 <-
+  gsub('L_subiculum', 'SUB',
+       gsub("L_CA1", "CA1",
+            gsub("L_CA4DG", "CA4DG",
+                 gsub("L_CA2CA3", "CA2CA3",
+                      gsub("L_ERC", "ERC", L_stream_heat$Var2)))))
+
+L_stream_heat$Var1 <-
+factor(L_stream_heat$Var1,
+       levels=(c("CA4DG", "CA2CA3", "CA1", "SUB", "ERC"))) #[order(L_stream_heat$Var2)]
+
+L_stream_heat$Var2 <-
+factor(L_stream_heat$Var2,
+       levels=(c("CA4DG", "CA2CA3", "CA1", "SUB", "ERC"))) #[order(L_stream_heat$Var2)]
+
+
+#for (m in modality){
+Rplot <- ggplot(get(paste0("R_", "stream", "_heat")) , aes(Var2, Var1, fill = value))+
+  geom_tile(color = "white")+
+  xlab(" ")+
+  ylab(" ")+
+  ggtitle("Right Hemisphere")+
+  scale_fill_gradientn(colours = cols,
+                       na.value = "gray20")+
+  theme(axis.text.x = element_text(angle = 90, size=12,color="black"),
+        legend.position="none",
+        legend.title = element_text(colour="black", size = 12, face = "bold"),
+        axis.text.y=element_text(size=12,color="black"),
+        axis.line.y.left =element_line(size=0.5, color = "black"),
+        axis.line.x.bottom =element_line(size=0.5, color = "black"),
+        axis.title.x = element_text(color="black", size=13, face="bold", vjust=-0.8), # vjust=0.5),
+        axis.title.y = element_text(color="black", size=13, face="bold", vjust=1.5),
+        panel.grid.major = element_blank(), 
+        panel.grid.minor = element_blank(),
+        panel.background = element_rect(fill = "transparent", color = NA),
+        plot.background = element_rect(fill = "transparent", color = NA)# vjust=0.5)
+      )
+
+Lplot <- ggplot(get(paste0("L_", "stream", "_heat")) , aes(Var2, Var1, fill = value))+
+  geom_tile(color = "white")+
+  xlab(" ")+
+  ylab(" ")+
+  ggtitle("Left Hemisphere")+
+  scale_fill_gradientn(colours = cols, 
+                       na.value = "gray20")+
+  theme(axis.text.x = element_text(angle = 90, size=12,color="black"),
+        legend.position="none",
+        legend.title = element_text(colour="black", size = 12, face = "bold"),
+        axis.text.y=element_text(size=12,color="black"),
+        axis.line.y.left =element_line(size=0.5, color = "black"),
+        axis.line.x.bottom =element_line(size=0.5, color = "black"),
+        axis.title.x = element_text(color="black", size=13, face="bold", vjust=-0.8), # vjust=0.5),
+        axis.title.y = element_text(color="black", size=13, face="bold", vjust=1.5),
+        panel.grid.major = element_blank(), 
+        panel.grid.minor = element_blank(),
+        panel.background = element_rect(fill = "transparent", color = NA),
+        plot.background = element_rect(fill = "transparent", color = NA)# vjust=0.5)
+      )
+  
+plt_legend <- get_legend(ggplot(get(paste0("R_", "stream", "_heat")) , aes(Var2, Var1, fill = value))+
+                        geom_tile()+
+                        scale_fill_gradientn(colours = cols,
+                                             name = "Streamline \ncount"))
+   
+grid.arrange(Rplot, Lplot, plt_legend, nrow = 2, ncol = 3,
+             layout_matrix = rbind(c(1, 1, 1, 1, 2, 2, 2, 2, 3))
+             ) %>%
+ ggsave(file=paste0("../output/plots/heatmaps/subfield_ERC_heatmaps_", "stream", ".png"),
+        width = 8, height = 3.5,
+        dpi = 300, 
+        bg = "transparent",
+        device = "png")
+```
+
+
+# END #
