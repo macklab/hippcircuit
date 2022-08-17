@@ -1,0 +1,167 @@
+---
+title: "00_import_data"
+output: html_document
+---
+
+# Clean env and install packages
+```{r setup, include=FALSE}
+# packages
+library(tidyverse)
+library(reshape2)
+library(ggpubr)
+library(ggplot2)
+library(gridExtra)
+library(RColorBrewer)
+```
+
+# Read in data
+```{r}
+# clear environment
+rm(list = ls())
+
+modality <- c("stream", "FA", "AD", "RD", "MD")
+headers <- read.table("../labels/subfield_MTL_labels.txt", header=T, sep="")
+
+for (m in modality){
+  temp <- list.files(path=paste0("../data/connectomes/subfields_MTL_",m), pattern="*.csv", recursive = T, full.names = T)
+  for (k in 1:length(temp)) assign(temp[k], read.csv(temp[k], header=F, sep=","))
+
+  temp_data <- list()
+  for (i in 1:length(temp)){
+    temp_data[[i]] <- mget(temp[i])
+    names(temp_data[[i]]) <- temp[i]
+  }
+  assign(paste0(m,"_data"), temp_data)
+}
+```
+
+# Get connectome labels
+```{r}
+# Subjects in a list
+sbj_list <- as.list(grep("stream", stream_data))
+
+columns <- c()
+for (i in 1:length(headers$Clear.Label)){
+  for (t in 1:length(headers$Clear.Label)){
+    column_name <- paste(headers$Clear.Label[i], headers$Clear.Label[t], sep="/")
+    columns <- append(columns, column_name)
+  }
+}
+```
+
+# Normalize streamline data
+```{r}
+# stream_mat <- vector()
+# for (i in 1:length(stream_data)){
+#   stream_mat <- rbind(stream_mat, t(as.vector(
+#     as.matrix(stream_data[[i]][[1]])/sum(as.matrix(stream_data[[i]][[1]])))))
+# }
+```
+
+# Separate Right and Left hemisphere
+```{r}
+right_coor <- grep("R_", headers$Clear.Label)
+left_coor <- grep("L_", headers$Clear.Label)
+
+# Separate R and L labels
+R_columns <- c()
+for (i in right_coor) {
+  for (t in right_coor){
+    R_column_name <- paste(headers$Clear.Label[i], headers$Clear.Label[t], sep="/")
+    R_columns <- append(R_columns, R_column_name)
+  }
+}
+
+L_columns <- c()
+for (j in left_coor){
+  for (k in left_coor){
+    L_column_name <- paste(headers$Clear.Label[j], headers$Clear.Label[k], sep="/")
+    L_columns <- append(L_columns, L_column_name)
+  }
+}
+```
+
+# Gather all participant data
+```{r}
+#### Take upper/lower triangular ######
+to.upper<-function(X) t(X)[lower.tri(X,diag=FALSE)]
+
+# Right 
+for (m in modality){
+  R_upper_temp <- data.frame()
+  for (i in 1:length(get(paste0(m, "_data")))) {
+    person_temp <-
+      data.frame(t(to.upper(matrix(unlist(get(paste0(m, "_data"))[i]), 
+                                   nrow = length(headers$Clear.Label),
+                                   ncol = length(headers$Clear.Label))
+                            [right_coor, right_coor])))
+    # person_temp$ID <- sub(paste0("../../../data/HCP_connectomes/connect_hipp+MTL_", m, "/sub-"),"",
+    #                       (sub(paste0("_MTL_hipp_connectome_", m, ".csv"),"",
+    #                            names(get(paste0(m, "_data"))[[i]]))))
+    person_temp$ID <- 
+      strsplit(names(get(paste0(m, "_data"))[[i]]), "sub-")[[1]][2] %>%
+      strsplit("_") %>%
+      .[[1]] %>%
+      .[[1]]
+    
+    R_upper_temp <- rbind(R_upper_temp, person_temp)
+  }
+  R_conn <- matrix(R_columns,
+                   nrow = length(headers$Clear.Label[right_coor]),
+                   ncol = length(headers$Clear.Label[right_coor]))
+  R_upper_columns <- to.upper(R_conn)
+  R_upper_columns <- c(R_upper_columns, "ID")
+  colnames(R_upper_temp) <- c(R_upper_columns)
+  
+  assign(paste0("R_data_", m), R_upper_temp)
+}
+# 
+# sub(paste0("_MTL_hipp_connectome_", m, ".csv"), "",names(get(paste0(m, "_data"))[[i]]))
+# person_test$ID <- sub("../../data/connect_stream/conn/sub-","",
+#                         (sub("_hipp_connectome_stream.csv","",
+#                              names(stream_data[[i]]))))
+# 
+
+# Left
+for (m in modality){
+  L_upper_temp <- data.frame()
+  for (i in 1:length(get(paste0(m, "_data")))) {
+    person_temp <-
+      data.frame(t(to.upper(matrix(unlist(get(paste0(m, "_data"))[i]), 
+                                   nrow = length(headers$Clear.Label),
+                                   ncol = length(headers$Clear.Label))
+                            [left_coor, left_coor])))
+    # person_temp$ID <- sub(paste0("../../../data/HCP_connectomes/connect_hipp+MTL_", m, "/sub-"),"",
+    #                       (sub(paste0("_MTL_hipp_connectome_", m, ".csv"),"",
+    #                            names(get(paste0(m, "_data"))[[i]]))))
+    person_temp$ID <- 
+      strsplit(names(get(paste0(m, "_data"))[[i]]), "sub-")[[1]][2] %>%
+      strsplit("_") %>%
+      .[[1]] %>%
+      .[[1]]
+        
+    L_upper_temp <- rbind(L_upper_temp, person_temp)
+  }
+  L_conn <- matrix(L_columns,
+                   nrow = length(headers$Clear.Label[left_coor]),
+                   ncol = length(headers$Clear.Label[left_coor]))
+  L_upper_columns <- to.upper(L_conn)
+  L_upper_columns <- c(L_upper_columns, "ID")
+  colnames(L_upper_temp) <- c(L_upper_columns)
+  
+  assign(paste0("L_data_", m), L_upper_temp)
+}
+```
+
+# Save data
+```{r}
+save(R_data_stream, L_data_stream,
+     R_data_FA, L_data_FA,
+     R_data_MD, L_data_MD,
+     R_data_AD, L_data_AD,
+     R_data_RD, L_data_RD,
+     file = "../output/Rdata/00_import_data_subfields+MTL_all_data.RDATA")
+```
+
+
+# END #
