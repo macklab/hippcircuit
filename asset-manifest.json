@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/hippcircuit/static/css/main.e86249e4.css",
-    "main.js": "/hippcircuit/static/js/main.bc08feb8.js",
+    "main.js": "/hippcircuit/static/js/main.c1b0029a.js",
     "static/media/R_SUB_ERC.glb": "/hippcircuit/static/media/R_SUB_ERC.0490fbb98655104a35c6.glb",
     "static/media/R_CA1_SUB.glb": "/hippcircuit/static/media/R_CA1_SUB.499e99c403e5c398bc52.glb",
     "static/media/L_SUB_ERC.glb": "/hippcircuit/static/media/L_SUB_ERC.398cc6e3172cb8c4b476.glb",
@@ -32,8 +32,6 @@
     "static/media/artim7.png": "/hippcircuit/static/media/artim7.26d5219190da42325d19.png",
     "static/media/artim8.png": "/hippcircuit/static/media/artim8.4e90ec0d61617a1b5842.png",
     "static/media/artim2.png": "/hippcircuit/static/media/artim2.01a88cf615ee8df05417.png",
-    "static/media/L_ERC_CA4DG.glb": "/hippcircuit/static/media/L_ERC_CA4DG.8f8b842f21df58ca9074.glb",
-    "static/media/R_ERC_CA4DG.glb": "/hippcircuit/static/media/R_ERC_CA4DG.043f0ed17798e36aca09.glb",
     "static/media/stream_R_CA2CA3_R_CA1.png": "/hippcircuit/static/media/stream_R_CA2CA3_R_CA1.af54c2994251ae5c7617.png",
     "static/media/stream_R_CA2CA3_R_CA4DG.png": "/hippcircuit/static/media/stream_R_CA2CA3_R_CA4DG.e93a0c7c39265a7e10ac.png",
     "static/media/stream_L_CA4DG_L_subiculum.png": "/hippcircuit/static/media/stream_L_CA4DG_L_subiculum.31d2a730947226888a9e.png",
@@ -54,10 +52,10 @@
     "static/media/BrainCanadaLogoDark.png": "/hippcircuit/static/media/BrainCanadaLogoDark.552793afd7781211a7e6.png",
     "index.html": "/hippcircuit/index.html",
     "main.e86249e4.css.map": "/hippcircuit/static/css/main.e86249e4.css.map",
-    "main.bc08feb8.js.map": "/hippcircuit/static/js/main.bc08feb8.js.map"
+    "main.c1b0029a.js.map": "/hippcircuit/static/js/main.c1b0029a.js.map"
   },
   "entrypoints": [
     "static/css/main.e86249e4.css",
-    "static/js/main.bc08feb8.js"
+    "static/js/main.c1b0029a.js"
   ]
 }
