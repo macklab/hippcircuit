@@ -5,14 +5,14 @@ import LCA1SUB from './models/L_CA1_SUB.glb';
 import LCA2CA3CA1 from './models/L_CA2CA3_CA1.glb';
 import LCA4DGCA2CA3 from './models/L_CA4DG_CA2CA3.glb';
 import LERCCA1 from './models/L_ERC_CA1.glb';
-import LERCCA4DG from './models/L_ERC_CA4DG.glb';
+// import LERCCA4DG from './models/L_ERC_CA4DG.glb';
 import LSUBCA4DG from './models/L_SUB_CA4DG.glb';
 import LSUBERC from './models/L_SUB_ERC.glb';
 import RCA1SUB from './models/R_CA1_SUB.glb';
 import RCA2CA3CA1 from './models/R_CA2CA3_CA1.glb';
 import RCA4DGCA2CA3 from './models/R_CA4DG_CA2CA3.glb';
 import RERCCA1 from './models/R_ERC_CA1.glb';
-import RERCCA4DG from './models/R_ERC_CA4DG.glb';
+// import RERCCA4DG from './models/R_ERC_CA4DG.glb';
 import RSUBCA4DG from './models/R_SUB_CA4DG.glb';
 import RSUBERC from './models/R_SUB_ERC.glb'
 
@@ -104,17 +104,17 @@ export const buttondata = [
         downloadText: 'Download data for Left ERC to CA1',
         streamsViolin: VPstreamLERCCA1
       },
-      {
-        id: 6,
-        side: 'Left',
-        firstROI: 'ERC',
-        secondROI: 'CA4DG',
-        n: 0,
-        downloadFile: TestFile,
-        downloadName: 'TestFile1.zip',
-        downloadText: 'Download data for Left ERC to CA4DG',
-        streamsViolin: null
-      },
+      //{
+      //  id: 6,
+      //  side: 'Left',
+      //  firstROI: 'ERC',
+      //  secondROI: 'CA4DG',
+      //  n: 0,
+      //  downloadFile: TestFile,
+      //  downloadName: 'TestFile1.zip',
+      //  downloadText: 'Download data for Left ERC to CA4DG',
+      //  streamsViolin: null
+      //},
       {
         id: 7,
         side: 'Left',
@@ -181,17 +181,17 @@ export const buttondata = [
         downloadText: 'Download data for Right ERC to CA1',
         streamsViolin: VPstreamRERCCA1
       },
-      {
-        id: 13,
-        side: 'Right',
-        firstROI: 'ERC',
-        secondROI: 'CA4DG',
-        n: 0,
-        downloadFile: TestFile,
-        downloadName: 'TestFile1.zip',
-        downloadText: 'Download data for Right ERC to CA4DG',
-        streamsViolin: null
-      },
+      //{
+      //  id: 13,
+      //  side: 'Right',
+      //  firstROI: 'ERC',
+      //  secondROI: 'CA4DG',
+      //  n: 0,
+      //  downloadFile: TestFile,
+      //  downloadName: 'TestFile1.zip',
+      //  downloadText: 'Download data for Right ERC to CA4DG',
+      //  streamsViolin: null
+      //},
       {
         id: 14,
         side: 'Right',
@@ -258,14 +258,14 @@ export const cardData = [
       secondROI: 'CA1',
       n: 128
     },
-    {
-      id: 6,
-      model: LERCCA4DG,
-      side: 'Left',
-      firstROI: 'ERC',
-      secondROI: 'CA4DG',
-      n: 0
-    },
+    //{
+    //  id: 6,
+    //  model: LERCCA4DG,
+    //  side: 'Left',
+    //  firstROI: 'ERC',
+    //  secondROI: 'CA4DG',
+    //  n: 0
+    //},
     {
       id: 7,
       model: LSUBCA4DG,
@@ -314,14 +314,14 @@ export const cardData = [
       secondROI: 'CA1',
       n: 110
     },
-    {
-      id: 13,
-      model: RERCCA4DG,
-      side: 'Right',
-      firstROI: 'ERC',
-      secondROI: 'CA4DG',
-      n: 0
-    },
+    //{
+    //  id: 13,
+    //  model: RERCCA4DG,
+    //  side: 'Right',
+    //  firstROI: 'ERC',
+    //  secondROI: 'CA4DG',
+    //  n: 0
+    //},
     {
       id: 14,
       model: RSUBCA4DG,

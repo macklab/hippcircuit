@@ -34,7 +34,7 @@ function Visualizer() {
             <div className='infolines'>
             <h1>{titleText}</h1>
             <h3>{sideText}</h3>
-            <h3>Number of tracts: {n}</h3>
+            {/*<h3>Number of tracts: {n}</h3>*/}
             <div className='clabel'>
               <div className='purplebox'></div>
               <h3>{roi1}</h3>
