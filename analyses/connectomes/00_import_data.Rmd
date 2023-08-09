@@ -23,7 +23,8 @@ modality <- c("stream", "FA", "AD", "RD", "MD")
 headers <- read.table("../labels/subfield_MTL_labels.txt", header=T, sep="")
 
 for (m in modality){
-  temp <- list.files(path=paste0("../data/connectomes/subfields_MTL_",m), pattern="*.csv", recursive = T, full.names = T)
+  temp <- list.files(path=paste0("../data/connectomes/subfields_MTL_",m), pattern="*.csv",
+                     recursive = T, full.names = T)
   for (k in 1:length(temp)) assign(temp[k], read.csv(temp[k], header=F, sep=","))
 
   temp_data <- list()
@@ -33,6 +34,7 @@ for (m in modality){
   }
   assign(paste0(m,"_data"), temp_data)
 }
+
 ```
 
 # Get connectome labels
@@ -47,6 +49,7 @@ for (i in 1:length(headers$Clear.Label)){
     columns <- append(columns, column_name)
   }
 }
+
 ```
 
 # Normalize streamline data
@@ -115,6 +118,7 @@ for (m in modality){
   
   assign(paste0("R_data_", m), R_upper_temp)
 }
+
 # 
 # sub(paste0("_MTL_hipp_connectome_", m, ".csv"), "",names(get(paste0(m, "_data"))[[i]]))
 # person_test$ID <- sub("../../data/connect_stream/conn/sub-","",
@@ -151,6 +155,7 @@ for (m in modality){
   
   assign(paste0("L_data_", m), L_upper_temp)
 }
+
 ```
 
 # Save data
