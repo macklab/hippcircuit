@@ -1,0 +1,353 @@
+---
+title: "Behaviour"
+author: "Melisa Gumus"
+date: "2022-12-17"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+# packages
+library(tidyverse)
+library(reshape2)
+library(ggpubr)
+library(ggplot2)
+library(gridExtra)
+library(lme4)
+install.packages("factoextra")
+library(factoextra)
+
+```
+
+# Load data
+```{r}
+# clear environment
+rm(list = ls())
+
+temp_data <- read.csv("../../data/behaviour/HCP_behavioural_data.csv") #, header=T, sep="")
+sbjs <- read.table("../../data/behaviour/final_subjects.txt") #, header=T, sep="")
+beh_data <- temp_data[temp_data$Subject %in% sbjs$V1,]
+beh_data$ID <- beh_data$Subject
+load("../../output/Rdata/00_import_data_subfields+MTL_all_data.RDATA")
+
+```
+
+# Exclude PRC, PHC and stratum
+```{r}
+stream_data <- merge(L_data_stream, R_data_stream, by = "ID")
+stream_beh_temp <- merge(stream_data, beh_data, by = "ID")
+
+exc_col <-
+  colnames(stream_beh_temp)[grepl("PRC|PHC|stratum", colnames(stream_beh_temp))]
+
+stream_beh_data <-
+  stream_beh_temp[,!(names(stream_beh_temp) %in% exc_col)]
+
+stream_beh_data$Gender <- as.factor(stream_beh_data$Gender)
+stream_beh_data$Age <- as.factor(stream_beh_data$Age)
+```
+
+# Plot function
+```{r}
+plot_func <- function(data, x, y){
+  ggplot(data,
+       aes(x = data[,x], y = data[,y])) +
+  geom_point() +
+  geom_smooth(method = lm) +
+  #geom_line(aes(colour = sbj)) +
+  theme(
+          #legend.title = element_text(colour="black", size = 12, face = "bold"),
+          axis.text.x=element_text(size=14,color="black"), #, face="bold"),
+          #axis.text.x=element_blank(),
+          axis.text.y=element_text(size=14,color="black"),
+          axis.line.y.left =element_line(size=0.5, color = "black"),
+          axis.line.x.bottom =element_line(size=0.5, color = "black"),
+          axis.title.x = element_text(color="black", size=22, face="bold"),# vjust=-0.2), # vjust=0.5),
+          axis.title.y = element_text(color="black", size=24, face="bold", vjust=1.5),
+          #legend.title = element_blank(),
+          legend.text=element_text(size = 18, colour = "black"),
+          legend.key.size = unit(1, "cm"),
+          legend.position = 'none',
+                  #panel.grid.major = element_blank(), 
+          #panel.grid.minor = element_blank(),
+          panel.background = element_rect(fill = "transparent", color = NA),
+          plot.background = element_rect(fill = "transparent", color = NA)# vjust=0.5)
+        )
+}
+
+```
+
+# Cognitive measures to test
+PicSeq_Unadj - pic sequence 
+CardSort_Unadj - card sorting
+Flanker_Unadj - flanker
+PMAT24_A_CR - progressive matrices
+ProcSpeed_Unadj - processing speed
+VSPLOT_TC - short penn line orientation
+SCPT_TP - short penn continous performance
+IWRD_TOT - verbal episodic memory
+ListSort_Unadj - list sorting
+
+```{r}
+cog <- c("PicSeq_Unadj", # no sig
+         "CardSort_Unadj", #L_CA4DG/L_subiculum - no TSP/MSP
+         "Flanker_Unadj", # L_subiculum/L_CA1 - output 
+         "PMAT24_A_CR", # L_CA2CA3/L_CA1, R_subiculum/R_CA1 - TSP and output
+         "ProcSpeed_Unadj", # no sig
+         "VSPLOT_TC", # L_CA2CA3/L_subiculum - no TSP/MSP
+         "SCPT_TP", # no sig
+         "IWRD_TOT", # L_ERC/L_CA1, R_ERC/R_CA1 - MSP
+         "ListSort_Unadj") # R_ERC/R_CA1  - MSP 
+```
+
+# linear model
+```{r}
+mdls <- list()
+
+for (i in 1:length(cog)){
+  mdls[[i]] <-
+    lm(stream_beh_data[,cog[i]] ~ as.matrix(stream_beh_data[,2:15]) +
+         Age + Gender, data = stream_beh_data) %>%
+    summary()
+  print(cog[i])
+  print(mdls[i])
+}
+
+```
+
+
+# Plot
+```{r}
+
+(ggplot(stream_beh_data,
+       aes(y = `CardSort_Unadj`, x = `L_CA4DG/L_subiculum`)) +
+  geom_point() +
+  geom_smooth(method = lm, se = TRUE, size = 2, colour = "blue4") +
+  ylab("Dimensional Card Sorting Score") +
+  xlab("Left CA4DG - SUB") +
+  #geom_line(aes(colour = sbj)) +
+  theme(
+          #legend.title = element_text(colour="black", size = 12, face = "bold"),
+          axis.text.x=element_text(size=10,color="black"), #, face="bold"),
+          #axis.text.x=element_blank(),
+          axis.text.y=element_text(size=10,color="black"),
+          axis.line.y.left =element_line(size=0.5, color = "black"),
+          axis.line.x.bottom =element_line(size=0.5, color = "black"),
+          axis.title.x = element_text(color="black", size=15, face="bold"),# vjust=-0.2), # vjust=0.5),
+          axis.title.y = element_text(color="black", size=15, face="bold", vjust=1.5),
+          #legend.title = element_blank(),
+          legend.text=element_text(size = 18, colour = "black"),
+          legend.key.size = unit(1, "cm"),
+          legend.position = 'none',
+          panel.grid.major = element_blank(), 
+          panel.grid.minor = element_blank(),
+          panel.background = element_rect(fill = "transparent", color = NA),
+          plot.background = element_rect(fill = "transparent", color = NA)# vjust=0.5)
+        )) %>%
+  ggsave(filename = paste0("CardSort_Unadj_", "L_CA4DG_L_subiculum", ".png"),
+                         plot = ., device = "png",
+       path = "../output/plots/cognition",
+       scale = 1, width = 6, height = 5, dpi = 300)
+
+```
+
+```{r}
+
+(ggplot(stream_beh_data,
+       aes(y = `Flanker_Unadj`, x = `L_subiculum/L_CA1`)) +
+  geom_point() +
+  geom_smooth(method = lm, se = TRUE, size = 2, colour = "blue4") +
+  ylab("Flanker Task Score ") +
+  xlab("Left CA1 - SUB") +
+  #geom_line(aes(colour = sbj)) +
+  theme(
+          #legend.title = element_text(colour="black", size = 12, face = "bold"),
+          axis.text.x=element_text(size=10,color="black"), #, face="bold"),
+          #axis.text.x=element_blank(),
+          axis.text.y=element_text(size=10,color="black"),
+          axis.line.y.left =element_line(size=0.5, color = "black"),
+          axis.line.x.bottom =element_line(size=0.5, color = "black"),
+          axis.title.x = element_text(color="black", size=15, face="bold"),# vjust=-0.2), # vjust=0.5),
+          axis.title.y = element_text(color="black", size=15, face="bold", vjust=1.5),
+          #legend.title = element_blank(),
+          legend.text=element_text(size = 18, colour = "black"),
+          legend.key.size = unit(1, "cm"),
+          legend.position = 'none',
+          panel.grid.major = element_blank(), 
+          panel.grid.minor = element_blank(),
+          panel.background = element_rect(fill = "transparent", color = NA),
+          plot.background = element_rect(fill = "transparent", color = NA)# vjust=0.5)
+        )) %>%
+  ggsave(filename = paste0("Flanker_Unadj_", "L_subiculum_L_CA1", ".png"),
+                         plot = ., device = "png",
+       path = "../output/plots/cognition",
+       scale = 1, width = 6, height = 5, dpi = 300)
+
+```
+
+# progressive matrices correct responses 
+```{r}
+
+(ggplot(stream_beh_data,
+       aes(y = `PMAT24_A_CR`, x = `L_CA2CA3/L_CA1`)) +
+  geom_point() +
+  geom_smooth(method = lm, se = TRUE, size = 2, colour = "blue4") +
+  ylab("Progressive Matrices Correct Responses") +
+  xlab("Left CA2CA3 - CA1") +
+  #geom_line(aes(colour = sbj)) +
+  theme(
+          #legend.title = element_text(colour="black", size = 12, face = "bold"),
+          axis.text.x=element_text(size=10,color="black"), #, face="bold"),
+          #axis.text.x=element_blank(),
+          axis.text.y=element_text(size=10,color="black"),
+          axis.line.y.left =element_line(size=0.5, color = "black"),
+          axis.line.x.bottom =element_line(size=0.5, color = "black"),
+          axis.title.x = element_text(color="black", size=15, face="bold"),# vjust=-0.2), # vjust=0.5),
+          axis.title.y = element_text(color="black", size=15, face="bold", vjust=1.5),
+          #legend.title = element_blank(),
+          legend.text=element_text(size = 18, colour = "black"),
+          legend.key.size = unit(1, "cm"),
+          legend.position = 'none',
+          panel.grid.major = element_blank(), 
+          panel.grid.minor = element_blank(),
+          panel.background = element_rect(fill = "transparent", color = NA),
+          plot.background = element_rect(fill = "transparent", color = NA)# vjust=0.5)
+        )) %>%
+  ggsave(filename = paste0("PMAT24_A_CR_", "L_CA2CA3_L_CA1", ".png"),
+                         plot = ., device = "png",
+       path = "../output/plots/cognition",
+       scale = 1, width = 6, height = 5, dpi = 300)
+
+(ggplot(stream_beh_data,
+       aes(y = `PMAT24_A_CR`, x = `R_subiculum/R_CA1`)) +
+  geom_point() +
+  geom_smooth(method = lm, se = TRUE, size = 2, colour = "blue4") +
+  ylab("Progressive Matrices Correct Responses") +
+  xlab("Right CA1 - SUB") +
+  #geom_line(aes(colour = sbj)) +
+  theme(
+          #legend.title = element_text(colour="black", size = 12, face = "bold"),
+          axis.text.x=element_text(size=10,color="black"), #, face="bold"),
+          #axis.text.x=element_blank(),
+          axis.text.y=element_text(size=10,color="black"),
+          axis.line.y.left =element_line(size=0.5, color = "black"),
+          axis.line.x.bottom =element_line(size=0.5, color = "black"),
+          axis.title.x = element_text(color="black", size=15, face="bold"),# vjust=-0.2), # vjust=0.5),
+          axis.title.y = element_text(color="black", size=15, face="bold", vjust=1.5),
+          #legend.title = element_blank(),
+          legend.text=element_text(size = 18, colour = "black"),
+          legend.key.size = unit(1, "cm"),
+          legend.position = 'none',
+          panel.grid.major = element_blank(), 
+          panel.grid.minor = element_blank(),
+          panel.background = element_rect(fill = "transparent", color = NA),
+          plot.background = element_rect(fill = "transparent", color = NA)# vjust=0.5)
+        )) %>%
+  ggsave(filename = paste0("PMAT24_A_CR_", "R_subiculum_R_CA1", ".png"),
+                         plot = ., device = "png",
+       path = "../output/plots/cognition",
+       scale = 1, width = 6, height = 5, dpi = 300)
+```
+
+
+```{r}
+(ggplot(stream_beh_data,
+       aes(y = `IWRD_TOT`, x = `L_ERC/L_CA1`)) +
+  geom_point() +
+  geom_smooth(method = lm, se = TRUE, size = 2, colour = "blue4") +
+  ylab("Penn Word Memory Correct Responses ") +
+  xlab("Left ERC - CA1") +
+  #geom_line(aes(colour = sbj)) +
+  theme(
+          #legend.title = element_text(colour="black", size = 12, face = "bold"),
+          axis.text.x=element_text(size=10,color="black"), #, face="bold"),
+          #axis.text.x=element_blank(),
+          axis.text.y=element_text(size=10,color="black"),
+          axis.line.y.left =element_line(size=0.5, color = "black"),
+          axis.line.x.bottom =element_line(size=0.5, color = "black"),
+          axis.title.x = element_text(color="black", size=15, face="bold"),# vjust=-0.2), # vjust=0.5),
+          axis.title.y = element_text(color="black", size=15, face="bold", vjust=1.5),
+          #legend.title = element_blank(),
+          legend.text=element_text(size = 18, colour = "black"),
+          legend.key.size = unit(1, "cm"),
+          legend.position = 'none',
+          panel.grid.major = element_blank(), 
+          panel.grid.minor = element_blank(),
+          panel.background = element_rect(fill = "transparent", color = NA),
+          plot.background = element_rect(fill = "transparent", color = NA)# vjust=0.5)
+        )) %>%
+  ggsave(filename = paste0("IWRD_TOT_", "L_ERC_L_CA1", ".png"),
+                         plot = ., device = "png",
+       path = "../output/plots/cognition",
+       scale = 1, width = 6, height = 5, dpi = 300)
+
+(ggplot(stream_beh_data,
+       aes(y = `IWRD_TOT`, x = `R_ERC/R_CA1`)) +
+  geom_point() +
+  geom_smooth(method = lm, se = TRUE, size = 2, colour = "blue4") +
+  ylab("Penn Word Memory Correct Responses ") +
+  xlab("Right ERC - CA1") +
+  #geom_line(aes(colour = sbj)) +
+  theme(
+          #legend.title = element_text(colour="black", size = 12, face = "bold"),
+          axis.text.x=element_text(size=10,color="black"), #, face="bold"),
+          #axis.text.x=element_blank(),
+          axis.text.y=element_text(size=10,color="black"),
+          axis.line.y.left =element_line(size=0.5, color = "black"),
+          axis.line.x.bottom =element_line(size=0.5, color = "black"),
+          axis.title.x = element_text(color="black", size=15, face="bold"),# vjust=-0.2), # vjust=0.5),
+          axis.title.y = element_text(color="black", size=15, face="bold", vjust=1.5),
+          #legend.title = element_blank(),
+          legend.text=element_text(size = 18, colour = "black"),
+          legend.key.size = unit(1, "cm"),
+          legend.position = 'none',
+          panel.grid.major = element_blank(), 
+          panel.grid.minor = element_blank(),
+          panel.background = element_rect(fill = "transparent", color = NA),
+          plot.background = element_rect(fill = "transparent", color = NA)# vjust=0.5)
+        )) %>%
+  ggsave(filename = paste0("IWRD_TOT_", "R_ERC_R_CA1", ".png"),
+                         plot = ., device = "png",
+       path = "../output/plots/cognition",
+       scale = 1, width = 6, height = 5, dpi = 300)
+```
+
+
+```{r}
+(ggplot(stream_beh_data,
+       aes(y = `ListSort_Unadj`, x = `R_ERC/R_CA1`)) +
+  geom_point() +
+  geom_smooth(method = lm, se = TRUE, size = 2, colour = "blue4") +
+  ylab("List Sorting Score") +
+  xlab("Right ERC - CA1") +
+  #geom_line(aes(colour = sbj)) +
+  theme(
+          #legend.title = element_text(colour="black", size = 12, face = "bold"),
+          axis.text.x=element_text(size=10,color="black"), #, face="bold"),
+          #axis.text.x=element_blank(),
+          axis.text.y=element_text(size=10,color="black"),
+          axis.line.y.left =element_line(size=0.5, color = "black"),
+          axis.line.x.bottom =element_line(size=0.5, color = "black"),
+          axis.title.x = element_text(color="black", size=15, face="bold"),# vjust=-0.2), # vjust=0.5),
+          axis.title.y = element_text(color="black", size=15, face="bold", vjust=1.5),
+          #legend.title = element_blank(),
+          legend.text=element_text(size = 18, colour = "black"),
+          legend.key.size = unit(1, "cm"),
+          legend.position = 'none',
+          panel.grid.major = element_blank(), 
+          panel.grid.minor = element_blank(),
+          panel.background = element_rect(fill = "transparent", color = NA),
+          plot.background = element_rect(fill = "transparent", color = NA)# vjust=0.5)
+        )) %>%
+  ggsave(filename = paste0("ListSort_Unadj_", "R_ERC_R_CA1", ".png"),
+                         plot = ., device = "png",
+       path = "../output/plots/cognition",
+       scale = 1,
+       width = 6, height = 5, dpi = 300)
+```
+
+
+
+
+# END # 
