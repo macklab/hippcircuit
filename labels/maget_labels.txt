@@ -1,0 +1,32 @@
+################################################
+# File format:
+# IDX   -R-  -G-  -B-  -A--  VIS MSH  LABEL
+# Fields:
+#    IDX:   Zero-based index
+#    -R-:   Red color component (0..255)
+#    -G-:   Green color component (0..255)
+#    -B-:   Blue color component (0..255)
+#    -A-:   Label transparency (0.00 .. 1.00)
+#    VIS:   Label visibility (0 or 1)
+#    IDX:   Label mesh visibility (0 or 1)
+#  LABEL:   Label description
+################################################
+    0     0    0    0        0  0  0    "Clear Label"
+    1   255    0    0        1  1  1    "R_CA1"
+    2     0  255    0        1  1  1    "R_subiculum"
+    4     0    0  255        1  1  1    "R_CA4DG"
+    5   255  255    0        1  1  1    "R_CA2CA3"
+    6     0  255  255        1  1  1    "R_stratum"
+    11  255  255  255        1  1  1    "R_fimbria"
+    12  255  255  255        1  1  1    "L_mammillary_body"
+    22  255  255  255        1  1  1    "R_mammillary_body"
+    33  255  255  255        1  1  1    "L_fornix"
+    35  255  255  255        1  1  1    "R_fornix"
+    37  255  255  255        1  1  1    "L_fimbria"
+    101 255    0    0        1  1  1    "L_CA1"
+    102   0  255    0        1  1  1    "L_subiculum"
+    104   0    0  255        1  1  1    "L_CA4DG"
+    105 255  255    0        1  1  1    "L_CA2CA3"
+    106   0  255  255        1  1  1    "L_stratum"
+    111 255  255  255        1  1  1    "R_alveus"
+    222 255  255  255        1  1  1    "L_alveus"
