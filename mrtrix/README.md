@@ -1,2 +1,2 @@
-# Create hippocampal connectomes
-Reconstruction of hippocampal pathways was possible with various tools and algorithms provided by MRtrix3
+# Diffusion Processing 
+In vivo reconstruction of hippocampal pathways in humans was possible with various tools and algorithms provided by [MRtrix3](https://www.mrtrix.org/)
