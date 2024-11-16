@@ -37,36 +37,12 @@ sbjs=$1
 # sbjs=$(sed -n 1,85p ${bids_dir}/subjects.txt)
 
 # Connectome Generation
-# 1) Create connectome for hipp subfields
-# Use -assignment_forward_search 10 for tracking more fibers
-for i in ${sbjs}; do
-  tck2connectome  ${bids_dir}/derivatives/mrtrix/sub-${i}/2M_sift.tck \
-  ${bids_dir}/derivatives/mrtrix/sub-${i}/sub-${i}_T1w_GM_labels.nii.gz \
-  ${bids_dir}/derivatives/mrtrix/sub-${i}/sub-${i}_hipp_connectome_stream.csv \
-  -out_assignments ${bids_dir}/derivatives/mrtrix/sub-${i}/sub-${i}_hipp_assignments_stream.csv \
-  -assignment_forward_search 5 \
-  -force
-done
-
-# Tensor specific connectomes
-for i in ${sbjs}; do
-  for t in ${metrics}; do
-    tck2connectome ${bids_dir}/derivatives/mrtrix/sub-${i}/2M_sift.tck \
-    ${bids_dir}/derivatives/mrtrix/sub-${i}/sub-${i}_T1w_GM_labels.nii.gz \
-    ${bids_dir}/derivatives/mrtrix/sub-${i}/sub-${i}_hipp_connectome_${t}.csv \
-    -scale_file ${bids_dir}/derivatives/mrtrix/sub-${i}/metrics_${t}.csv \
-    -stat_edge mean -force
-  done
-done
-
-#######################
-# 2) MTL + maget segmentation (no anterior/posteior)
+# MTL + maget segmentation
 for i in ${sbjs}; do
   tck2connectome  ${bids_dir}/derivatives/mrtrix/sub-${i}/2M_sift.tck \
   ${bids_dir}/derivatives/itk-snap/sub-${i}/MTL_hipp_subfields.nii.gz \
-  ${bids_dir}/derivatives/mrtrix/sub-${i}/sub-${i}_MTL_hipp_connectome_stream.csv \
-  -out_assignments ${bids_dir}/derivatives/mrtrix/sub-${i}/sub-${i}_MTL_hipp_assignments_stream.csv \
-  -assignment_forward_search 5 \
+  ${bids_dir}/derivatives/mrtrix/sub-${i}/sub-${i}_MTL_hipp_connectome_stream_default.csv \
+  -out_assignments ${bids_dir}/derivatives/mrtrix/sub-${i}/sub-${i}_MTL_hipp_assignments_stream_default.csv \
   -force
 done
 
@@ -77,52 +53,6 @@ for i in ${sbjs}; do
     tck2connectome ${bids_dir}/derivatives/mrtrix/sub-${i}/2M_sift.tck \
     ${bids_dir}/derivatives/itk-snap/sub-${i}/MTL_hipp_subfields.nii.gz \
     ${bids_dir}/derivatives/mrtrix/sub-${i}/sub-${i}_MTL_hipp_connectome_${t}.csv \
-    -scale_file ${bids_dir}/derivatives/mrtrix/sub-${i}/metrics_${t}.csv \
-    -stat_edge mean -force
-  done
-done
-
-#######################
-# 3) Anterior/posterior hipp
-for i in ${sbjs}; do
-  tck2connectome  ${bids_dir}/derivatives/mrtrix/sub-${i}/2M_sift.tck \
-  ${bids_dir}/derivatives/itk-snap/sub-${i}/ant_post_subfields.nii.gz \
-  ${bids_dir}/derivatives/mrtrix/sub-${i}/sub-${i}_ant_post_connectome_stream.csv \
-  -out_assignments ${bids_dir}/derivatives/mrtrix/sub-${i}/sub-${i}_ant_post_assignments_stream.csv \
-  -assignment_forward_search 5 \
-  -force
-done
-
-# Metric specific connectomes
-metrics="FA MD AD RD"
-for i in ${sbjs}; do
-  for t in ${metrics}; do
-    tck2connectome ${bids_dir}/derivatives/mrtrix/sub-${i}/2M_sift.tck \
-    ${bids_dir}/derivatives/itk-snap/sub-${i}/ant_post_subfields.nii.gz \
-    ${bids_dir}/derivatives/mrtrix/sub-${i}/sub-${i}_ant_post_connectome_${t}.csv \
-    -scale_file ${bids_dir}/derivatives/mrtrix/sub-${i}/metrics_${t}.csv \
-    -stat_edge mean -force
-  done
-done
-
-#######################
-# 4) MTL + anterior/posterior hipp
-for i in ${sbjs}; do
-  tck2connectome  ${bids_dir}/derivatives/mrtrix/sub-${i}/2M_sift.tck \
-  ${bids_dir}/derivatives/itk-snap/sub-${i}/ant_post_MTL_rois.nii.gz \
-  ${bids_dir}/derivatives/mrtrix/sub-${i}/sub-${i}_ant_post_MTL_connectome_stream.csv \
-  -out_assignments ${bids_dir}/derivatives/mrtrix/sub-${i}/sub-${i}_ant_post_MTL_assignments_stream.csv \
-  -assignment_forward_search 5 \
-  -force
-done
-
-# Metric specific connectomes
-metrics="FA MD AD RD"
-for i in ${sbjs}; do
-  for t in ${metrics}; do
-    tck2connectome ${bids_dir}/derivatives/mrtrix/sub-${i}/2M_sift.tck \
-    ${bids_dir}/derivatives/itk-snap/sub-${i}/ant_post_MTL_rois.nii.gz \
-    ${bids_dir}/derivatives/mrtrix/sub-${i}/sub-${i}_ant_post_MTL_connectome_${t}.csv \
     -scale_file ${bids_dir}/derivatives/mrtrix/sub-${i}/metrics_${t}.csv \
     -stat_edge mean -force
   done
