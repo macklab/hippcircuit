@@ -1,0 +1,412 @@
+---
+title: "01_violin_plots"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+# clear environment
+rm(list = ls())
+
+# packages
+library(tidyverse)
+library(reshape2)
+library(ggplot2)
+library(ggpubr)
+
+# data
+load("../../output/Rdata/00_import_data_MTL_hipp.RDATA")
+
+# Define modalities
+modality <- c("stream") #, "FA", "AD", "RD", "MD")
+
+modality_clean <- c("Streamline density") #,
+                    # "Fractional Anisotropy",
+                    # "Axial Diffusivity",
+                    # "Radial Diffusivity",
+                    # "Mean Diffusivity")
+
+tsp <- read.csv("../../data/hipp_paths_edit/tracks_edited_exc.csv", header = F)
+colnames(tsp) <- c("ID", "side", "variable", "value")
+tsp$variable <- gsub("_", "/", tsp$variable)
+
+```
+
+#### RIGHT - LEFT - BOXPLOT #####
+# Compare all ROI pairs to each other in right and left side
+```{r}
+for (m in 1:length(modality)){
+  L_temp_ready <- melt(get(paste0("L_data_", modality[m])))
+  R_temp_ready <- melt(get(paste0("R_data_", modality[m])))
+       
+  # get rid of PRC PHC
+  R_temp_heat <-
+    R_temp_ready[-which(grepl("PRC", R_temp_ready$variable) |
+                   grepl("PHC", R_temp_ready$variable) |
+                   grepl("stratum", R_temp_ready$variable)
+                     ),]
+  
+  L_temp_heat <-
+    L_temp_ready[-which(grepl("PRC", L_temp_ready$variable) |
+                   grepl("PHC", L_temp_ready$variable) |
+                   grepl("stratum", L_temp_ready$variable)
+                     ),]
+  
+  # Clean up the names
+  R_temp_heat$variable <-
+    gsub('R_subiculum', 'SUB',
+         gsub("R_CA1", "CA1",
+              gsub("R_CA4DG", "CA4DG",
+                   gsub("R_CA2CA3", "CA2CA3",
+                        gsub("R_ERC", "ERC", R_temp_heat$variable)))))
+  R_temp_heat$side <- "R"
+  
+  L_temp_heat$variable <-
+    gsub('L_subiculum', 'SUB',
+         gsub("L_CA1", "CA1",
+              gsub("L_CA4DG", "CA4DG",
+                   gsub("L_CA2CA3", "CA2CA3",
+                        gsub("L_ERC", "ERC", L_temp_heat$variable)))))
+  L_temp_heat$side <- "L"
+  
+  temp_heat <- rbind(L_temp_heat, R_temp_heat)
+  # temp_rois <- c("ERC/CA1",
+  #                 "CA4DG/SUB",
+  #                 "CA2CA3/CA4DG",
+  #                 "CA2CA3/CA1",
+  #                 "SUB/CA1",
+  #                 "ERC/SUB")
+  
+  temp_heat_clean <-
+    temp_heat %>%
+    subset(temp_heat$variable == "ERC/CA1" |
+             #temp_heat$variable == "CA4DG/SUB" |
+             #temp_heat$variable == "CA2CA3/CA4DG" |
+             #temp_heat$variable == "CA2CA3/CA1" |
+             temp_heat$variable == "SUB/CA1" |
+             temp_heat$variable == "ERC/SUB")
+  
+  temp_heat_clean$side <- 
+    factor(temp_heat_clean$side, levels = c("R", "L"))
+  
+  temp_heat_clean_new <- rbind(temp_heat_clean, tsp)
+  
+  temp_heat_clean_new$variable <-
+    factor(temp_heat_clean_new$variable,
+           levels = c("ERC/CA1",
+                      "CA4DG/SUB",
+                      "CA4DG/CA2CA3",
+                      "CA2CA3/CA1",
+                      "SUB/CA1",
+                      "ERC/SUB"
+                      ))
+    
+  (ggplot(temp_heat_clean_new, aes(x=variable, y=value, fill=side)) +
+      geom_boxplot(width = .44,
+                   #outlier.shape=8,
+                   outlier.size = 0.2,
+                   #notch=TRUE,
+                   aes(y = value, fill = side)) +
+      # geom_errorbar()+
+      # geom_violin(aes(y = value, fill = side)) +
+      # geom_dotplot(binaxis= "y",
+      #            stackdir = "center",
+      #            dotsize = 0.01,
+      #            position = "dodge") +
+      scale_x_discrete(#name = "Hemisphere",
+                      breaks = c("ERC/CA1",
+                      #"CA4DG/SUB",
+                      "CA4DG/CA2CA3",
+                      "CA2CA3/CA1",
+                      "SUB/CA1",
+                      "ERC/SUB"),
+                      labels = c("ERC/CA1",
+                      #"DG/SUB",
+                      "DG/CA3",
+                      "CA3/CA1",
+                      "SUB/CA1",
+                      "ERC/SUB"))+
+      scale_fill_manual(name = "Hemisphere",
+                      breaks = c("R", "L"),
+                      values=c("indianred4", #"peachpuff4",
+                               "indianred1" #"peru"
+                               ),
+                      labels = c("Right", "Left"))+
+      ylab(modality_clean[m]) +
+      xlab(" ") +
+      stat_compare_means(aes(group = side), label = "p.signif", paired = TRUE) +
+      theme(
+        legend.title = element_text(colour="black", size = 12, face = "bold"),
+        axis.text.x=element_text(size=9,color="black", face="bold"),
+        axis.text.y=element_text(size=12,color="black"),
+        axis.line.y.left =element_line(size=0.5, color = "black"),
+        axis.line.x.bottom =element_line(size=0.5, color = "black"),
+        axis.title.x = element_text(color="black", size=13, face="bold", vjust=-0.8), # vjust=0.5),
+        axis.title.y = element_text(color="black", size=13, face="bold", vjust=1.5),
+        panel.grid.major = element_blank(), 
+        panel.grid.minor = element_blank(),
+        legend.position = "none",
+        panel.background = element_rect(fill = "white", color = "white"),
+        legend.background = element_rect(fill = "white", color = "white")
+        #plot.background = element_rect(fill = "transparent", color = NA)# vjust=0.5)
+        )) %>%
+    ggsave(paste0("../../plots/distribution/pathways_boxplot_", modality[m], ".png"), .,
+           width = 6, height = 3, dpi = 800#,
+           #bg = "transparent"
+           )
+}
+
+
+# ggplot(filter(temp_heat_clean, variable == "CA2CA3/CA1"), aes(x=variable, y=value, fill=side)) +
+#    geom_violin(aes(y = value, fill = side)) +
+#     geom_dotplot(binaxis= "y",
+#                  stackdir = "center",
+#                  dotsize = 0.1,
+#                  position = "dodge") +
+#     scale_fill_manual(name = "Hemisphere",
+#                       breaks = c("R", "L"),
+#                       values=c("indianred4", #"peachpuff4",
+#                                "indianred1" #"peru"
+#                       ),
+#                       labels = c("Right", "Left"))
+# 
+# 
+# ggplot(filter(temp_heat_clean, variable == "CA2CA3/CA1"), aes(x=as.factor(variable), y=value, fill=as.factor(side))) +
+#     geom_dotplot(binaxis= "y",
+#                  stackdir = "center",
+#                  dotsize = 0.02, position = "dodge")
+
+```
+
+
+# raincloud
+```{r}
+
+ggplot(temp_heat_clean_new, aes(x=variable, y=value, fill=side)) +
+      # geom_boxplot(aes(y = value, fill = side)) +
+      geom_violin(aes(y = value, fill = side)) +
+      geom_dotplot(binaxis= "y",
+                 stackdir = "center",
+                 dotsize = 0.01,
+                 position = "dodge") 
+
+
+ggplot(temp_heat_clean_new, aes(x = variable, y = value, fill=side)) +
+#ggplot(filter(temp_heat_clean_new, value >50), aes(x = variable, y = value, fill=side)) + 
+  ## add half-violin from {ggdist} package
+  ggdist::stat_halfeye(
+    ## custom bandwidth
+    adjust = .5,
+    ## adjust height
+    width = .6,
+    ## move geom to the right
+    justification = -.2,
+    ## remove slab interval
+    .width = 0,
+    point_colour = NA,
+   # limits = c(10, NA)
+    #align = ggdist::align_boundary(at = 10)
+  ) +
+  geom_boxplot(
+    width = .15, 
+    ## remove outliers
+    outlier.color = NA ## `outlier.shape = NA` or `outlier.alpha = 0` works as well
+  ) #+
+  ## add dot plots from {ggdist} package
+  # ggdist::stat_dots(
+  #   ## orientation to the left
+  #   side = "left", 
+  #   ## move geom to the left
+  #   justification = 1.12, 
+  #   ## adjust grouping (binning) of observations 
+  #   binwidth = .25
+  # ) + 
+  # ## remove white space on the sides
+  # coord_cartesian(xlim = c(1.3, 2.9))
+
+```
+
+# AVERAGE
+```{r}
+# average right and left side
+temp_wide <-
+  temp_heat_clean_new %>% pivot_wider(names_from = c("side", "variable"))
+
+avg_data <- 
+  temp_wide %>%
+  mutate("ERC/CA1" = (`R_ERC/CA1`+`L_ERC/CA1`)/2) %>%
+  mutate("CA4DG/CA2CA3" = (`R_CA4DG/CA2CA3`+`L_CA4DG/CA2CA3`)/2) %>%
+  mutate("CA2CA3/CA1" = (`R_CA2CA3/CA1`+`L_CA2CA3/CA1`)/2) %>%
+  mutate("SUB/CA1" = (`R_SUB/CA1`+`L_SUB/CA1`)/2) %>%
+  mutate("ERC/SUB" = (`R_ERC/SUB`+`L_ERC/SUB`)/2) %>% 
+  select(c("ID",
+           "ERC/CA1",
+           "CA4DG/CA2CA3",
+           "CA2CA3/CA1",
+           "SUB/CA1",
+           "ERC/SUB")) %>%
+  melt()
+  #mutate("CA4DG/subiculum" = (`R_CA4DG/R_subiculum`+`L_CA4DG/L_subiculum`)/2) 
+
+```
+
+#### Rainclouds of averages #####
+```{r}
+
+# ggplot(temp_heat_clean_new, aes(x=variable, y=value, fill=side)) +
+
+(ggplot(avg_data, aes(x = variable, y = value, fill = variable)) +
+    ggdist::stat_halfeye(
+    ## custom bandwidth
+    adjust = .5,
+    ## adjust height
+    width = .6,
+    ## move geom to the right
+    justification = -.4,
+    ## remove slab interval
+    .width = 0,
+    point_colour = NA,
+    alpha = 0.8,
+   # limits = c(10, NA)
+    #align = ggdist::align_boundary(at = 10)
+   ) +
+  geom_boxplot(width = .20,
+                   #outlier.shape=8,
+                   outlier.size = 0.2,
+               alpha = 0.8,
+                   #notch=TRUE,
+                   aes(y = value)) + #, fill = side)) +
+      # geom_errorbar()+
+      # geom_violin(aes(y = value, fill = side)) +
+      # geom_dotplot(binaxis= "y",
+      #            stackdir = "center",
+      #            dotsize = 0.01,
+      #            position = "dodge") +
+      scale_x_discrete(#name = "Hemisphere",
+                      breaks = c("ERC/CA1",
+                      #"CA4DG/SUB",
+                      "CA4DG/CA2CA3",
+                      "CA2CA3/CA1",
+                      "SUB/CA1",
+                      "ERC/SUB"),
+                      labels = c("ERC/CA1",
+                      #"DG/SUB",
+                      "DG/CA3",
+                      "CA3/CA1",
+                      "SUB/CA1",
+                      "ERC/SUB"))+
+      scale_fill_manual(#name = "Hemisphere",
+                      breaks = c("ERC/CA1",
+                      #"CA4DG/SUB",
+                      "CA4DG/CA2CA3",
+                      "CA2CA3/CA1",
+                      "SUB/CA1",
+                      "ERC/SUB"),
+                      values=c("#006664", #"peachpuff4",
+                               "#8D406C", #"peru"
+                               "#8D406C",
+                               "#3E3D61",
+                               "#3E3D61"
+                               )) +
+                      #labels = c("Right", "Left"))+
+      ylab(modality_clean[m]) +
+      xlab(" ") +
+      #stat_compare_means(aes(group = side), label = "p.signif", paired = TRUE) +
+      theme(
+        #legend.title = element_text(colour="black", size = 12, face = "bold"),
+        axis.text.x=element_text(size=9,color="black", face="bold"),
+        axis.text.y=element_text(size=12,color="black"),
+        axis.line.y.left =element_line(size=0.5, color = "black"),
+        axis.line.x.bottom =element_line(size=0.5, color = "black"),
+        axis.title.x = element_text(color="black", size=13, face="bold", vjust=-0.8), # vjust=0.5),
+        axis.title.y = element_text(color="black", size=13, face="bold", vjust=1.5),
+        panel.grid.major = element_blank(), 
+        panel.grid.minor = element_blank(),
+        panel.background = element_rect(fill = "white", color = "white"),
+        legend.position = "none",
+        # legend.background = element_rect(fill = "white", color = "white")
+        #plot.background = element_rect(fill = "transparent", color = NA)# vjust=0.5)
+        )) %>%
+    ggsave(paste0("../../plots/distribution/pathways_violin_average_", "stream", ".png"), .,
+           width = 6, height = 3, dpi = 800 #,
+           #bg = "transparent"
+           )
+
+```
+
+
+
+# Comparing pathways to each other - Anova
+```{r}
+
+aov_mdl <- aov(value ~ variable, data = avg_data)
+aov_mdl %>%
+  summary()
+
+TukeyHSD(aov_mdl)
+
+stats <- TukeyHSD(aov_mdl)
+
+# for full pvalues
+stats$variable
+
+```
+
+
+# Coefficient of Variation.
+# sd/mean
+# (sd(data_stream$total, na.rm = T))/(mean(data_stream$total, na.rm = T))*100
+```{r}
+
+sd(filter(avg_data, variable == "ERC/CA1")$value, na.rm = T)/
+  mean(filter(avg_data, variable == "ERC/CA1")$value,na.rm = T)*100
+
+sd(filter(avg_data, variable == "CA4DG/CA2CA3")$value, na.rm = T)/
+  mean(filter(avg_data, variable == "CA4DG/CA2CA3")$value, na.rm = T)*100
+
+sd(filter(avg_data, variable == "CA2CA3/CA1")$value, na.rm = T)/
+  mean(filter(avg_data, variable == "CA2CA3/CA1")$value, na.rm = T)*100
+
+sd(filter(avg_data, variable == "SUB/CA1")$value, na.rm = T)/
+  mean(filter(avg_data, variable == "SUB/CA1")$value, na.rm = T)*100
+
+sd(filter(avg_data, variable == "ERC/SUB")$value, na.rm = T)/
+  mean(filter(avg_data, variable == "ERC/SUB")$value, na.rm = T)*100
+
+
+```
+
+
+# T-test right-left side
+```{r}
+
+test_data <-
+  pivot_wider(temp_heat_clean_new, names_from = c("side", "variable"))
+
+left_rois <- c(#"L_ERC/L_CA4DG",
+               "L_CA4DG/CA2CA3",
+               "L_CA2CA3/CA1",
+               "L_SUB/CA1",
+               "L_ERC/SUB",
+               # "L_CA4DG/L_subiculum",
+               "L_ERC/CA1"
+               )
+
+right_rois <- c(#"R_ERC/R_CA4DG",
+               "R_CA4DG/CA2CA3",
+               "R_CA2CA3/CA1",
+               "R_SUB/CA1",
+               "R_ERC/SUB",
+               # "R_CA4DG/R_subiculum",
+               "R_ERC/CA1"
+               )
+
+for (i in 1:5){
+  print(right_rois[i])
+  t.test(test_data[,right_rois[i]][[1]], test_data[,left_rois[i]][[1]], paired = T) %>%
+    print()
+}
+
+```
+
+### END
+

@@ -1,0 +1,259 @@
+---
+title: "03_violin_plots_sex"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+# clear environment
+rm(list = ls())
+
+# packages
+library(tidyverse)
+library(reshape2)
+library(ggplot2)
+library(ggpubr)
+
+# data
+load("../../output/Rdata/00_import_data_MTL_hipp.RDATA")
+
+# Define modalities
+modality <- c("stream") #, "FA", "AD", "RD", "MD")
+
+modality_clean <- c("Steamline density") #,
+                    # "Fractional Anisotropy",
+                    # "Axial Diffusivity",
+                    # "Radial Diffusivity",
+                    # "Mean Diffusivity")
+
+tsp <- read.csv("../../data/hipp_paths_edit/tracks_edited_exc.csv", header = F)
+colnames(tsp) <- c("ID", "side", "variable", "value")
+tsp$variable <- gsub("_", "/", tsp$variable)
+
+```
+
+
+# Sex differences
+```{r}
+
+tsp_wide <-
+  tsp %>% pivot_wider(names_from = c("side", "variable")) 
+
+beh_data <- read.csv("../../data/behaviour/HCP_behavioural_data.csv") 
+beh_data$ID <- beh_data$Subject
+
+# average right and left side
+stream_sex <- merge(R_data_stream, L_data_stream, by = "ID") %>%
+  merge(tsp_wide, by = "ID")
+stream_sex <- stream_sex %>%
+  mutate("ERC/CA1" = (`R_ERC/R_CA1`+`L_ERC/L_CA1`)/2) %>%
+  mutate("CA4DG/CA2CA3" = (`R_CA4DG/CA2CA3`+`L_CA4DG/CA2CA3`)/2) %>%
+  mutate("CA2CA3/CA1" = (`R_CA2CA3/CA1`+`L_CA2CA3/CA1`)/2) %>%
+  mutate("subiculum/CA1" = (`R_subiculum/R_CA1`+`L_subiculum/L_CA1`)/2) %>%
+  mutate("ERC/subiculum" = (`R_ERC/R_subiculum`+`L_ERC/L_subiculum`)/2) %>%
+  mutate("CA4DG/subiculum" = (`R_CA4DG/R_subiculum`+`L_CA4DG/L_subiculum`)/2) 
+
+
+stream_sex <- merge(stream_sex, beh_data[,c("ID", "Gender")], by = "ID")
+
+# Separate males and females
+stream_sexM <-
+  stream_sex %>%
+  subset(Gender == "M")
+
+stream_sexF <-
+  stream_sex %>%
+  subset(Gender == "F")
+
+```
+
+
+# Plot sex differences
+```{r}
+# melt data
+temp_readyM <- melt(stream_sexM)
+temp_readyF <- melt(stream_sexF)
+     
+# get rid of PRC PHC
+temp_heatM <-
+  temp_readyM[-which(grepl("PRC", temp_readyM$variable) |
+                 grepl("PHC", temp_readyM$variable) |
+                 grepl("stratum", temp_readyM$variable)
+                   ),]
+  
+temp_heatF <-
+ temp_readyF[-which(grepl("PRC", temp_readyF$variable) |
+                 grepl("PHC", temp_readyF$variable) |
+                 grepl("stratum", temp_readyF$variable)
+                   ),]
+  
+  
+# Clean up the names
+temp_heatM$variable <-
+  gsub('subiculum', 'SUB',
+       temp_heatM$variable)
+temp_heatM$side <- "M"
+
+temp_heatF$variable <-
+  gsub('subiculum', 'SUB',
+       temp_heatF$variable)
+temp_heatF$side <- "F"
+
+# Combine M and F  
+temp_heat <- rbind(temp_heatM, temp_heatF)
+
+# select the ROI pairs
+temp_heat_clean <-
+  temp_heat %>%
+  subset(temp_heat$variable == "ERC/CA1" |
+           #temp_heat$variable == "CA4DG/SUB" |
+           temp_heat$variable == "CA4DG/CA2CA3" |
+           temp_heat$variable == "CA2CA3/CA1" |
+           temp_heat$variable == "SUB/CA1" |
+           temp_heat$variable == "ERC/SUB")
+  
+temp_heat_clean$side <- 
+  factor(temp_heat_clean$side, levels = c("M", "F"))
+
+temp_heat_clean$variable <-
+  factor(temp_heat_clean$variable,
+         levels = c("ERC/CA1",
+                    #"CA4DG/SUB",
+                    "CA4DG/CA2CA3",
+                    "CA2CA3/CA1",
+                    "SUB/CA1",
+                    "ERC/SUB"
+                    ))
+  
+(ggplot(temp_heat_clean, aes(x=variable, y=value, fill=variable)) +
+      geom_boxplot(width = .44,
+               #outlier.shape=8,
+               outlier.size = 0.2,
+               #notch=TRUE,
+               aes(y = value, fill = side)) +
+      # geom_errorbar()+
+      # geom_violin(aes(y = value, fill = side)) +
+      # geom_dotplot(binaxis= "y",
+      #            stackdir = "center",
+      #            dotsize = 0.01,
+      #            position = "dodge") +
+      scale_x_discrete(#name = "Hemisphere",
+                      breaks = c("ERC/CA1",
+                      #"CA4DG/SUB",
+                      "CA4DG/CA2CA3",
+                      "CA2CA3/CA1",
+                      "SUB/CA1",
+                      "ERC/SUB"),
+                      labels = c("ERC/CA1",
+                      #"DG/SUB",
+                      "DG/CA3",
+                      "CA3/CA1",
+                      "SUB/CA1",
+                      "ERC/SUB"))+
+    scale_fill_manual(name = "Sex",
+                    breaks = c("F", "M"),
+                    values=c("peru", #"peachpuff4",
+                             "peachpuff4" #"peru"
+                             ),
+                    labels = c("Female", "Male"))+
+    ylab("Streamline Density") +
+    xlab(" ") +
+    #stat_compare_means(comparisons = c("M", "F")) +
+    stat_compare_means(aes(group = side), label = "p.signif",
+                       method = "t.test") + #label = "p.signif", method = "t.test",
+                   #ref.group = "F") +
+    theme(
+      legend.title = element_text(colour="black", size = 12, face = "bold"),
+      axis.text.x=element_text(size=9,color="black", face="bold"),
+      axis.text.y=element_text(size=12,color="black"),
+      axis.line.y.left =element_line(size=0.5, color = "black"),
+      axis.line.x.bottom =element_line(size=0.5, color = "black"),
+      axis.title.x = element_text(color="black", size=13, face="bold", vjust=-0.8), # vjust=0.5),
+      axis.title.y = element_text(color="black", size=13, face="bold", vjust=1.5),
+      panel.grid.major = element_blank(), 
+      panel.grid.minor = element_blank(),
+      panel.background = element_rect(fill = "white", color = "white"),
+      legend.background = element_rect(fill = "white", color = "white"),
+      legend.position = "none"
+      #plot.background = element_rect(fill = "transparent", color = NA)# vjust=0.5)
+      )) %>%
+  ggsave(paste0("../../plots/distribution/pathways_sex_differences", ".png"), .,
+         width = 6, height = 3, dpi = 800 #,
+         #bg = "transparent"
+         )
+
+```
+
+
+
+# Sex differences in violin plots
+```{r}
+ggplot(temp_heat_clean, aes(x=variable, y=value, fill=variable)) +
+    #geom_boxplot(aes(y = value, fill = side)) +
+  geom_violin(aes(y = value, fill = side)) +
+  stat_summary(fun = "mean",
+               position = position_dodge(0.9),
+               aes(fill = side))
+  # scale_fill_manual(name = "Sex",
+  #                   breaks = c("F", "M"),
+  #                   values=c("peru", #"peachpuff4",
+  #                            "peachpuff4" #"peru"
+  #                            ),
+  #                   labels = c("Female", "Male"))
+
+ggplot(temp_heat_clean, aes(x = variable, y = value, fill = side))+ #, fill=side)) +
+#ggplot(filter(temp_heat_clean, value >50), aes(x = variable, y = value, fill=side)) + 
+  ## add half-violin from {ggdist} package
+  ggdist::stat_halfeye(
+    ## custom bandwidth
+    adjust = .5,
+    ## adjust height
+    width = .6,
+    ## move geom to the right
+    justification = -.2,
+    ## remove slab interval
+    .width = 0,
+    point_colour = NA,
+   # limits = c(10, NA)
+    #align = ggdist::align_boundary(at = 10)
+  ) +
+  geom_boxplot(
+    width = .15, 
+    ## remove outliers
+    outlier.color = NA ## `outlier.shape = NA` or `outlier.alpha = 0` works as well
+  ) 
+
+```
+
+# Ttest - male vs female
+```{r}
+test_data <-
+  pivot_wider(temp_heat_clean[1:4], names_from = c("Gender", "variable"))
+
+sex_rois_M <- c(#"ERC/CA4DG",
+               "M_CA4DG/CA2CA3",
+               "M_CA2CA3/CA1",
+               "M_SUB/CA1",
+               "M_ERC/SUB",
+               # "CA4DG/subiculum",
+               "M_ERC/CA1"
+               )
+
+sex_rois_F <- c(#"ERC/CA4DG",
+               "F_CA4DG/CA2CA3",
+               "F_CA2CA3/CA1",
+               "F_SUB/CA1",
+               "F_ERC/SUB",
+               # "CA4DG/SUB",
+               "F_ERC/CA1"
+               )
+
+for (i in 1:5){
+  print(sex_rois_F[i])
+  t.test(test_data[,sex_rois_F[i]], test_data[,sex_rois_M[i]]) %>%
+    print()
+}
+
+```
+
+
+## END
