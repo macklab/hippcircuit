@@ -2,6 +2,7 @@
 HippCircuit is a resource for _in vivo_ quantification of human white hippocampal white matter connections based on diffusion weighted imaging. The processing pipeline includes 2 arms: a) quantification of white connections at the individual level, b) template creation based on the entire sample. 
 
 This processing pipeline was developed based on the Human Connectome Project Young Adult Sample (N=831). Each participant's white matter connectivity matrices are also available to download from this resource to answer various multimodal questions, leveraging the Human Connectome Project data. 
+
 ![Processing_Pipeline](https://github.com/user-attachments/assets/779ff9c3-2fe0-4eea-9162-ec192cd7f8d2)
 
 ## Contents
