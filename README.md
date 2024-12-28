@@ -8,7 +8,7 @@ This processing pipeline was developed based on the Human Connectome Project You
 ## Contents
 * Data organization
 * Project pipelines
-* General tips for using High Performance Computing clusters (The pipeline is based on [SciNet](https://scinethpc.ca/) , but can be adapted for other supercomputers)
+* General tips for using High Performance Computing clusters (This pipeline is based on [Compute Canada's](https://www.alliancecan.ca/en) resources at [SciNet](https://scinethpc.ca/), but can be adapted for other supercomputers)
 
 Software on Niagara
 * fmriprep
