@@ -8,7 +8,7 @@ This processing pipeline was developed on the Human Connectome Project Young Adu
 ## Contents
 * Data organization
 * Project pipelines
-* General tips for using High Performance Computing clusters (
+* General tips for using High Performance Computing clusters
 
 Software on Niagara
 * BIDS
