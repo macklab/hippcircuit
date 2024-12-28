@@ -1,10 +1,13 @@
-# hippcircuit
-Welcome to the hippcircuit wiki!
+# HippCircuit
+HippCircuit is a resource for _in vivo_ quantification of human white hippocampal white matter connections based on diffusion weighted imaging. The processing pipeline includes 2 arms: a) quantification of white connections at the individual level, b) template creation based on the entire sample. 
 
+This processing pipeline was developed based on the Human Connectome Project Young Adult Sample (N=831). Each participant's white matter connectivity matrices are also available to download from this resource to answer various multimodal questions, leveraging the Human Connectome Project data. 
+![Processing_Pipeline](https://github.com/user-attachments/assets/779ff9c3-2fe0-4eea-9162-ec192cd7f8d2)
 
+## Contents
 * Data organization
 * Project pipelines
-* General tips for using Niagara
+* General tips for using High Performance Computing clusters (The pipeline is based on [SciNet](https://scinethpc.ca/) , but can be adapted for other supercomputers)
 
 Software on Niagara
 * fmriprep
@@ -40,4 +43,15 @@ install & create basic bid files and directories
 
     module load freesurfer/6.0.0
 
+## Citation
+If you are any parts of this resource, please make sure to cite:
+
+
+> Gumus, M; Bourganos, A; Mack, M.L. (Manuscript in preparation). _In vivo_ Quantification of White Matter Pathways in the Human Hippocampus. 
+
+
+
 ***
+
+
+
