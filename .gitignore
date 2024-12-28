@@ -62,3 +62,6 @@ slurm-*.out
 
 # Internal files only - for extra checks
 **win_**
+
+# Files that were used for tests before finalizing the pipeline
+analyses/connectomes/*

@@ -47,8 +47,10 @@ colnames(R_melted) <- c("sbj", "reg1", "reg2", "stream")
 
 # get rid of stratum
 R_melted <- R_melted[-c(grep("stratum", R_melted$reg1), grep("stratum", R_melted$reg2),
-                            grep("R_PHC", R_melted$reg1), grep("R_PHC", R_melted$reg2),
-                            grep("R_PRC", R_melted$reg1), grep("R_PRC", R_melted$reg2)),]
+                        grep("R_PHC", R_melted$reg1), grep("R_PHC", R_melted$reg2),
+                        grep("R_PRC", R_melted$reg1), grep("R_PRC", R_melted$reg2)
+                        #grep("R_subiculum", R_melted$reg1), grep("R_subiculum", R_melted$reg2)
+                        ),]
 
 ```
 

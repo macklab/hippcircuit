@@ -11,6 +11,7 @@ rm(list = ls())
 library(tidyverse)
 library(reshape2)
 library(ggplot2)
+library(ggpubr)
 
 # data
 load("../../output/Rdata/00_import_data_subfields+MTL_all_data.RDATA")
@@ -486,6 +487,25 @@ temp_heat_clean$variable <-
 
 ```
 
+
+
+# Sex differences in violin plots
+
+
+```{r}
+ggplot(temp_heat_clean, aes(x=variable, y=value, fill=variable)) +
+    #geom_boxplot(aes(y = value, fill = side)) +
+  geom_violin(aes(y = value, fill = side)) +
+  stat_summary(fun = "mean",
+               position = position_dodge(0.9),
+               aes(fill = side))
+  # scale_fill_manual(name = "Sex",
+  #                   breaks = c("F", "M"),
+  #                   values=c("peru", #"peachpuff4",
+  #                            "peachpuff4" #"peru"
+  #                            ),
+  #                   labels = c("Female", "Male"))
+```
 
 # Ttest - male vs female
 ```{r}

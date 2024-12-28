@@ -20,10 +20,10 @@ library(RColorBrewer)
 rm(list = ls())
 
 modality <- c("stream", "FA", "AD", "RD", "MD")
-headers <- read.table("../labels/subfield_MTL_labels.txt", header=T, sep="")
+headers <- read.table("../../labels/subfield_MTL_labels.txt", header=T, sep="")
 
 for (m in modality){
-  temp <- list.files(path=paste0("../data/connectomes/subfields_MTL_",m), pattern="*.csv",
+  temp <- list.files(path=paste0("../../data/connectomes/subfields_MTL_",m), pattern="*.csv",
                      recursive = T, full.names = T)
   for (k in 1:length(temp)) assign(temp[k], read.csv(temp[k], header=F, sep=","))
 
