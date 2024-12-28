@@ -1,14 +1,14 @@
 # HippCircuit
 HippCircuit is a resource for _in vivo_ quantification of human white hippocampal white matter connections based on diffusion weighted imaging and various processing software. The processing pipeline includes 2 arms: a) quantification of white connections at the individual level, b) template creation based on the entire sample. 
 
-This processing pipeline was developed on the Human Connectome Project Young Adult Sample (N=831). Each participant's white matter connectivity matrices are also available to download from this resource to answer various multimodal questions, leveraging the Human Connectome Project data. The pipeline can be applied to a sample of interest with certain modifications.
+This processing pipeline was developed on the [Human Connectome Project Young Adult](https://www.humanconnectome.org/study/hcp-young-adult) Sample (N=831). Each participant's white matter connectivity matrices are also available to download from this resource to answer various multimodal questions, leveraging the Human Connectome Project data. The pipeline can be applied to a sample of interest with certain modifications.
 
 ![Processing_Pipeline](https://github.com/user-attachments/assets/779ff9c3-2fe0-4eea-9162-ec192cd7f8d2)
 
 ## Contents
 * Data organization
 * Project pipelines
-* General tips for using High Performance Computing clusters (
+* General tips for using High Performance Computing clusters
 
 Software on Niagara
 * BIDS
@@ -45,17 +45,17 @@ To install & create basic BIDS files and directories:
 If using supercomputers other than SciNet, please follow the instructions on the MRtrix website for software installation.
 
 ## FSL 
-FSL is loaded as part of the dependencies above. However, it can also be loaded separetely:
+[FSL](https://fsl.fmrib.ox.ac.uk/fsl/docs/#/) is loaded as part of the dependencies above. However, it can also be loaded separetely:
 
     module load fsl/.experimental-6.0.0
     
 ## Freesurfer 
-The ideal version of Freesurfer 7.1. was not available in NiaEnv/2018a. Thus, we are using 6.0.0:
+The ideal version of [Freesurfer](https://surfer.nmr.mgh.harvard.edu/) 7.1. was not available in NiaEnv/2018a. Thus, we are using 6.0.0:
 
     module load freesurfer/6.0.0
 
 ## MAGeT brain
-Hippocampus was segmentated into its subfields using MAGeTbrain. The CobraLab has graciously given us access to their software stack on Niagara. If your Compute Canada account is associated with the mmack group, you will have access. You can activate MAGeTbrain as the following:
+Hippocampus was segmentated into its subfields using [MAGeTbrain](https://github.com/CoBrALab/MAGeTbrain). The CobraLab has graciously given us access to their software stack on Niagara. If your Compute Canada account is associated with the mmack group, you will have access. You can activate MAGeTbrain as the following:
 
     module load cobralab/2019b
     source /project/m/mmack/software/MAGeTbrain/bin/activate
