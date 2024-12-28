@@ -64,4 +64,5 @@ slurm-*.out
 **win_**
 
 # Files that were used for tests before finalizing the pipeline
-analyses/connectomes*/*
+**analyses/connectomes**
+**hipp_atlas**
