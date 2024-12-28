@@ -1,4 +1,4 @@
-# MAGeTbrain on Niagara
+# Hippocampal subfield segmentation - MAGeTbrain on Niagara
 The [CoBrALab](https://www.cobralab.ca/) has graciously given us access to their software stack on Niagara. If your Compute Canada account is associated with the mmack group, you will have access. For more information, please visit [MAGeTbrain](https://github.com/CobraLab/MAGeTbrain) page.
 
 ## Update your .bashrc
