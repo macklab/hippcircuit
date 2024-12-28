@@ -1,8 +1,8 @@
 # Participant-specific white matter connections
-In vivo reconstruction of hippocampal pathways in humans was possible with various tools and algorithms provided by [MRtrix3](https://www.mrtrix.org/)
+_In vivo_ reconstruction of hippocampal pathways in humans was possible with various tools and algorithms provided by [MRtrix3](https://www.mrtrix.org/).
 
 ## Implementing the pipeline in your own data
-If you choose to implement this processing pipeline in your data, the following steps should be followed to create hippomcapus specific connectivity matrices. 
+If you choose to implement this processing pipeline in your data, the following steps should be followed to create white matter connections in the human hippocampus.
 
 **1) Structural image processing** 
 * 5 tissue type image is created based on preprocessed T1 weighted image.
