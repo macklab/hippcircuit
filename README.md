@@ -55,7 +55,7 @@ The ideal version of [Freesurfer](https://surfer.nmr.mgh.harvard.edu/) 7.1. was 
     module load freesurfer/6.0.0
 
 ## MAGeT brain
-Hippocampus was segmentated into its subfields using [MAGeTbrain](https://github.com/CoBrALab/MAGeTbrain). The CobraLab has graciously given us access to their software stack on Niagara. If your Compute Canada account is associated with the mmack group, you will have access. You can activate MAGeTbrain as the following:
+Hippocampus was segmentated into its subfields using [MAGeTbrain](https://github.com/CoBrALab/MAGeTbrain). The [CoBrALab](https://www.cobralab.ca/) has graciously given us access to their software stack on Niagara. If your Compute Canada account is associated with the mmack group, you will have access. You can activate MAGeTbrain as the following:
 
     module load cobralab/2019b
     source /project/m/mmack/software/MAGeTbrain/bin/activate
