@@ -6,11 +6,20 @@ This processing pipeline was developed on the Human Connectome Project Young Adu
 ![Processing_Pipeline](https://github.com/user-attachments/assets/779ff9c3-2fe0-4eea-9162-ec192cd7f8d2)
 
 ## Contents
-* Data organization
-* Project pipelines
-* General tips for using High Performance Computing clusters
+Scripts are organized into separate folders according to their specific roles in the pipeline:
 
-Software on Niagara
+* Hippocampal subfield segmentations: `maget`
+* Entorhinal cortex segementations: `itk-snap`
+* Quantification of individual white matter connections (a): `mrtrix`
+* Creation of the template based on the entire sample (b): `fixel-based`
+* Label files for the segmentations: `labels`
+* Statistical analyses of connectivity matrices: `analyses`
+
+## Setting Up Environment
+This pipeline was developed on [Compute Canada's](https://www.alliancecan.ca/en) resources at [SciNet](https://scinethpc.ca/), but can be adapted for other supercomputers. Most software is available as modules at SciNet. `Python.2.7` was compatible with the software versions implemented here.
+
+Software necessary for the processing pipeline:
+
 * BIDS
 * MRtrix3
 * FSL
@@ -19,8 +28,6 @@ Software on Niagara
 * ASHS
 * ITK-SNAP
 
-## Setting Up Environment
-This pipeline was developed on [Compute Canada's](https://www.alliancecan.ca/en) resources at [SciNet](https://scinethpc.ca/), but can be adapted for other supercomputers. Most software is available as modules at SciNet. The necessary software can be  `Python.2.7` is compatible with the following software versions.
 
 ## BIDS
 Data should be in [BIDS format](https://bids.neuroimaging.io/). Dicoms can be converted to BIDS format using [Dcm2Bids](https://github.com/UNFmontreal/Dcm2Bids).
