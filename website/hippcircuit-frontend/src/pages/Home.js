@@ -12,7 +12,7 @@ function Home() {
     const navigate = useNavigate();
 
     function handleClick() {
-        navigate("/explore");
+        {/* navigate("/explore"); */}
         window.location.reload(false);
     }
 

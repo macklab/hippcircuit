@@ -69,7 +69,8 @@ export default function HomeButton() {
           variants={{ hover: { scale: 0.85 }, press: { scale: 1.1 } }}
           className="label"
         >
-          explore the data
+          {/* explore the data */}
+          coming soon!
         </motion.div>
       </motion.button>
     </MotionConfig>
