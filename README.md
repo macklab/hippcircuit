@@ -74,7 +74,7 @@ If you choose to use the cloud services of ASHS, you will also need to download 
 
 
 ## Citation
-If you are any parts of this resource, please make sure to cite:
+If you are using any part of this resource, please cite us:
 
 > Gumus, M., Bourganos, A., & Mack, M. L. (2025). In vivo Quantification of White Matter Pathways in the Human Hippocampus (p. 2025.01.13.632268). bioRxiv. https://doi.org/10.1101/2025.01.13.632268
 
