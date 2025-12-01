@@ -1,4 +1,6 @@
 # HippCircuit
+Read the paper: Gumus, M., A. Bourganos, and M. L. Mack. 2025. In Vivo Quantification of White Matter Pathways in the Human Hippocampus. Human Brain Mapping 46, no. 17: e70417. https://doi.org/10.1002/hbm.70417.
+
 HippCircuit is a resource for _in vivo_ quantification of human white hippocampal white matter connections based on diffusion weighted imaging and various processing software. The processing pipeline includes 2 arms: a) quantification of white connections at the individual level, b) template creation based on the entire sample. 
 
 This processing pipeline was developed on the Human Connectome Project Young Adult Sample (N=831). Each participant's white matter connectivity matrices are available to download from this resource to answer various multimodal questions, leveraging the Human Connectome Project data. To explore the data, please check out our [HippCircuit website!](https://macklab.github.io/hippcircuit/) The pipeline can be applied to a sample of interest with certain modifications.
@@ -76,9 +78,7 @@ If you choose to use the cloud services of ASHS, you will also need to download 
 ## Citation
 If you are using any part of this resource, please cite us:
 
-> Gumus, M., Bourganos, A., & Mack, M. L. (2025). In vivo Quantification of White Matter Pathways in the Human Hippocampus (p. 2025.01.13.632268). bioRxiv. https://doi.org/10.1101/2025.01.13.632268
-
-
+> Gumus, M., A. Bourganos, and M. L. Mack. 2025. In Vivo Quantification of White Matter Pathways in the Human Hippocampus. Human Brain Mapping 46, no. 17: e70417. https://doi.org/10.1002/hbm.70417.
 
 ***
 
